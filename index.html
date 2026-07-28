@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>openOODA — Capability-Secure, Self-Testing Language (alpha)</title>
-  <meta name="description" content="openOODA v0.18.0-alpha: exhaustive Result match, clang-only native IR link, contract call-site spans.">
+  <meta name="description" content="openOODA v0.19.0-alpha: import .oo modules, Option Some/None, ooda check, float LLVM, cap call-graph.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -16,7 +16,7 @@
     <a href="#" class="logo">
       <div class="logo-badge">.oo</div>
       <div class="logo-text">openOODA</div>
-      <span class="version-pill">v0.18.0-alpha</span>
+      <span class="version-pill">v0.19.0-alpha</span>
     </a>
     <nav>
       <a href="#real">What's real</a>
@@ -28,9 +28,8 @@
   <section class="hero">
     <h1>The <span>capability-secure</span> &amp; <span>self-testing</span> systems language</h1>
     <p>
-      Alpha toolchain: sealed capabilities, contracts with call-site diagnostics,
-      must-use Result, exhaustive Result/Option match, integer LLVM IR
-      (clang-linked when available), and subset WAT. Truth over theater.
+      Userland is <strong>.oo</strong>: multi-file <code>import</code>, Option, contracts, sealed caps.
+      Compiler bootstrap is still Rust (until self-host). Alpha ships truth, not theater.
     </p>
     <div class="install-box" id="install">
       <span>$</span>
@@ -38,32 +37,34 @@
       <button class="copy-btn" onclick="navigator.clipboard.writeText('curl -fsSL https://openOODA.github.io/install.sh | sh'); this.innerText='Copied!';">Copy</button>
     </div>
     <p style="margin-top:0.75rem;opacity:0.75;font-size:0.9rem;">
-      Installer downloads <code>v0.18.0-alpha</code> from GitHub Releases (Linux x86_64).
+      Installer downloads <code>v0.19.0-alpha</code> (Linux x86_64). Override with <code>OODA_VERSION</code>.
     </p>
   </section>
   <section class="stats-ribbon" id="real">
-    <div class="stat-card"><div class="stat-value">Exhaustive</div><div class="stat-label">Result / Option match</div></div>
-    <div class="stat-card"><div class="stat-value">clang</div><div class="stat-label">Native IR link only</div></div>
-    <div class="stat-card"><div class="stat-value">Call-site</div><div class="stat-label">Contract diagnostics</div></div>
-    <div class="stat-card"><div class="stat-value">Sealed</div><div class="stat-label">Capability effects</div></div>
+    <div class="stat-card"><div class="stat-value">import</div><div class="stat-label">Multi-file .oo modules</div></div>
+    <div class="stat-card"><div class="stat-value">Option</div><div class="stat-label">Some / None + match</div></div>
+    <div class="stat-card"><div class="stat-value">check</div><div class="stat-label">Caps + types, no run</div></div>
+    <div class="stat-card"><div class="stat-value">Float</div><div class="stat-label">LLVM double IR</div></div>
   </section>
   <section class="features" id="features">
-    <div class="feature-card"><div class="feature-icon">🔒</div><h3>Capabilities</h3><p>Default-deny sealed I/O; explicit caps with spanned errors.</p></div>
-    <div class="feature-card"><div class="feature-icon">🧪</div><h3>Contracts</h3><p><code>requires</code>/<code>ensures</code>/<code>verify</code>; failures report call-site line:col.</p></div>
-    <div class="feature-card"><div class="feature-icon">📐</div><h3>Types</h3><p>Must-use Result, <code>let mut</code>, exhaustive match on Result/Option.</p></div>
-    <div class="feature-card"><div class="feature-icon">⚡</div><h3>Dual engine</h3><p>LLVM Int IR; native binary when <strong>clang</strong> is installed (not gcc).</p></div>
-    <div class="feature-card" id="gaps"><div class="feature-icon">⚠️</div><h3>Gaps</h3><p>No full LSP/pkg/migrate/replay; WASM is subset; no PyTorch.</p></div>
+    <div class="feature-card"><div class="feature-icon">📦</div><h3>.oo userland</h3><p><code>import "lib.oo"</code> with <code>OODA_STD</code> / <code>OODA_PATH</code>. std is .oo.</p></div>
+    <div class="feature-card"><div class="feature-icon">🔒</div><h3>Capabilities</h3><p>Sealed effects + call-graph: cap args must be live handles (no forgery).</p></div>
+    <div class="feature-card"><div class="feature-icon">🧪</div><h3>Contracts &amp; types</h3><p>requires/ensures/verify, must-use Result, exhaustive match, refinements.</p></div>
+    <div class="feature-card"><div class="feature-icon">⚡</div><h3>Dual engine</h3><p>Interpreter; LLVM Int/Bool/Float; WAT Int subset; clang to link.</p></div>
+    <div class="feature-card" id="gaps"><div class="feature-icon">⚠️</div><h3>Gaps</h3><p>Bootstrap still Rust. No full LSP/pkg/WASM product/PyTorch. Self-host is future work.</p></div>
   </section>
   <section class="hero" style="padding-top:1rem;">
     <pre style="text-align:left;background:rgba(0,0,0,0.35);padding:1rem 1.25rem;border-radius:12px;font-family:'Fira Code',monospace;font-size:0.85rem;">
 ooda --version
-ooda run examples/hello.oo
-ooda build examples/int_main.oo --emit-llvm
-# install clang to link a native binary from the .ll
+ooda check examples/hello.oo
+ooda run examples/import_lib.oo
+ooda run examples/option_match.oo
+export OODA_STD=./openooda-std   # use std/*.oo
     </pre>
     <p style="opacity:0.8;margin-top:1rem;">
       <a href="https://github.com/openOODA/ooda/releases" target="_blank">Releases</a> ·
-      <a href="https://github.com/openOODA/spec" target="_blank">Spec</a>
+      <a href="https://github.com/openOODA/spec" target="_blank">Spec / DESIGN</a> ·
+      <a href="https://github.com/openOODA/std" target="_blank">std (.oo)</a>
     </p>
   </section>
   <footer>
