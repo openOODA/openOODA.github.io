@@ -3,11 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>openOODA — Capability-Secure, Self-Testing Language (alpha)</title>
-  <meta name="description" content="openOODA v0.19.0-alpha: import .oo modules, Option Some/None, ooda check, float LLVM, cap call-graph.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <title>openOODA — Capability-Secure Systems Language (alpha)</title>
+  <meta name="description" content="openOODA v0.20.0-alpha: while, else-if, unary not, is_err, std:: imports.">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -16,10 +14,10 @@
     <a href="#" class="logo">
       <div class="logo-badge">.oo</div>
       <div class="logo-text">openOODA</div>
-      <span class="version-pill">v0.19.0-alpha</span>
+      <span class="version-pill">v0.20.0-alpha</span>
     </a>
     <nav>
-      <a href="#real">What's real</a>
+      <a href="#real">What&rsquo;s real</a>
       <a href="#gaps">Gaps</a>
       <a href="#install">Install</a>
       <a href="https://github.com/openOODA/ooda" class="btn-primary" target="_blank">GitHub</a>
@@ -28,47 +26,42 @@
   <section class="hero">
     <h1>The <span>capability-secure</span> &amp; <span>self-testing</span> systems language</h1>
     <p>
-      Userland is <strong>.oo</strong>: multi-file <code>import</code>, Option, contracts, sealed caps.
-      Compiler bootstrap is still Rust (until self-host). Alpha ships truth, not theater.
+      Userland is <strong>.oo</strong> — <code>while</code>, <code>else if</code>, <code>import std::…</code>,
+      contracts, sealed caps. Bootstrap is Rust until self-host. Truth over theater.
     </p>
     <div class="install-box" id="install">
       <span>$</span>
       <span class="install-cmd">curl -fsSL https://openOODA.github.io/install.sh | sh</span>
-      <button class="copy-btn" onclick="navigator.clipboard.writeText('curl -fsSL https://openOODA.github.io/install.sh | sh'); this.innerText='Copied!';">Copy</button>
+      <button class="copy-btn" onclick="navigator.clipboard.writeText('curl -fsSL https://openOODA.github.io/install.sh | sh'); this.innerText='Copied!'">Copy</button>
     </div>
     <p style="margin-top:0.75rem;opacity:0.75;font-size:0.9rem;">
-      Installer downloads <code>v0.19.0-alpha</code> (Linux x86_64). Override with <code>OODA_VERSION</code>.
+      Installer downloads <code>v0.20.0-alpha</code> (Linux x86_64).
     </p>
   </section>
   <section class="stats-ribbon" id="real">
-    <div class="stat-card"><div class="stat-value">import</div><div class="stat-label">Multi-file .oo modules</div></div>
-    <div class="stat-card"><div class="stat-value">Option</div><div class="stat-label">Some / None + match</div></div>
-    <div class="stat-card"><div class="stat-value">check</div><div class="stat-label">Caps + types, no run</div></div>
-    <div class="stat-card"><div class="stat-value">Float</div><div class="stat-label">LLVM double IR</div></div>
+    <div class="stat-card"><div class="stat-value">while</div><div class="stat-label">Loops (run/LLVM/WAT)</div></div>
+    <div class="stat-card"><div class="stat-value">else if</div><div class="stat-label">Chained conditionals</div></div>
+    <div class="stat-card"><div class="stat-value">import</div><div class="stat-label">.oo + std:: modules</div></div>
+    <div class="stat-card"><div class="stat-value">!</div><div class="stat-label">Unary not + is_err</div></div>
   </section>
   <section class="features" id="features">
-    <div class="feature-card"><div class="feature-icon">📦</div><h3>.oo userland</h3><p><code>import "lib.oo"</code> with <code>OODA_STD</code> / <code>OODA_PATH</code>. std is .oo.</p></div>
-    <div class="feature-card"><div class="feature-icon">🔒</div><h3>Capabilities</h3><p>Sealed effects + call-graph: cap args must be live handles (no forgery).</p></div>
-    <div class="feature-card"><div class="feature-icon">🧪</div><h3>Contracts &amp; types</h3><p>requires/ensures/verify, must-use Result, exhaustive match, refinements.</p></div>
-    <div class="feature-card"><div class="feature-icon">⚡</div><h3>Dual engine</h3><p>Interpreter; LLVM Int/Bool/Float; WAT Int subset; clang to link.</p></div>
-    <div class="feature-card" id="gaps"><div class="feature-icon">⚠️</div><h3>Gaps</h3><p>Bootstrap still Rust. No full LSP/pkg/WASM product/PyTorch. Self-host is future work.</p></div>
+    <div class="feature-card"><div class="feature-icon">🔁</div><h3>Control flow</h3><p><code>while</code>, <code>if/else if/else</code>, <code>match</code> on Result/Option.</p></div>
+    <div class="feature-card"><div class="feature-icon">📦</div><h3>.oo modules</h3><p><code>import "lib.oo"</code> and <code>import std::crypto</code> via <code>OODA_STD</code>.</p></div>
+    <div class="feature-card"><div class="feature-icon">🔒</div><h3>Capabilities</h3><p>Sealed effects; cap handles on the call graph; runtime gate.</p></div>
+    <div class="feature-card"><div class="feature-icon">⚡</div><h3>Dual engine</h3><p>Interpreter; LLVM (Int/Bool/Float/while); WAT Int subset.</p></div>
+    <div class="feature-card" id="gaps"><div class="feature-icon">⚠️</div><h3>Gaps</h3><p>No arrays/for, full LSP/pkg, or self-host. Bootstrap remains Rust.</p></div>
   </section>
   <section class="hero" style="padding-top:1rem;">
-    <pre style="text-align:left;background:rgba(0,0,0,0.35);padding:1rem 1.25rem;border-radius:12px;font-family:'Fira Code',monospace;font-size:0.85rem;">
-ooda --version
+    <pre style="text-align:left;background:rgba(0,0,0,0.35);padding:1rem;border-radius:12px;font-family:'Fira Code',monospace;font-size:0.85rem;">
+ooda run examples/while_count.oo
 ooda check examples/hello.oo
-ooda run examples/import_lib.oo
-ooda run examples/option_match.oo
-export OODA_STD=./openooda-std   # use std/*.oo
+export OODA_STD=../openooda-std
     </pre>
     <p style="opacity:0.8;margin-top:1rem;">
       <a href="https://github.com/openOODA/ooda/releases" target="_blank">Releases</a> ·
-      <a href="https://github.com/openOODA/spec" target="_blank">Spec / DESIGN</a> ·
-      <a href="https://github.com/openOODA/std" target="_blank">std (.oo)</a>
+      <a href="https://github.com/openOODA/spec" target="_blank">DESIGN</a>
     </p>
   </section>
-  <footer>
-    <p>© 2026 openOODA. DESIGN.md is the north star; this page is shipped truth.</p>
-  </footer>
+  <footer><p>© 2026 openOODA. DESIGN.md is the north star; this page is shipped truth.</p></footer>
 </body>
 </html>
