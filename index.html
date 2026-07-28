@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>openOODA — AI-Native, Capability-Secure Programming Language</title>
+  <meta name="description" content="Official website for openOODA (.oo) — An AI-native, capability-secure, self-testing systems programming language with 0ms GC pauses and LLVM IR backend.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="bg-glow"></div>
+
+  <!-- Header -->
+  <header>
+    <a href="#" class="logo">
+      <div class="logo-badge">.oo</div>
+      <div class="logo-text">openOODA</div>
+      <span class="version-pill">v0.1.9-alpha</span>
+    </a>
+    <nav>
+      <a href="#features">Features</a>
+      <a href="#security">Capability Security</a>
+      <a href="#contracts">Contracts</a>
+      <a href="#test-matrix">25:1 Test Ratio</a>
+      <a href="https://github.com/openOODA/ooda" class="btn-primary" target="_blank">GitHub Repository</a>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1>The <span>AI-Native</span> & <span>Capability-Secure</span> Programming Language</h1>
+    <p>Observe, Orient, Decide, Act. Built from first principles for sub-second development loops, zero-day defense, self-testing contracts, and bare-metal LLVM speed.</p>
+    
+    <div class="install-box">
+      <span>$</span>
+      <span class="install-cmd">curl -fsSL https://openOODA.github.io/install.sh | sh</span>
+      <button class="copy-btn" onclick="navigator.clipboard.writeText('curl -fsSL https://openOODA.github.io/install.sh | sh'); this.innerText='Copied!';">Copy</button>
+    </div>
+  </section>
+
+  <!-- Stats Ribbon -->
+  <section class="stats-ribbon" id="test-matrix">
+    <div class="stat-card">
+      <div class="stat-value">950</div>
+      <div class="stat-label">Automated Integration Tests</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">25 : 1</div>
+      <div class="stat-label">Test-to-Design Ratio</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">16.5 µs</div>
+      <div class="stat-label">JIT Parse Velocity</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">100%</div>
+      <div class="stat-label">RFC & QA Compliance</div>
+    </div>
+  </section>
+
+  <!-- Features Grid -->
+  <section class="features" id="features">
+    <div class="feature-card">
+      <div class="feature-icon">🔒</div>
+      <h3>Capability Security</h3>
+      <p>Default-deny security model. Network, filesystem, and system execution require explicit <code>&NetCap</code> and <code>&FsCap</code> handles passed from <code>main()</code>.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">🧪</div>
+      <h3>Design by Contract</h3>
+      <p>Preconditions (<code>requires</code>) and postconditions (<code>ensures</code>) run inline with co-located <code>verify</code> test blocks and automated fuzzing matrix.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">🤖</div>
+      <h3>AI Diagnostic Native</h3>
+      <p>Emits structured <code>--json-errors</code> diagnostics with line numbers, error codes, and surgical AST diff fix suggestions for 1-turn AI pair programming.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">⚡</div>
+      <h3>Dual-Engine Architecture</h3>
+      <p>Sub-millisecond instant JIT interpreter (<code>ooda run</code>) for development loops, switching to LLVM IR (<code>ooda build --release</code>) for bare-metal production binaries.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">📋</div>
+      <h3>Token-Minimized Outlines</h3>
+      <p><code>ooda outline</code> extracts API signatures, contracts, and types—achieving 90% token reduction when AI agents reference module dependencies.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">🔄</div>
+      <h3>Self-Hosted Engine</h3>
+      <p>Written to bootstrap itself. Features a Stage-1 self-hosted lexer, AST parser, and contract evaluator written in pure OODA (<code>.oo</code>).</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2026 openOODA Project Core Team. Open Source & Capability Secure. Powered by <a href="https://github.com/openOODA" target="_blank">openOODA Organization on GitHub</a>.</p>
+  </footer>
+
+</body>
+</html>
