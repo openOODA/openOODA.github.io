@@ -4,21 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>openOODA — Capability-Secure, Self-Testing Language (alpha)</title>
-  <meta name="description" content="openOODA (.oo) v0.12.1-alpha: sealed capabilities, contracts, integer LLVM IR, partial WAT, real SHA-256/JSON. Honest about gaps.">
+  <meta name="description" content="openOODA v0.13.0-alpha: must-use Result, let mut, integer LLVM+WAT println, sealed caps, contracts.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
   <div class="bg-glow"></div>
-
   <header>
     <a href="#" class="logo">
       <div class="logo-badge">.oo</div>
       <div class="logo-text">openOODA</div>
-      <span class="version-pill">v0.12.1-alpha</span>
+      <span class="version-pill">v0.13.0-alpha</span>
     </a>
     <nav>
       <a href="#real">What's real</a>
@@ -27,102 +25,49 @@
       <a href="https://github.com/openOODA/ooda" class="btn-primary" target="_blank">GitHub</a>
     </nav>
   </header>
-
   <section class="hero">
     <h1>The <span>capability-secure</span> &amp; <span>self-testing</span> systems language</h1>
     <p>
-      Observe, Orient, Decide, Act. Alpha toolchain: real interpreter, sealed capability effects,
-      design-by-contract, static type checks, validated <strong>integer-subset</strong> LLVM IR,
-      and a partial integer WAT backend. We ship truth, not theater.
+      Observe, Orient, Decide, Act. Alpha with sealed capabilities, contracts,
+      must-use <code>Result</code>, <code>let mut</code> assignment, integer LLVM IR,
+      and subset WAT including <code>println(Int)</code>. Truth over theater.
     </p>
-
     <div class="install-box" id="install">
       <span>$</span>
       <span class="install-cmd">curl -fsSL https://openOODA.github.io/install.sh | sh</span>
       <button class="copy-btn" onclick="navigator.clipboard.writeText('curl -fsSL https://openOODA.github.io/install.sh | sh'); this.innerText='Copied!';">Copy</button>
     </div>
     <p style="margin-top:0.75rem;opacity:0.75;font-size:0.9rem;">
-      Installer downloads <code>v0.12.1-alpha</code> from GitHub Releases (Linux x86_64). Override with <code>OODA_VERSION=…</code>.
+      Installer downloads <code>v0.13.0-alpha</code> from GitHub Releases (Linux x86_64).
     </p>
   </section>
-
   <section class="stats-ribbon" id="real">
-    <div class="stat-card">
-      <div class="stat-value">~50+</div>
-      <div class="stat-label">Hand-written QA programs</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-value">Sealed</div>
-      <div class="stat-label">Capability effect table</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-value">Int IR</div>
-      <div class="stat-label">Validated LLVM subset</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-value">Clean</div>
-      <div class="stat-label">No IR/tarballs in git</div>
-    </div>
+    <div class="stat-card"><div class="stat-value">Must-use</div><div class="stat-label">Result / Option</div></div>
+    <div class="stat-card"><div class="stat-value">let mut</div><div class="stat-label">Immutability default</div></div>
+    <div class="stat-card"><div class="stat-value">Int IR</div><div class="stat-label">LLVM + WAT println</div></div>
+    <div class="stat-card"><div class="stat-value">Sealed</div><div class="stat-label">Capability effects</div></div>
   </section>
-
   <section class="features" id="features">
-    <div class="feature-card">
-      <div class="feature-icon">🔒</div>
-      <h3>Capability security (real)</h3>
-      <p>Default-deny sealed builtins. Explicit <code>&amp;NetCap</code> / <code>&amp;FsCap</code> / <code>&amp;SysCap</code> / <code>&amp;EnvCap</code>. Runtime gate in the interpreter.</p>
-    </div>
-
-    <div class="feature-card">
-      <div class="feature-icon">🧪</div>
-      <h3>Contracts &amp; verify (real)</h3>
-      <p><code>requires</code> / <code>ensures</code> at runtime. Co-located <code>verify</code> via <code>ooda test</code>.</p>
-    </div>
-
-    <div class="feature-card">
-      <div class="feature-icon">🔢</div>
-      <h3>Integer LLVM + partial WAT</h3>
-      <p><code>ooda build</code> emits validated Int/Bool IR. <code>--target wasm</code> emits subset <code>.wat</code> or fails non-zero. String programs use <code>ooda run</code>.</p>
-    </div>
-
-    <div class="feature-card">
-      <div class="feature-icon">🔐</div>
-      <h3>Crypto &amp; JSON (real)</h3>
-      <p><code>sha2</code> / <code>hmac</code> / <code>serde_json</code> internals with real digests.</p>
-    </div>
-
-    <div class="feature-card">
-      <div class="feature-icon">🤖</div>
-      <h3>AI-oriented tools (partial)</h3>
-      <p><code>--json-errors</code> with line:col, <code>outline</code>, <code>reflect</code>, <code>context</code>, <code>patch</code>.</p>
-    </div>
-
-    <div class="feature-card" id="gaps">
-      <div class="feature-icon">⚠️</div>
-      <h3>Not implemented (honest)</h3>
-      <p><strong>No</strong> full WASM/WASI product, <strong>no</strong> PyTorch bridge, <strong>no</strong> LSP, <strong>no</strong> package downloads, <strong>no</strong> migrate/replay. Those fail closed.</p>
-    </div>
+    <div class="feature-card"><div class="feature-icon">🔒</div><h3>Capabilities</h3><p>Default-deny sealed I/O builtins; explicit <code>&amp;NetCap</code> / <code>&amp;FsCap</code>.</p></div>
+    <div class="feature-card"><div class="feature-icon">🧪</div><h3>Contracts</h3><p><code>requires</code> / <code>ensures</code> / <code>verify</code> at runtime.</p></div>
+    <div class="feature-card"><div class="feature-icon">📐</div><h3>Types</h3><p>Must-use Result/Option; immutable <code>let</code>; assign only with <code>let mut</code>.</p></div>
+    <div class="feature-card"><div class="feature-icon">⚡</div><h3>Dual engine</h3><p>Interpreter + integer LLVM; subset WAT with real <code>println(Int)</code>.</p></div>
+    <div class="feature-card" id="gaps"><div class="feature-icon">⚠️</div><h3>Gaps (honest)</h3><p>No full LSP/pkg/migrate/replay; no PyTorch; WASM is subset only.</p></div>
   </section>
-
   <section class="hero" style="padding-top:1rem;">
-    <h2 style="font-size:1.4rem;margin-bottom:0.5rem;">Quick start after install</h2>
-    <pre style="text-align:left;background:rgba(0,0,0,0.35);padding:1rem 1.25rem;border-radius:12px;overflow:auto;font-family:'Fira Code',monospace;font-size:0.85rem;line-height:1.5;">
+    <pre style="text-align:left;background:rgba(0,0,0,0.35);padding:1rem 1.25rem;border-radius:12px;font-family:'Fira Code',monospace;font-size:0.85rem;">
 ooda --version
 ooda run examples/hello.oo
-ooda test examples/math_contract.oo
 ooda build examples/int_main.oo --emit-llvm
-ooda run --json-errors broken.oo
+ooda build --target wasm examples/int_main.oo
     </pre>
     <p style="opacity:0.8;margin-top:1rem;">
-      Spec: <a href="https://github.com/openOODA/spec" target="_blank">openOODA/spec</a> ·
-      QA: <a href="https://github.com/openOODA/qa" target="_blank">openOODA/qa</a> ·
-      Releases: <a href="https://github.com/openOODA/ooda/releases" target="_blank">GitHub Releases</a>
+      <a href="https://github.com/openOODA/ooda/releases" target="_blank">Releases</a> ·
+      <a href="https://github.com/openOODA/spec" target="_blank">Spec</a>
     </p>
   </section>
-
   <footer>
-    <p>© 2026 openOODA. Alpha — DESIGN.md is the north star; this page tracks shipped truth.
-      <a href="https://github.com/openOODA" target="_blank">GitHub org</a></p>
+    <p>© 2026 openOODA. DESIGN.md is the north star; this page is shipped truth.</p>
   </footer>
-
 </body>
 </html>
