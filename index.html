@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>openOODA — Capability-Secure &amp; Self-Testing Systems Language</title>
-  <meta name="description" content="openOODA v0.23.0-alpha: capability-secure .oo language, OODA loop architecture, dual engine.">
+  <meta name="description" content="openOODA v0.25.0-alpha: capability-secure .oo language, OODA loop architecture, dual engine.">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
@@ -15,7 +15,7 @@
     <a href="#" class="logo">
       <img class="logo-img" src="logo_badge.svg" width="38" height="38" alt="openOODA">
       <div class="logo-text">openOODA</div>
-      <span class="version-pill">v0.23.0-alpha</span>
+      <span class="version-pill">v0.26.0-alpha</span>
     </a>
     <nav>
       <a href="#why">Why openOODA</a>
@@ -39,14 +39,16 @@
       <button type="button" class="copy-btn" onclick="navigator.clipboard.writeText('curl -fsSL https://openOODA.github.io/install | sh'); this.innerText='Copied!'">Copy</button>
     </div>
     <p class="install-meta">
-      Pins <code>v0.23.0-alpha</code> (override with <code>OODA_VERSION</code>).
+      Pins <code>v0.25.0-alpha</code> (override with <code>OODA_VERSION</code>).
       Layout: <code>~/.local/bin/ooda</code>, <code>~/.local/share/ooda</code>, <code>~/.config/ooda/env</code>.
     </p>
     <p class="alpha-note">
       <strong>Alpha honesty:</strong> DESIGN.md is the north star. This release ships a real stage-0
-      <code>ooda</code> toolchain (run / check / build subsets, sealed caps, contracts) and an
+      <code>ooda</code> toolchain (run / check / build subsets, sealed caps with real HTTPS
+      <code>fetch</code> under <code>&amp;NetCap</code>, contracts, <code>--json-errors</code>) and an
       <code>install.oo</code> story installer. Full LSP, package registry, complete LLVM/WASM product,
-      and full SPEC self-host are <em>not</em> claimed — only what the binary and docs say is real.
+      AES, embedded Python, type-alias <code>where</code> refinements, and full SPEC self-host are
+      <em>not</em> claimed — unfinished paths fail non-zero.
     </p>
   </section>
 
