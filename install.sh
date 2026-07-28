@@ -5,7 +5,7 @@
 # ===================================================================
 set -e
 
-VERSION="v0.1.9-alpha"
+VERSION="v0.5.0-alpha"
 INSTALL_DIR="$HOME/.ooda/bin"
 
 echo "🚀 Installing openOODA Toolchain ${VERSION}..."

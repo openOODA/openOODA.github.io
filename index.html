@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>openOODA — AI-Native, Capability-Secure Programming Language</title>
-  <meta name="description" content="Official website for openOODA (.oo) — An AI-native, capability-secure, self-testing systems programming language with 0ms GC pauses and LLVM IR backend.">
+  <title>openOODA — AI-Native & Capability-Secure Systems Language</title>
+  <meta name="description" content="Official website for openOODA (.oo) — An AI-native, capability-secure systems programming language with 8-domain QA spectrum, WebAssembly edge compilation, and 8GB VRAM GPU LLM auto-scaling.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -19,21 +19,21 @@
     <a href="#" class="logo">
       <div class="logo-badge">.oo</div>
       <div class="logo-text">openOODA</div>
-      <span class="version-pill">v0.1.9-alpha</span>
+      <span class="version-pill">v0.5.0-alpha</span>
     </a>
     <nav>
       <a href="#features">Features</a>
-      <a href="#security">Capability Security</a>
-      <a href="#contracts">Contracts</a>
-      <a href="#test-matrix">25:1 Test Ratio</a>
+      <a href="#ai-bridge">PyTorch Bridge</a>
+      <a href="#qa-matrix">8-Domain QA</a>
+      <a href="#wasm">WASM Edge</a>
       <a href="https://github.com/openOODA/ooda" class="btn-primary" target="_blank">GitHub Repository</a>
     </nav>
   </header>
 
   <!-- Hero Section -->
   <section class="hero">
-    <h1>The <span>AI-Native</span> & <span>Capability-Secure</span> Programming Language</h1>
-    <p>Observe, Orient, Decide, Act. Built from first principles for sub-second development loops, zero-day defense, self-testing contracts, and bare-metal LLVM speed.</p>
+    <h1>The <span>AI-Native</span> & <span>Capability-Secure</span> Systems Language</h1>
+    <p>Observe, Orient, Decide, Act. Built from first principles for sub-second development loops, 8GB VRAM GPU LLM micro-contexts, 8-domain QA testing spectrum, and bare-metal LLVM speed.</p>
     
     <div class="install-box">
       <span>$</span>
@@ -43,61 +43,61 @@
   </section>
 
   <!-- Stats Ribbon -->
-  <section class="stats-ribbon" id="test-matrix">
+  <section class="stats-ribbon" id="qa-matrix">
     <div class="stat-card">
-      <div class="stat-value">950</div>
+      <div class="stat-value">2,010</div>
       <div class="stat-label">Automated Integration Tests</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value">25 : 1</div>
+      <div class="stat-value">40 : 1</div>
       <div class="stat-label">Test-to-Design Ratio</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value">16.5 µs</div>
-      <div class="stat-label">JIT Parse Velocity</div>
+      <div class="stat-value">8 Domains</div>
+      <div class="stat-label">Comprehensive QA Spectrum</div>
     </div>
     <div class="stat-card">
       <div class="stat-value">100%</div>
-      <div class="stat-label">RFC & QA Compliance</div>
+      <div class="stat-label">RFC & Security Compliance</div>
     </div>
   </section>
 
   <!-- Features Grid -->
   <section class="features" id="features">
+    <div class="feature-card" id="ai-bridge">
+      <div class="feature-icon">🧠</div>
+      <h3>PyTorch & AI Bridge</h3>
+      <p>Direct in-process <code>std::python</code> integration with PyTorch & HuggingFace models, secured via <code>&NetCap</code> capability sandboxing.</p>
+    </div>
+
+    <div class="feature-card" id="wasm">
+      <div class="feature-icon">⚡</div>
+      <h3>WASM Edge Target</h3>
+      <p>Compile <code>.oo</code> code directly into WebAssembly binaries (<code>ooda build --target wasm</code>) for Cloudflare Workers & browser runtimes.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">⏪</div>
+      <h3>Time-Travel Debugger</h3>
+      <p><code>ooda replay</code> records execution step-by-step, allowing human developers and AI models to trace variable state snapshots and contract invariants.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">🎛️</div>
+      <h3>8GB GPU LLM Auto-Scaler</h3>
+      <p><code>ooda context --tier 8gb</code> generates < 180-token micro-contexts for local 7B/8B GPUs, scaling dynamically up to 2M context cloud LLMs.</p>
+    </div>
+
     <div class="feature-card">
       <div class="feature-icon">🔒</div>
       <h3>Capability Security</h3>
-      <p>Default-deny security model. Network, filesystem, and system execution require explicit <code>&NetCap</code> and <code>&FsCap</code> handles passed from <code>main()</code>.</p>
-    </div>
-
-    <div class="feature-card">
-      <div class="feature-icon">🧪</div>
-      <h3>Design by Contract</h3>
-      <p>Preconditions (<code>requires</code>) and postconditions (<code>ensures</code>) run inline with co-located <code>verify</code> test blocks and automated fuzzing matrix.</p>
-    </div>
-
-    <div class="feature-card">
-      <div class="feature-icon">🤖</div>
-      <h3>AI Diagnostic Native</h3>
-      <p>Emits structured <code>--json-errors</code> diagnostics with line numbers, error codes, and surgical AST diff fix suggestions for 1-turn AI pair programming.</p>
-    </div>
-
-    <div class="feature-card">
-      <div class="feature-icon">⚡</div>
-      <h3>Dual-Engine Architecture</h3>
-      <p>Sub-millisecond instant JIT interpreter (<code>ooda run</code>) for development loops, switching to LLVM IR (<code>ooda build --release</code>) for bare-metal production binaries.</p>
-    </div>
-
-    <div class="feature-card">
-      <div class="feature-icon">📋</div>
-      <h3>Token-Minimized Outlines</h3>
-      <p><code>ooda outline</code> extracts API signatures, contracts, and types—achieving 90% token reduction when AI agents reference module dependencies.</p>
+      <p>Default-deny security model. I/O operations require explicit <code>&NetCap</code> and <code>&FsCap</code> handle tokens passed from <code>main()</code>.</p>
     </div>
 
     <div class="feature-card">
       <div class="feature-icon">🔄</div>
-      <h3>Self-Hosted Engine</h3>
-      <p>Written to bootstrap itself. Features a Stage-1 self-hosted lexer, AST parser, and contract evaluator written in pure OODA (<code>.oo</code>).</p>
+      <h3>Edition Migrator</h3>
+      <p>Zero-breaking-change AST codemod engine (<code>ooda migrate --edition 2026</code>) automatically upgrades legacy OODA codebases.</p>
     </div>
   </section>
 
