@@ -289,6 +289,75 @@ nav a:hover {
   font-size: 14px;
 }
 
+/* Why Section / The Boyd Doctrine */
+.why-section {
+  max-width: 1200px;
+  margin: 80px auto;
+  padding: 48px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: var(--radius);
+  backdrop-filter: blur(16px);
+  position: relative;
+  overflow: hidden;
+}
+
+.why-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.why-header h2 {
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, #06b6d4, #8b5cf6, #d946ef);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.why-header p {
+  color: var(--text-muted);
+  font-size: 16px;
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.why-card {
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 24px;
+  transition: border-color 0.3s ease;
+}
+
+.why-card:hover {
+  border-color: rgba(99, 102, 241, 0.6);
+}
+
+.why-card h4 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.why-card p {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.65;
+}
+
 /* Footer */
 footer {
   border-top: 1px solid var(--border-color);
