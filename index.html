@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>openOODA — Capability-Secure Systems Language (alpha)</title>
-  <meta name="description" content="openOODA v0.23.0-alpha: capability-secure .oo language, CHS bootstrap, dual engine.">
+  <meta name="description" content="openOODA v0.23.0-alpha: capability-secure .oo language, XDG install, CHS bootstrap.">
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -18,7 +18,6 @@
     </a>
     <nav>
       <a href="#real">What&rsquo;s real</a>
-      <a href="#gaps">Gaps</a>
       <a href="#install">Install</a>
       <a href="https://github.com/openOODA/ooda" class="btn-primary" target="_blank">GitHub</a>
     </nav>
@@ -26,39 +25,46 @@
   <section class="hero">
     <h1>The <span>capability-secure</span> &amp; <span>self-testing</span> systems language</h1>
     <p>
-      Userland is <strong>.oo</strong> — contracts, sealed caps, dual engine.
-      Stage-0 host is Rust; <strong>CHS frontend self-host</strong> (oodac) is in-tree.
-      Truth over theater.
+      Userland is <strong>.oo</strong>. The installer is <strong>.oo</strong> too —
+      a shell bootstrap only exists to fetch stage-0, then hands off to
+      <code>install/install.oo</code> under real capability tokens.
     </p>
     <div class="install-box" id="install">
       <span>$</span>
-      <span class="install-cmd">curl -fsSL https://openOODA.github.io/install.sh | sh</span>
-      <button class="copy-btn" onclick="navigator.clipboard.writeText('curl -fsSL https://openOODA.github.io/install.sh | sh'); this.innerText='Copied!'">Copy</button>
+      <span class="install-cmd">curl -fsSL https://openOODA.github.io/install | sh</span>
+      <button class="copy-btn" onclick="navigator.clipboard.writeText('curl -fsSL https://openOODA.github.io/install | sh'); this.innerText='Copied!'">Copy</button>
     </div>
     <p style="margin-top:0.75rem;opacity:0.75;font-size:0.9rem;">
-      Installer downloads <code>v0.23.0-alpha</code> (Linux x86_64). Override with <code>OODA_VERSION=…</code>.
+      Pins <code>v0.23.0-alpha</code> (override with <code>OODA_VERSION</code>).
+      Layout: <code>~/.local/bin/ooda</code>, <code>~/.local/share/ooda</code>, <code>~/.config/ooda/env</code>.
     </p>
   </section>
   <section class="stats-ribbon" id="real">
-    <div class="stat-card"><div class="stat-value">while</div><div class="stat-label">Loops (run / C / LLVM)</div></div>
-    <div class="stat-card"><div class="stat-value">caps</div><div class="stat-label">Sealed Fs/Net/Sys/Env</div></div>
-    <div class="stat-card"><div class="stat-value">CHS</div><div class="stat-label">oodac + fixed-point</div></div>
-    <div class="stat-card"><div class="stat-value">check</div><div class="stat-label">Type + cap gate</div></div>
+    <div class="stat-card"><div class="stat-value">.oo</div><div class="stat-label">Installer source</div></div>
+    <div class="stat-card"><div class="stat-value">XDG</div><div class="stat-label">share / bin / config / cache</div></div>
+    <div class="stat-card"><div class="stat-value">caps</div><div class="stat-label">Net · Fs · Sys · Env</div></div>
+    <div class="stat-card"><div class="stat-value">CHS</div><div class="stat-label">oodac in-tree</div></div>
   </section>
-  <section class="features" id="features">
-    <div class="feature-card"><div class="feature-icon">🔁</div><h3>Control flow</h3><p><code>while</code>, <code>if/else if/else</code>, <code>match</code> on Result/Option.</p></div>
-    <div class="feature-card"><div class="feature-icon">📦</div><h3>.oo modules</h3><p><code>import "lib.oo"</code> and <code>import std::…</code> when <code>OODA_STD</code> points at the std tree.</p></div>
-    <div class="feature-card"><div class="feature-icon">🔒</div><h3>Capabilities</h3><p>Sealed effects; cap handles on the call graph; runtime default-deny.</p></div>
-    <div class="feature-card"><div class="feature-icon">⚡</div><h3>Engines</h3><p>Interpreter; CHS→C + gcc; LLVM Int/Bool/Float subset (clang when present).</p></div>
-    <div class="feature-card" id="gaps"><div class="feature-icon">⚠️</div><h3>Gaps</h3><p>No full LSP/pkg product. Full SPEC self-host not claimed — only CHS frontend fixed-point.</p></div>
+  <section class="features">
+    <div class="feature-card"><div class="feature-icon">📖</div><h3>Install story</h3><p>Chaptered narrative in <code>install/install.oo</code>: who we are, where files live, download, PATH, verify.</p></div>
+    <div class="feature-card"><div class="feature-icon">📁</div><h3>Correct paths</h3><p><code>$XDG_DATA_HOME/ooda</code>, <code>$XDG_BIN_HOME</code> (or <code>~/.local/bin</code>), <code>~/.config/ooda/env</code>, <code>~/.cache/ooda</code>.</p></div>
+    <div class="feature-card"><div class="feature-icon">🔒</div><h3>Capabilities</h3><p>Installer itself requires <code>&amp;NetCap &amp;FsCap &amp;SysCap &amp;EnvCap</code> — default-deny even for setup.</p></div>
+    <div class="feature-card" id="gaps"><div class="feature-icon">⚠️</div><h3>Gaps</h3><p>Bootstrap shell is Chapter 0 only. Full SPEC self-host not claimed. Std is a slot you clone into <code>OODA_STD</code>.</p></div>
   </section>
   <section class="hero" style="padding-top:1rem;">
+    <p style="opacity:0.85;margin-bottom:0.5rem;">After install:</p>
+    <pre style="text-align:left;background:rgba(0,0,0,0.35);padding:1rem;border-radius:12px;font-family:'Fira Code',monospace;font-size:0.85rem;">. ~/.config/ooda/env
+ooda --version
+git clone https://github.com/openOODA/ooda.git && cd ooda
+ooda run examples/while_count.oo
+# optional std:
+git clone https://github.com/openOODA/std.git "$OODA_STD"</pre>
     <p style="opacity:0.8;margin-top:1rem;">
       <a href="https://github.com/openOODA/ooda/releases" target="_blank">Releases</a> ·
-      <a href="https://github.com/openOODA/spec" target="_blank">DESIGN</a> ·
-      <a href="https://github.com/openOODA/ooda/blob/main/bootstrap/CHS.md" target="_blank">CHS</a>
+      <a href="https://github.com/openOODA/ooda/blob/main/install/install.oo" target="_blank">install.oo</a> ·
+      <a href="https://github.com/openOODA/spec" target="_blank">DESIGN</a>
     </p>
   </section>
-  <footer><p>© 2026 openOODA. DESIGN.md is the north star; this page tracks the published alpha pin.</p></footer>
+  <footer><p>© 2026 openOODA. The installer is .oo; shell only bootstraps the host.</p></footer>
 </body>
 </html>
