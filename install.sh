@@ -28,7 +28,7 @@ echo "Downloading ${URL}"
 if ! curl -fsSL "$URL" -o "$TMPDIR/$ASSET"; then
   echo "error: failed to download release asset." >&2
   echo "  Check that ${VERSION} exists at https://github.com/${REPO}/releases" >&2
-VERSION="${OODA_VERSION:-v0.20.0-alpha}"
+  echo "  Or set OODA_VERSION=vX.Y.Z-alpha to pin a published release." >&2
   exit 1
 fi
 
