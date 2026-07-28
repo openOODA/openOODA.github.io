@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>openOODA — Capability-Secure &amp; Self-Testing Systems Language</title>
-  <meta name="description" content="openOODA v0.23.0-alpha: capability-secure .oo language, Observe-Orient-Decide-Act architecture, JIT + LLVM + WASM dual engine.">
+  <meta name="description" content="openOODA v0.23.0-alpha: capability-secure .oo language, OODA loop architecture, dual engine.">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
@@ -13,7 +13,7 @@
   <div class="bg-glow"></div>
   <header>
     <a href="#" class="logo">
-      <img src="logo_badge.svg" alt="openOODA OODA Loop Badge" style="width:38px;height:38px;border-radius:10px;box-shadow:0 0 15px rgba(99,102,241,0.4);">
+      <img class="logo-img" src="logo_badge.svg" width="38" height="38" alt="openOODA">
       <div class="logo-text">openOODA</div>
       <span class="version-pill">v0.23.0-alpha</span>
     </a>
@@ -29,109 +29,120 @@
   <section class="hero">
     <h1>The <span>capability-secure</span> &amp; <span>self-testing</span> systems language</h1>
     <p>
-      Built around the <strong>OODA Loop</strong> (Observe · Orient · Decide · Act): sealed capability security, design-by-contract, refinement types, and dual JIT / LLVM / WASM execution.
+      Built around the <strong>OODA Loop</strong> (Observe · Orient · Decide · Act):
+      sealed capability security, design-by-contract, and dual-engine execution.
     </p>
-
-    <!-- OODA Loop Graphic Card -->
-    <div style="margin: 30px auto 40px; max-width: 720px; background: rgba(15,23,42,0.85); border: 1px solid rgba(99,102,241,0.3); border-radius: 24px; padding: 24px; box-shadow: 0 0 50px rgba(99,102,241,0.15); backdrop-filter: blur(16px);">
-      <img src="https://raw.githubusercontent.com/openOODA/brand/main/logo/png/openooda_logo_dark.png" alt="openOODA Loop Emblem" style="width: 100%; max-width: 600px; height: auto; border-radius: 16px;">
-    </div>
 
     <div class="install-box" id="install">
       <span>$</span>
       <span class="install-cmd">curl -fsSL https://openOODA.github.io/install | sh</span>
-      <button class="copy-btn" onclick="navigator.clipboard.writeText('curl -fsSL https://openOODA.github.io/install | sh'); this.innerText='Copied!'">Copy</button>
+      <button type="button" class="copy-btn" onclick="navigator.clipboard.writeText('curl -fsSL https://openOODA.github.io/install | sh'); this.innerText='Copied!'">Copy</button>
     </div>
-    <p style="margin-top:0.75rem;opacity:0.75;font-size:0.9rem;">
+    <p class="install-meta">
       Pins <code>v0.23.0-alpha</code> (override with <code>OODA_VERSION</code>).
       Layout: <code>~/.local/bin/ooda</code>, <code>~/.local/share/ooda</code>, <code>~/.config/ooda/env</code>.
     </p>
+    <p class="alpha-note">
+      <strong>Alpha honesty:</strong> DESIGN.md is the north star. This release ships a real stage-0
+      <code>ooda</code> toolchain (run / check / build subsets, sealed caps, contracts) and an
+      <code>install.oo</code> story installer. Full LSP, package registry, complete LLVM/WASM product,
+      and full SPEC self-host are <em>not</em> claimed — only what the binary and docs say is real.
+    </p>
   </section>
 
-  <!-- OODA Loop Architecture Ribbon -->
-  <section class="stats-ribbon" id="ooda-loop" style="grid-template-columns: repeat(4, 1fr);">
-    <div class="stat-card" style="border-color: rgba(6,182,212,0.4);">
-      <div class="stat-value" style="color: #06b6d4;">👁️ OBSERVE</div>
-      <div class="stat-label">Static AST spans &amp; AI JSON error diagnostics</div>
+  <section class="ooda-ribbon" id="ooda-loop" aria-label="OODA loop phases">
+    <div class="ooda-card observe">
+      <div class="ooda-phase">Observe</div>
+      <div class="ooda-title">See the program</div>
+      <div class="ooda-desc">AST spans, structured diagnostics, <code>ooda dump</code> / outline for agents.</div>
     </div>
-    <div class="stat-card" style="border-color: rgba(139,92,246,0.4);">
-      <div class="stat-value" style="color: #8b5cf6;">🧭 ORIENT</div>
-      <div class="stat-label">Sealed capability gates (&amp;NetCap, &amp;FsCap) &amp; Int[min..max]</div>
+    <div class="ooda-card orient">
+      <div class="ooda-phase">Orient</div>
+      <div class="ooda-title">Constrain power</div>
+      <div class="ooda-desc">Sealed caps (<code>&amp;NetCap</code>, <code>&amp;FsCap</code>, …) and refinement bounds.</div>
     </div>
-    <div class="stat-card" style="border-color: rgba(217,70,239,0.4);">
-      <div class="stat-value" style="color: #d946ef;">⚖️ DECIDE</div>
-      <div class="stat-label">Contracts (requires, ensures result, verify blocks)</div>
+    <div class="ooda-card decide">
+      <div class="ooda-phase">Decide</div>
+      <div class="ooda-title">Check the contract</div>
+      <div class="ooda-desc"><code>requires</code> / <code>ensures</code> / <code>verify</code> — fail closed before you ship.</div>
     </div>
-    <div class="stat-card" style="border-color: rgba(16,185,129,0.4);">
-      <div class="stat-value" style="color: #10b981;">⚡ ACT</div>
-      <div class="stat-label">JIT + LLVM + WASM &amp; atomic auto-fix (ooda patch)</div>
+    <div class="ooda-card act">
+      <div class="ooda-phase">Act</div>
+      <div class="ooda-title">Run or build</div>
+      <div class="ooda-desc">Interpreter, CHS→C native, LLVM/WASM subsets — iterate, then harden.</div>
     </div>
   </section>
 
   <section class="features" id="real">
     <div class="feature-card">
-      <div class="feature-icon" style="background: rgba(6,182,212,0.15); color: #06b6d4;">🔒</div>
-      <h3>Sealed Capabilities</h3>
-      <p>Default-deny security model. Sealed builtins check capability tokens (<code>&amp;NetCap</code>, <code>&amp;FsCap</code>, <code>&amp;SysCap</code>, <code>&amp;EnvCap</code>) statically and at runtime.</p>
+      <div class="feature-icon">🔒</div>
+      <h3>Sealed capabilities</h3>
+      <p>Default-deny I/O. Sealed builtins require capability tokens statically and at runtime.</p>
     </div>
     <div class="feature-card">
-      <div class="feature-icon" style="background: rgba(139,92,246,0.15); color: #8b5cf6;">📜</div>
-      <h3>Design by Contract</h3>
-      <p>Preconditions (<code>requires</code>), postconditions (<code>ensures result</code>), static refinement bounds (<code>Int[1..65535]</code>), and co-located <code>verify</code> blocks.</p>
+      <div class="feature-icon orient">📜</div>
+      <h3>Design by contract</h3>
+      <p><code>requires</code>, <code>ensures</code>, refinement bounds, and co-located <code>verify</code> blocks.</p>
     </div>
     <div class="feature-card">
-      <div class="feature-icon" style="background: rgba(217,70,239,0.15); color: #d946ef;">🤖</div>
-      <h3>AI Diagnostic Native</h3>
-      <p>Machine-readable JSON diagnostics (<code>--json-errors</code>) with AST source spans and atomic in-memory surgical patch repairs (<code>ooda patch</code>).</p>
+      <div class="feature-icon decide">🤖</div>
+      <h3>AI-readable toolchain</h3>
+      <p>JSON diagnostics with spans; outline / reflect / patch for compact agent loops.</p>
     </div>
   </section>
 
-  <!-- Why Section: Col. John Boyd & The Origin of the OODA Loop -->
   <section class="why-section" id="why">
     <div class="why-header">
-      <h2>Why openOODA? The Boyd Doctrine</h2>
+      <h2>Why openOODA? The Boyd doctrine</h2>
       <p>
-        In air combat, systems engineering, and AI programming, victory belongs to whoever operates inside the opponent's decision cycle.
+        In air combat, systems work, and AI-assisted coding, advantage goes to whoever
+        closes the decision cycle faster — not who has the biggest peak specs.
       </p>
     </div>
     <div class="why-grid">
       <div class="why-card">
-        <h4>✈️ 1. Victory in the Air</h4>
+        <h4>1. Velocity over peak power</h4>
         <p>
-          Legendary USAF fighter pilot Col. John Boyd analyzed Korean War aerial combat to understand why F-86 Sabres dominated MiG-15s despite MiGs having superior climb rates. Boyd discovered the Sabre's bubble canopy and fast hydraulic controls allowed pilots to transition between maneuvers faster. He proved that victory is determined not by raw top speed, but by the velocity of decision cycles.
+          Col. John Boyd’s OODA loop framed victory as operating inside the opponent’s
+          decision cycle. openOODA applies that to compilers: short observe → orient →
+          decide → act loops for humans and agents.
         </p>
       </div>
       <div class="why-card">
-        <h4>🏛️ 2. Victory Over Bureaucracy</h4>
+        <h4>2. Guard rails, not ceremony</h4>
         <p>
-          Challenging bloated Pentagon doctrine, Boyd formulated Energy-Maneuverability (E-M) theory and the OODA Loop (Observe · Orient · Decide · Act). Fighting USAF staff officers who favored heavy, sluggish multi-role jets (like the F-111), Boyd and his "Fighter Mafia" bypassed bureaucratic inertia to design the lightweight, ultra-agile <strong>F-16 Fighting Falcon</strong> and <strong>F/A-18 Hornet</strong>.
+          Capabilities and contracts make incorrect I/O and broken promises hard to ship,
+          without requiring a separate security product bolted on later.
         </p>
       </div>
       <div class="why-card">
-        <h4>💻 3. The Software &amp; AI Parallel</h4>
+        <h4>3. Designed for AI co-authoring</h4>
         <p>
-          Sluggish feedback loops, ambient I/O security vulnerabilities, and slow compiler cycles cripple software development. <strong>openOODA</strong> applies Boyd's doctrine directly to systems programming: real-time AST observation, capability orientation, design-by-contract decision checking, and instant dual-engine JIT / LLVM / WASM action.
+          Compact modules, machine-readable errors, and token-light outlines shrink the
+          loop between “agent edited code” and “toolchain said no — here’s why.”
         </p>
       </div>
     </div>
   </section>
 
-  <section class="hero" style="padding-top:1rem;">
-    <p style="opacity:0.85;margin-bottom:0.5rem;">After install:</p>
-    <pre style="text-align:left;background:rgba(0,0,0,0.35);padding:1rem;border-radius:12px;font-family:'Fira Code',monospace;font-size:0.85rem;">. ~/.config/ooda/env
+  <section class="get-started">
+    <h3>After install</h3>
+    <pre>. ~/.config/ooda/env
 ooda --version
 git clone https://github.com/openOODA/ooda.git &amp;&amp; cd ooda
 ooda run examples/while_count.oo
 # optional std:
 git clone https://github.com/openOODA/std.git "$OODA_STD"</pre>
-    <p style="opacity:0.8;margin-top:1rem;">
-      <a href="https://github.com/openOODA/ooda/releases" target="_blank">Releases</a> ·
-      <a href="https://github.com/openOODA/brand" target="_blank">Brand Assets</a> ·
-      <a href="https://github.com/openOODA/ooda/blob/main/install/install.oo" target="_blank">install.oo</a> ·
-      <a href="https://github.com/openOODA/spec" target="_blank">DESIGN</a>
+    <p class="links">
+      <a href="https://github.com/openOODA/ooda/releases" target="_blank" rel="noopener">Releases</a> ·
+      <a href="https://github.com/openOODA/brand" target="_blank" rel="noopener">Brand</a> ·
+      <a href="https://github.com/openOODA/ooda/blob/main/install/install.oo" target="_blank" rel="noopener">install.oo</a> ·
+      <a href="https://github.com/openOODA/spec" target="_blank" rel="noopener">DESIGN</a>
     </p>
   </section>
 
-  <footer><p>© 2026 openOODA. Built around the Observe · Orient · Decide · Act loop.</p></footer>
+  <footer>
+    <p>© 2026 openOODA. Observe · Orient · Decide · Act.</p>
+  </footer>
 </body>
 </html>

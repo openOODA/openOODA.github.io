@@ -7,12 +7,11 @@
       <stop offset="100%" stop-color="#10b981"/>
     </linearGradient>
   </defs>
-  <rect width="64" height="64" rx="16" fill="#090d16"/>
+  <rect width="64" height="64" rx="16" fill="#07090e"/>
   <circle cx="32" cy="32" r="22" stroke="url(#favLoopGrad)" stroke-width="3" fill="none"/>
-  <!-- 4 Nodes -->
   <circle cx="32" cy="10" r="3" fill="#06b6d4"/>
   <circle cx="54" cy="32" r="3" fill="#8b5cf6"/>
   <circle cx="32" cy="54" r="3" fill="#d946ef"/>
   <circle cx="10" cy="32" r="3" fill="#10b981"/>
-  <text x="32" y="40" font-family="-apple-system, sans-serif" font-weight="900" font-size="18" fill="#ffffff" text-anchor="middle">.oo</text>
+  <text x="32" y="40" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-weight="900" font-size="18" fill="#ffffff" text-anchor="middle">.oo</text>
 </svg>

@@ -23,7 +23,7 @@
   </defs>
 
   <!-- Background Tile -->
-  <rect width="200" height="200" rx="48" fill="#07090e"/>
+  <rect width="200" height="200" rx="48" fill="#090d16"/>
 
   <!-- OODA Orbital Loop Badge -->
   <g transform="translate(100, 100)">
