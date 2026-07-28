@@ -8,7 +8,7 @@
 set -euo pipefail
 
 REPO="openOODA/ooda"
-VERSION="${OODA_VERSION:-v0.11.0-alpha}"
+VERSION="${OODA_VERSION:-v0.12.1-alpha}"
 INSTALL_DIR="${OODA_INSTALL_DIR:-$HOME/.ooda/bin}"
 ASSET="ooda-${VERSION}-linux-x86_64.tar.gz"
 URL="https://github.com/${REPO}/releases/download/${VERSION}/${ASSET}"
