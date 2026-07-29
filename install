@@ -12,7 +12,7 @@
 set -euo pipefail
 
 REPO="${OODA_REPO:-openOODA/ooda}"
-VERSION="${OODA_VERSION:-v0.88.0-alpha}"
+VERSION="${OODA_VERSION:-v0.89.0-alpha}"
 ARCH="${OODA_ARCH:-linux-x86_64}"
 ASSET="ooda-${VERSION}-${ARCH}.tar.gz"
 URL="https://github.com/${REPO}/releases/download/${VERSION}/${ASSET}"
