@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>openOODA — Capability-Secure &amp; Self-Testing Systems Language</title>
-  <meta name="description" content="openOODA v0.182.1-alpha: capability-secure .oo language, OODA loop architecture, dual engine.">
+  <meta name="description" content="openOODA v0.182.1-alpha: capability-secure .oo language, pure native Backend-C, OODA loop.">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
@@ -30,7 +30,7 @@
     <h1>The <span>capability-secure</span> &amp; <span>self-testing</span> systems language</h1>
     <p>
       Built around the <strong>OODA Loop</strong> (Observe · Orient · Decide · Act):
-      sealed capability security, design-by-contract, and dual-engine execution.
+      sealed capability security, design-by-contract, and pure native Backend-C execution.
     </p>
 
     <div class="install-box" id="install">
@@ -60,12 +60,12 @@
     <div class="ooda-card decide">
       <div class="ooda-phase">Decide</div>
       <div class="ooda-title">Check the contract</div>
-      <div class="ooda-desc"><code>requires</code> / <code>ensures</code> / <code>verify</code> — fail closed before you ship.</div>
+      <div class="ooda-desc"><code>requires</code> (simple runtime) / <code>verify</code> via <code>ooda test</code>; <code>ensures</code> residual on native.</div>
     </div>
     <div class="ooda-card act">
       <div class="ooda-phase">Act</div>
       <div class="ooda-title">Run or build</div>
-      <div class="ooda-desc">Interpreter, CHS→C native, LLVM/WASM subsets — iterate, then harden.</div>
+      <div class="ooda-desc">Pure native Backend-C (build/run); wasm/llvm fail-closed residual.</div>
     </div>
   </section>
 
@@ -73,7 +73,7 @@
     <div class="feature-card">
       <div class="feature-icon">🔒</div>
       <h3>Sealed capabilities</h3>
-      <p>Default-deny I/O. Sealed builtins require capability tokens statically and at runtime.</p>
+      <p>Default-deny I/O. Sealed free calls require <code>&amp;Cap</code> params at check time (native runtime does not re-check caps).</p>
     </div>
     <div class="feature-card">
       <div class="feature-icon orient">📜</div>
@@ -83,7 +83,7 @@
     <div class="feature-card">
       <div class="feature-icon decide">🤖</div>
       <h3>AI-readable toolchain</h3>
-      <p>JSON diagnostics with patch codemods; <code>outline --json</code> / reflect / patch for compact agent loops.</p>
+      <p><code>--json-errors</code> + codes + <code>fix_hint</code>; <code>outline</code> / <code>reflect</code> / <code>patch replace_fn</code> for agents.</p>
     </div>
   </section>
 
