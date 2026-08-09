@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>openOODA — Capability-Secure &amp; Self-Testing Systems Language</title>
-  <meta name="description" content="openOODA v0.182.1-alpha: capability-secure .oo language, pure native Backend-C, OODA loop.">
+  <title>openOODA — Capability-Secure, Self-Testing Systems Language</title>
+  <meta name="description" content="openOODA v0.183.0-alpha: pure .oo compiler + CLI, capability-sealed I/O, contracts, agent tooling, thin C runtime + seed.">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
@@ -15,14 +15,14 @@
     <a href="#" class="logo">
       <img class="logo-img" src="logo_badge.svg" width="38" height="38" alt="openOODA">
       <div class="logo-text">openOODA</div>
-      <span class="version-pill">v0.182.1-alpha</span>
+      <span class="version-pill">v0.183.0-alpha</span>
     </a>
     <nav>
       <a href="#why">Why openOODA</a>
       <a href="#ooda-loop">OODA Loop</a>
       <a href="#real">What&rsquo;s real</a>
       <a href="#install">Install</a>
-      <a href="https://github.com/openOODA/ooda" class="btn-primary" target="_blank">GitHub</a>
+      <a href="https://github.com/openOODA/ooda" class="btn-primary" target="_blank" rel="noopener">GitHub</a>
     </nav>
   </header>
 
@@ -30,7 +30,8 @@
     <h1>The <span>capability-secure</span> &amp; <span>self-testing</span> systems language</h1>
     <p>
       Built around the <strong>OODA Loop</strong> (Observe · Orient · Decide · Act):
-      sealed capability security, design-by-contract, and pure native Backend-C execution.
+      sealed capabilities, design-by-contract, AI-native tooling, and a
+      <strong>pure <code>.oo</code> product</strong> (compiler + CLI) on a thin C runtime floor with a trusted seed.
     </p>
 
     <div class="install-box" id="install">
@@ -39,33 +40,41 @@
       <button type="button" class="copy-btn" onclick="navigator.clipboard.writeText('curl -fsSL https://openOODA.github.io/install | sh'); this.innerText='Copied!'">Copy</button>
     </div>
     <p class="install-meta">
-      Pins <code>v0.182.1-alpha</code> (override with <code>OODA_VERSION</code>).
+      Pins <code>v0.183.0-alpha</code> (override with <code>OODA_VERSION</code>).
       Layout: <code>~/.local/bin/ooda</code>, <code>~/.local/share/ooda</code>, <code>~/.config/ooda/env</code>.
+      Needs <code>curl</code>, <code>tar</code>, then the pure installer in <code>install/install.oo</code>.
     </p>
     <p class="alpha-note">
-      <strong>Alpha honesty (v0.182.1-alpha):</strong> DESIGN.md north star. Product tree is pure <code>.oo</code> + C runtime + seed <code>oodac</code> (zero product <code>.rs</code>). Build needs gcc + trusted seed binary. Residual: cold-start seed, fail-closed out-of-surface features. <strong>Not a beta tag</strong> until B0–B5 public proof pack. All Rights Reserved.</p>
+      <strong>Alpha honesty (v0.183.0-alpha):</strong>
+      Product tree is pure <code>.oo</code> + C runtime + seed <code>oodac</code> (zero product <code>.rs</code>).
+      Rebuild needs bash, gcc, and a trusted seed binary.
+      Residual: cold-start seed, ARC free still leak-safe, multi-type pure fuzz fail-closed,
+      wasm/llvm/bytecode are real smokes not production floors.
+      <strong>Not a beta tag</strong> — only the owner tags beta (<code>bootstrap/BETA.md</code>).
+      All Rights Reserved.
+    </p>
   </section>
 
   <section class="ooda-ribbon" id="ooda-loop" aria-label="OODA loop phases">
     <div class="ooda-card observe">
       <div class="ooda-phase">Observe</div>
       <div class="ooda-title">See the program</div>
-      <div class="ooda-desc">AST spans, structured diagnostics, <code>ooda dump</code> / outline for agents.</div>
+      <div class="ooda-desc"><code>ooda dump</code>, structured diags, <code>outline</code> for token-cheap public APIs.</div>
     </div>
     <div class="ooda-card orient">
       <div class="ooda-phase">Orient</div>
       <div class="ooda-title">Constrain power</div>
-      <div class="ooda-desc">Sealed caps (<code>&amp;NetCap</code>, <code>&amp;FsCap</code>, …) and refinement bounds.</div>
+      <div class="ooda-desc">Sealed caps (<code>&amp;FsCap</code>, <code>&amp;SysCap</code>, <code>&amp;EnvCap</code>, <code>&amp;NetCap</code>) at check + runtime seal.</div>
     </div>
     <div class="ooda-card decide">
       <div class="ooda-phase">Decide</div>
       <div class="ooda-title">Check the contract</div>
-      <div class="ooda-desc"><code>requires</code> (simple runtime) / <code>verify</code> via <code>ooda test</code>; <code>ensures</code> residual on native.</div>
+      <div class="ooda-desc">Simple <code>requires</code> on native; <code>verify</code> / <code>assert_*</code> via <code>ooda test</code>; pure Int <code>--fuzz</code>.</div>
     </div>
     <div class="ooda-card act">
       <div class="ooda-phase">Act</div>
       <div class="ooda-title">Run or build</div>
-      <div class="ooda-desc">Pure native Backend-C (build/run); wasm/llvm fail-closed residual.</div>
+      <div class="ooda-desc">Product path: pure native Backend-C. WASM / LLVM / bytecode interpreter smokes when tools present.</div>
     </div>
   </section>
 
@@ -73,17 +82,51 @@
     <div class="feature-card">
       <div class="feature-icon">🔒</div>
       <h3>Sealed capabilities</h3>
-      <p>Default-deny I/O. Sealed free calls require <code>&amp;Cap</code> params at check time (native runtime does not re-check caps).</p>
+      <p>
+        Default-deny sealed I/O. Compile-time cap params plus process-local runtime magic-token re-check on Backend-C
+        (not cryptographic object-caps — honest alpha).
+      </p>
     </div>
     <div class="feature-card">
       <div class="feature-icon orient">📜</div>
       <h3>Design by contract</h3>
-      <p><code>requires</code>, <code>ensures</code>, <code>Int[lo..hi]</code> on lets <em>and</em> call-site params, co-located <code>verify</code>.</p>
+      <p>
+        <code>requires</code> / <code>ensures</code> / co-located <code>verify</code>.
+        Simple requires + assert macros on native; pure <strong>Int-domain</strong> <code>--fuzz</code> (no Python on that path).
+      </p>
     </div>
     <div class="feature-card">
       <div class="feature-icon decide">🤖</div>
-      <h3>AI-readable toolchain</h3>
-      <p><code>--json-errors</code> + codes + <code>fix_hint</code>; <code>outline</code> / <code>reflect</code> / <code>patch replace_fn</code> for agents.</p>
+      <h3>AI-native toolchain</h3>
+      <p>
+        <code>--json-errors</code>, <code>outline</code> / <code>reflect</code> (parse-only, safe for agents),
+        surgical <code>patch replace_fn</code>. Compact modules under a line lock.
+      </p>
+    </div>
+  </section>
+
+  <section class="real-table-section" id="status">
+    <div class="why-header">
+      <h2>What&rsquo;s real in v0.183.0-alpha</h2>
+      <p>Product claims only. Residuals stay fail-closed or documented — no soft-pass green.</p>
+    </div>
+    <div class="status-table-wrap">
+      <table class="status-table">
+        <thead>
+          <tr><th>Capability</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Pure <code>.oo</code> CLI + compiler</td><td class="ok">Shipped — self-host via seed + gcc</td></tr>
+          <tr><td><code>check</code> / <code>dump</code> / <code>run</code> / <code>build --target c</code></td><td class="ok">Shipped — native Backend-C product path</td></tr>
+          <tr><td><code>outline</code> / <code>reflect</code> / <code>patch</code></td><td class="ok">Shipped — agent surface (M1)</td></tr>
+          <tr><td>Caps (static + runtime seal)</td><td class="ok">Shipped on Backend-C — magic tokens, not crypto caps</td></tr>
+          <tr><td><code>test</code> + pure Int <code>--fuzz</code></td><td class="ok">Shipped Int domain — multi-type fail-closed</td></tr>
+          <tr><td>Bytecode VM</td><td class="partial">Interpreter smokes — not JIT; language surface growing</td></tr>
+          <tr><td>WASM / LLVM</td><td class="partial">Emit + execute smokes when wasmtime/clang present — not floors</td></tr>
+          <tr><td>Memory ARC free</td><td class="partial">Retain/release on; free still leak-safe residual</td></tr>
+          <tr><td>Beta tag</td><td class="no">Owner-only — not claimed</td></tr>
+        </tbody>
+      </table>
     </div>
   </section>
 
@@ -91,7 +134,7 @@
     <div class="why-header">
       <h2>Why openOODA? The Boyd doctrine</h2>
       <p>
-        In air combat, systems work, and AI-assisted coding, advantage goes to whoever
+        In systems work and AI-assisted coding, advantage goes to whoever
         closes the decision cycle faster — not who has the biggest peak specs.
       </p>
     </div>
@@ -100,7 +143,7 @@
         <h4>1. Velocity over peak power</h4>
         <p>
           Col. John Boyd’s OODA loop framed victory as operating inside the opponent’s
-          decision cycle. openOODA applies that to compilers: short observe → orient →
+          decision cycle. openOODA applies that to toolchains: short observe → orient →
           decide → act loops for humans and agents.
         </p>
       </div>
@@ -108,7 +151,7 @@
         <h4>2. Guard rails, not ceremony</h4>
         <p>
           Capabilities and contracts make incorrect I/O and broken promises hard to ship,
-          without requiring a separate security product bolted on later.
+          without bolting on a separate security product later.
         </p>
       </div>
       <div class="why-card">
@@ -124,13 +167,17 @@
   <section class="get-started">
     <h3>After install</h3>
     <pre>. ~/.config/ooda/env
-ooda --version
+ooda version
 git clone https://github.com/openOODA/ooda.git &amp;&amp; cd ooda
-ooda run fixtures/while_count.oo
+# rebuild from pure seed (needs gcc):
+./scripts/bootstrap_no_cargo.sh
+./bin/ooda run fixtures/while_count.oo
+./bin/ooda outline fixtures/int_main.oo
 # optional std:
 git clone https://github.com/openOODA/std.git "$OODA_STD"</pre>
     <p class="links">
       <a href="https://github.com/openOODA/ooda/releases" target="_blank" rel="noopener">Releases</a> ·
+      <a href="https://github.com/openOODA/ooda" target="_blank" rel="noopener">ooda repo</a> ·
       <a href="https://github.com/openOODA/brand" target="_blank" rel="noopener">Brand</a> ·
       <a href="https://github.com/openOODA/ooda/blob/main/install/install.oo" target="_blank" rel="noopener">install.oo</a> ·
       <a href="https://github.com/openOODA/spec" target="_blank" rel="noopener">DESIGN</a>
@@ -138,7 +185,7 @@ git clone https://github.com/openOODA/std.git "$OODA_STD"</pre>
   </section>
 
   <footer>
-    <p>© 2026 openOODA. Observe · Orient · Decide · Act.</p>
+    <p>© 2026 openOODA. Observe · Orient · Decide · Act. Pure <code>.oo</code> product · C floor · seed bootstrap.</p>
   </footer>
 </body>
 </html>
