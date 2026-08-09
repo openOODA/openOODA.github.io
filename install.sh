@@ -27,9 +27,9 @@ echo "╔═══════════════════════�
 echo "║  openOODA · Chapter 0 · Bootstrap (shell)                        ║"
 echo "╚══════════════════════════════════════════════════════════════════╝"
 echo ""
-echo "  Shell cannot implement openOODA. It can only fetch the stage-0 host"
-echo "  so the *real* installer (install/install.oo) can run under capability"
-echo "  security and tell the full story."
+echo "  Shell cannot implement openOODA. It can only fetch a trusted seed"
+echo "  binary so the *real* installer (install/install.oo) can run under"
+echo "  capability security and tell the full story."
 echo ""
 echo "  Version : ${VERSION}"
 echo "  Asset   : ${ASSET}"
@@ -70,10 +70,10 @@ if [[ -z "${INSTALL_OO}" ]]; then
 fi
 
 echo ""
-echo "  Stage-0 binary : ${OODA_BIN}"
+echo "  Seed binary    : ${OODA_BIN}"
 echo "  Installer (.oo): ${INSTALL_OO}"
 echo ""
-echo "  Handing off to OODA — Chapter 1 begins inside install.oo …"
+echo "  Handing off to pure OODA — Chapter 1 begins inside install.oo …"
 echo ""
 
 # Export pin so install.oo resolves the same version
