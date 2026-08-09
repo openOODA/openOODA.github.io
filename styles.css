@@ -301,21 +301,110 @@ nav a:hover {
   line-height: 1.45;
 }
 
-/* Status honesty table */
-.real-table-section {
-  max-width: 900px;
-  margin: 0 auto 80px;
+/* Design goals (DESIGN.md) */
+.design-section,
+.progress-section {
+  max-width: 1100px;
+  margin: 0 auto 72px;
   padding: 0 24px;
   position: relative;
   z-index: 1;
 }
 
+.section-tag {
+  display: inline-block;
+  margin-left: 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--observe);
+  vertical-align: middle;
+  border: 1px solid rgba(6, 182, 212, 0.35);
+  border-radius: 999px;
+  padding: 3px 10px;
+}
+
+.design-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.design-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 22px 20px;
+  backdrop-filter: blur(12px);
+}
+
+.design-card h3 {
+  font-size: 1.05rem;
+  margin-bottom: 12px;
+  color: var(--text-main);
+}
+
+.design-card ul {
+  margin: 0;
+  padding-left: 1.15rem;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+
+.design-card li {
+  margin-bottom: 0.45rem;
+  line-height: 1.45;
+}
+
+.design-card li strong {
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+.design-card code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  color: #cbd5e1;
+}
+
+.design-foot {
+  margin-top: 12px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.design-foot a {
+  color: var(--observe);
+  text-decoration: none;
+}
+
+.design-foot a:hover {
+  text-decoration: underline;
+}
+
+.design-section .ooda-ribbon {
+  margin: 24px auto 28px;
+  padding: 0;
+}
+
+/* Progress tables (PROGRESS.md) */
 .status-table-wrap {
   overflow-x: auto;
   border: 1px solid var(--border-color);
   border-radius: var(--radius);
   background: var(--bg-card);
   backdrop-filter: blur(12px);
+  margin-bottom: 18px;
+}
+
+.table-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0;
+  padding: 14px 16px 0;
 }
 
 .status-table {
@@ -338,6 +427,16 @@ nav a:hover {
   text-transform: uppercase;
   letter-spacing: 0.08em;
   font-weight: 700;
+  background: rgba(7, 9, 14, 0.35);
+}
+
+.progress-foot {
+  margin-top: 8px;
+  max-width: none;
+}
+
+.progress-foot a {
+  color: var(--observe);
 }
 
 .status-table tr:last-child td {
@@ -547,7 +646,8 @@ footer {
   }
 
   .features,
-  .why-grid {
+  .why-grid,
+  .design-grid {
     grid-template-columns: 1fr;
   }
 

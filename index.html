@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>openOODA — Capability-Secure, Self-Testing Systems Language</title>
-  <meta name="description" content="openOODA v0.183.0-alpha: pure .oo compiler + CLI, capability-sealed I/O, contracts, agent tooling, thin C runtime + seed.">
+  <title>openOODA — Design Goals &amp; Implementation Progress</title>
+  <meta name="description" content="openOODA: DESIGN.md north star (OODA loop, caps, contracts, AI-native) and PROGRESS.md implementation status for v0.183.0-alpha.">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
@@ -18,20 +18,19 @@
       <span class="version-pill">v0.183.0-alpha</span>
     </a>
     <nav>
-      <a href="#why">Why openOODA</a>
-      <a href="#ooda-loop">OODA Loop</a>
-      <a href="#real">What&rsquo;s real</a>
+      <a href="#design">Design goals</a>
+      <a href="#progress">Progress</a>
       <a href="#install">Install</a>
+      <a href="https://github.com/openOODA/spec/blob/main/DESIGN.md" target="_blank" rel="noopener">DESIGN.md</a>
       <a href="https://github.com/openOODA/ooda" class="btn-primary" target="_blank" rel="noopener">GitHub</a>
     </nav>
   </header>
 
   <section class="hero">
-    <h1>The <span>capability-secure</span> &amp; <span>self-testing</span> systems language</h1>
+    <h1>AI-native, <span>capability-secure</span>, <span>self-testing</span> systems language</h1>
     <p>
-      Built around the <strong>OODA Loop</strong> (Observe · Orient · Decide · Act):
-      sealed capabilities, design-by-contract, AI-native tooling, and a
-      <strong>pure <code>.oo</code> product</strong> (compiler + CLI) on a thin C runtime floor with a trusted seed.
+      Built around the <strong>OODA loop</strong> (Observe · Orient · Decide · Act).
+      <strong>DESIGN.md</strong> is the north star. <strong>PROGRESS.md</strong> records what the implementation has actually shipped — this page keeps those two layers separate.
     </p>
 
     <div class="install-box" id="install">
@@ -40,128 +39,217 @@
       <button type="button" class="copy-btn" onclick="navigator.clipboard.writeText('curl -fsSL https://openOODA.github.io/install | sh'); this.innerText='Copied!'">Copy</button>
     </div>
     <p class="install-meta">
-      Pins <code>v0.183.0-alpha</code> (override with <code>OODA_VERSION</code>).
+      Install pin <code>v0.183.0-alpha</code> (override with <code>OODA_VERSION</code>).
       Layout: <code>~/.local/bin/ooda</code>, <code>~/.local/share/ooda</code>, <code>~/.config/ooda/env</code>.
-      Needs <code>curl</code>, <code>tar</code>, then the pure installer in <code>install/install.oo</code>.
     </p>
     <p class="alpha-note">
-      <strong>Alpha honesty (v0.183.0-alpha):</strong>
-      Product tree is pure <code>.oo</code> + C runtime + seed <code>oodac</code> (zero product <code>.rs</code>).
-      Rebuild needs bash, gcc, and a trusted seed binary.
-      Residual: cold-start seed, ARC free still leak-safe, multi-type pure fuzz fail-closed,
-      wasm/llvm/bytecode are real smokes not production floors.
-      <strong>Not a beta tag</strong> — only the owner tags beta (<code>bootstrap/BETA.md</code>).
-      All Rights Reserved.
+      <strong>How to read this site:</strong>
+      Sections under <em>Design goals</em> are the long-term architecture from
+      <a href="https://github.com/openOODA/spec/blob/main/DESIGN.md" target="_blank" rel="noopener">DESIGN.md</a>
+      — not a claim that every bullet is implemented.
+      Sections under <em>Implementation progress</em> mirror monorepo
+      <code>PROGRESS.md</code> (local tracker; product git remains source of truth for tips).
+      <strong>Not beta</strong> — owner-only tag (<code>bootstrap/BETA.md</code>).
     </p>
   </section>
 
-  <section class="ooda-ribbon" id="ooda-loop" aria-label="OODA loop phases">
-    <div class="ooda-card observe">
-      <div class="ooda-phase">Observe</div>
-      <div class="ooda-title">See the program</div>
-      <div class="ooda-desc"><code>ooda dump</code>, structured diags, <code>outline</code> for token-cheap public APIs.</div>
-    </div>
-    <div class="ooda-card orient">
-      <div class="ooda-phase">Orient</div>
-      <div class="ooda-title">Constrain power</div>
-      <div class="ooda-desc">Sealed caps (<code>&amp;FsCap</code>, <code>&amp;SysCap</code>, <code>&amp;EnvCap</code>, <code>&amp;NetCap</code>) at check + runtime seal.</div>
-    </div>
-    <div class="ooda-card decide">
-      <div class="ooda-phase">Decide</div>
-      <div class="ooda-title">Check the contract</div>
-      <div class="ooda-desc">Simple <code>requires</code> on native; <code>verify</code> / <code>assert_*</code> via <code>ooda test</code>; pure Int <code>--fuzz</code>.</div>
-    </div>
-    <div class="ooda-card act">
-      <div class="ooda-phase">Act</div>
-      <div class="ooda-title">Run or build</div>
-      <div class="ooda-desc">Product path: pure native Backend-C. WASM / LLVM / bytecode interpreter smokes when tools present.</div>
-    </div>
-  </section>
-
-  <section class="features" id="real">
-    <div class="feature-card">
-      <div class="feature-icon">🔒</div>
-      <h3>Sealed capabilities</h3>
-      <p>
-        Default-deny sealed I/O. Compile-time cap params plus process-local runtime magic-token re-check on Backend-C
-        (not cryptographic object-caps — honest alpha).
-      </p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon orient">📜</div>
-      <h3>Design by contract</h3>
-      <p>
-        <code>requires</code> / <code>ensures</code> / co-located <code>verify</code>.
-        Simple requires + assert macros on native; pure <strong>Int-domain</strong> <code>--fuzz</code> (no Python on that path).
-      </p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon decide">🤖</div>
-      <h3>AI-native toolchain</h3>
-      <p>
-        <code>--json-errors</code>, <code>outline</code> / <code>reflect</code> (parse-only, safe for agents),
-        surgical <code>patch replace_fn</code>. Compact modules under a line lock.
-      </p>
-    </div>
-  </section>
-
-  <section class="real-table-section" id="status">
+  <!-- ========== DESIGN.md GOALS ========== -->
+  <section class="design-section" id="design">
     <div class="why-header">
-      <h2>What&rsquo;s real in v0.183.0-alpha</h2>
-      <p>Product claims only. Residuals stay fail-closed or documented — no soft-pass green.</p>
+      <h2>Design goals <span class="section-tag">DESIGN.md north star</span></h2>
+      <p>
+        From the architectural blueprint: what openOODA is <em>for</em>.
+        Goals below are the target shape of the language and ecosystem — progress is tracked separately.
+      </p>
     </div>
+
+    <div class="ooda-ribbon" id="ooda-loop" aria-label="OODA loop design">
+      <div class="ooda-card observe">
+        <div class="ooda-phase">Observe</div>
+        <div class="ooda-title">Tight feedback</div>
+        <div class="ooda-desc">Sub-second compile loops, rich JSON metadata, dumps and outlines so humans and agents see the program fast.</div>
+      </div>
+      <div class="ooda-card orient">
+        <div class="ooda-phase">Orient</div>
+        <div class="ooda-title">Capability sandbox</div>
+        <div class="ooda-desc">Default-deny I/O; explicit tokens like <code>&amp;FsCap</code> / <code>&amp;NetCap</code>; scale toward quotas, taint, and attestation.</div>
+      </div>
+      <div class="ooda-card decide">
+        <div class="ooda-phase">Decide</div>
+        <div class="ooda-title">Contracts &amp; proof</div>
+        <div class="ooda-desc">First-class <code>requires</code> / <code>ensures</code>, co-located <code>verify</code>, and automated contract fuzzing.</div>
+      </div>
+      <div class="ooda-card act">
+        <div class="ooda-phase">Act</div>
+        <div class="ooda-title">Native multi-target</div>
+        <div class="ooda-desc">Bytecode for fast dev, LLVM for production native, WASM for edge/web, room for bare-metal and accelerators.</div>
+      </div>
+    </div>
+
+    <div class="design-grid">
+      <article class="design-card">
+        <h3>1. Language philosophy</h3>
+        <ul>
+          <li><strong>OODA speed</strong> — observe → orient → decide → act as the product loop for humans and AI.</li>
+          <li><strong>Mathematical contracts</strong> — <code>requires</code> / <code>ensures</code> as first-class bounds on behavior.</li>
+          <li><strong>Data-oriented design</strong> — SoA layouts, zero-copy serialization goals.</li>
+          <li><strong>AST macros &amp; type-state</strong> — compile-time rewrite power; lifecycle-safe APIs.</li>
+        </ul>
+      </article>
+      <article class="design-card">
+        <h3>2. AI-native tooling</h3>
+        <ul>
+          <li><strong>Surgical patching</strong> — machine-readable diagnostics; AST-oriented agent fixes.</li>
+          <li><strong>Token-minimized APIs</strong> — <code>outline</code> / <code>reflect</code> for cheap codebase views.</li>
+          <li><strong>Intent-driven synthesis</strong> (goal) — contracts first; body synthesis/verification as north-star.</li>
+          <li><strong>Global / overnight fuzzing</strong> (goal) — collaborative contract breaking beyond local runs.</li>
+        </ul>
+      </article>
+      <article class="design-card">
+        <h3>3. Safety &amp; security engine</h3>
+        <ul>
+          <li><strong>Capability sandboxing</strong> — no ambient I/O; sealed tokens on the call graph.</li>
+          <li><strong>Time / entropy / heap / CPU quotas</strong> (goal ladder) — purity and DoS bounds.</li>
+          <li><strong>Taint &amp; secret tracking</strong> (goal) — sensitive data never reaches unsafe sinks.</li>
+          <li><strong>Contract fuzzer</strong> — <code>ooda test --fuzz</code> against <code>requires</code>/<code>ensures</code>.</li>
+          <li><strong>0ms GC via ARC / RAII</strong> — scope lifetimes without stop-the-world GC.</li>
+          <li>Advanced goals: temporal memory, call-graph integrity, metamorphic binaries (DESIGN.md §3).</li>
+        </ul>
+      </article>
+      <article class="design-card">
+        <h3>4. Compiler &amp; execution targets</h3>
+        <ul>
+          <li><strong>Bytecode VM</strong> — fast development execution path (interpreter; design also discusses hot reload).</li>
+          <li><strong>LLVM</strong> — production-oriented native IR / CPU performance.</li>
+          <li><strong>WebAssembly</strong> — browsers and edge.</li>
+          <li>Further goals: GPU/NPU targets, bare-metal <code>no_std</code>, deterministic builds, compile-time FFI.</li>
+        </ul>
+      </article>
+      <article class="design-card">
+        <h3>5. Ecosystem &amp; DX</h3>
+        <ul>
+          <li><strong>Self-hosted ecosystem</strong> — compiler first; package manager, LSP, registry as pure <code>.oo</code> goals.</li>
+          <li><strong>Verifiable web of code</strong> (goal) — capability manifests and formal trust on imports.</li>
+          <li><strong>Fearless concurrency</strong> (goal) — message passing; caps relinquished across threads.</li>
+          <li><strong>std::core vs std::os</strong> — pure logic vs OS-capability surface.</li>
+          <li>Narrative diagnostics, HITL testing, universal LSP (DESIGN.md §5).</li>
+        </ul>
+      </article>
+      <article class="design-card">
+        <h3>6. Tension points (by design)</h3>
+        <ul>
+          <li>Deterministic builds vs metamorphic binaries — disk hash vs RAM polymorphism.</li>
+          <li>Instant ARC free vs temporal/rollback memory — opt-in arenas for history.</li>
+          <li>Capability sandbox vs C/C++ FFI — explicit <code>&amp;UnsafeFFICap</code>-class breach.</li>
+        </ul>
+        <p class="design-foot">
+          Full blueprint:
+          <a href="https://github.com/openOODA/spec/blob/main/DESIGN.md" target="_blank" rel="noopener">spec/DESIGN.md</a>
+          · also mirrored in the product tree.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ========== PROGRESS.md STATUS ========== -->
+  <section class="progress-section" id="progress">
+    <div class="why-header">
+      <h2>Implementation progress <span class="section-tag">from PROGRESS.md</span></h2>
+      <p>
+        Status tables below follow monorepo <code>PROGRESS.md</code>
+        (local implementation tracker). Product SHA truth lives in the
+        <a href="https://github.com/openOODA/ooda" target="_blank" rel="noopener">ooda</a> repo.
+      </p>
+    </div>
+
     <div class="status-table-wrap">
+      <h3 class="table-title">Pin</h3>
       <table class="status-table">
         <thead>
-          <tr><th>Capability</th><th>Status</th></tr>
+          <tr><th>Item</th><th>Value (PROGRESS.md)</th></tr>
         </thead>
         <tbody>
-          <tr><td>Pure <code>.oo</code> CLI + compiler</td><td class="ok">Shipped — self-host via seed + gcc</td></tr>
-          <tr><td><code>check</code> / <code>dump</code> / <code>run</code> / <code>build --target c</code></td><td class="ok">Shipped — native Backend-C product path</td></tr>
-          <tr><td><code>outline</code> / <code>reflect</code> / <code>patch</code></td><td class="ok">Shipped — agent surface (M1)</td></tr>
-          <tr><td>Caps (static + runtime seal)</td><td class="ok">Shipped on Backend-C — magic tokens, not crypto caps</td></tr>
-          <tr><td><code>test</code> + pure Int <code>--fuzz</code></td><td class="ok">Shipped Int domain — multi-type fail-closed</td></tr>
-          <tr><td>Bytecode VM</td><td class="partial">Interpreter smokes — not JIT; language surface growing</td></tr>
-          <tr><td>WASM / LLVM</td><td class="partial">Emit + execute smokes when wasmtime/clang present — not floors</td></tr>
-          <tr><td>Memory ARC free</td><td class="partial">Retain/release on; free still leak-safe residual</td></tr>
-          <tr><td>Beta tag</td><td class="no">Owner-only — not claimed</td></tr>
+          <tr><td>Release</td><td><code>v0.183.0-alpha</code></td></tr>
+          <tr><td>Tip (hygiene)</td><td><code>ooda</code> <code>main</code> @ post-<code>cc6b8be</code> (M2 emit + cold-seed bootstrap hygiene)</td></tr>
+          <tr><td>Self-host</td><td><code>PURE_NO_ARC=1</code> default (as recorded in PROGRESS.md)</td></tr>
         </tbody>
       </table>
     </div>
-  </section>
 
-  <section class="why-section" id="why">
-    <div class="why-header">
-      <h2>Why openOODA? The Boyd doctrine</h2>
-      <p>
-        In systems work and AI-assisted coding, advantage goes to whoever
-        closes the decision cycle faster — not who has the biggest peak specs.
-      </p>
+    <div class="status-table-wrap">
+      <h3 class="table-title">Shipped</h3>
+      <table class="status-table">
+        <thead>
+          <tr><th>Area</th><th>Result</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>M1 outline/reflect</td><td class="ok">Native pure path; smoke PASSED</td></tr>
+          <tr><td>PURE_NO_ARC self-host</td><td class="ok">Bootstrap works with strip</td></tr>
+          <tr><td>M2 emit (partial)</td><td class="partial">Env last-wins; local-only releases; ret_arc stash-before-release; early_return run green</td></tr>
+          <tr><td>M4/M5 emit</td><td class="partial"><code>emit-wasm</code> / <code>emit-llvm</code> + smokes</td></tr>
+          <tr><td>M6 interpreter</td><td class="ok"><code>bc_vm_smoke</code> PASSED</td></tr>
+          <tr><td>Runtime</td><td class="ok">Non-consuming <code>oo_str_concat</code></td></tr>
+          <tr><td>Line lock</td><td class="ok">O=0</td></tr>
+        </tbody>
+      </table>
     </div>
-    <div class="why-grid">
-      <div class="why-card">
-        <h4>1. Velocity over peak power</h4>
-        <p>
-          Col. John Boyd’s OODA loop framed victory as operating inside the opponent’s
-          decision cycle. openOODA applies that to toolchains: short observe → orient →
-          decide → act loops for humans and agents.
-        </p>
-      </div>
-      <div class="why-card">
-        <h4>2. Guard rails, not ceremony</h4>
-        <p>
-          Capabilities and contracts make incorrect I/O and broken promises hard to ship,
-          without bolting on a separate security product later.
-        </p>
-      </div>
-      <div class="why-card">
-        <h4>3. Designed for AI co-authoring</h4>
-        <p>
-          Compact modules, machine-readable errors, and token-light outlines shrink the
-          loop between “agent edited code” and “toolchain said no — here’s why.”
-        </p>
-      </div>
+
+    <div class="status-table-wrap">
+      <h3 class="table-title">Rails (last hygiene pass)</h3>
+      <table class="status-table">
+        <thead>
+          <tr><th>Rail</th><th>Result</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>check_file_lines.sh</code></td><td class="ok">OK</td></tr>
+          <tr><td><code>outline_reflect_smoke</code></td><td class="ok">PASSED</td></tr>
+          <tr><td><code>llvm_token_align_smoke</code></td><td class="ok">exec bit fixed; in <code>ci_product</code></td></tr>
+          <tr><td><code>wasm_emit_smoke</code> / <code>bc_vm_smoke</code></td><td class="ok">in <code>ci_product</code></td></tr>
+          <tr><td><code>ci_product.sh</code></td><td class="ok">formerly <code>ci_no_rust.sh</code>; cold-seed + honesty rails</td></tr>
+          <tr><td>bootstrap seed emit host</td><td class="ok">both oodac + CLI pure builds</td></tr>
+          <tr><td>product_sh emit SEGV</td><td class="ok">fixed: <code>oo_str_concat</code> early-out in <code>c_emit_let</code></td></tr>
+          <tr><td>Honesty probes</td><td class="ok">PASSED (prior)</td></tr>
+        </tbody>
+      </table>
     </div>
+
+    <div class="status-table-wrap">
+      <h3 class="table-title">Entropy / honesty (PROGRESS.md)</h3>
+      <table class="status-table">
+        <thead>
+          <tr><th>Item</th><th>Note</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Beta</td><td class="no">No beta — <code>ooda/bootstrap/BETA.md</code></td></tr>
+          <tr><td>M2 ARC</td><td class="partial"><code>ARC_M2_RESIDUAL.md</code> — stage2 ARC-on deferred</td></tr>
+          <tr><td>M3 fuzz</td><td class="partial"><code>FUZZ_DEFER.md</code> — residual noted in PROGRESS</td></tr>
+          <tr><td>Cold seed</td><td class="partial"><code>bootstrap/seed/oodac</code> preferred over tree <code>oodac/oodac</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="status-table-wrap">
+      <h3 class="table-title">Follow-up commits (PROGRESS.md)</h3>
+      <table class="status-table">
+        <thead>
+          <tr><th>Commit</th><th>Note</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>cc6b8be</code></td><td>fix(m2): env last-wins + ret_arc stash-before-release</td></tr>
+          <tr><td><code>baa894a</code></td><td>fix(emit-c): untyped let/list; M6 bc_vm; fail-closed pure emit</td></tr>
+          <tr><td><code>9549c84</code></td><td>docs(honesty)</td></tr>
+          <tr><td>(pending)</td><td class="partial">hygiene: cold-seed bootstrap preference + llvm smoke +x</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="progress-foot alpha-note">
+      PROGRESS.md also notes local monorepo-only items (agent thrash dirs, dirty sibling trees)
+      that are not product release claims. For residual detail see
+      <code>ooda/bootstrap/ARC_M2_RESIDUAL.md</code>,
+      <code>FUZZ_DEFER.md</code>, and
+      <code>BETA.md</code>.
+    </p>
   </section>
 
   <section class="get-started">
@@ -169,23 +257,20 @@
     <pre>. ~/.config/ooda/env
 ooda version
 git clone https://github.com/openOODA/ooda.git &amp;&amp; cd ooda
-# rebuild from pure seed (needs gcc):
 ./scripts/bootstrap_no_cargo.sh
 ./bin/ooda run fixtures/while_count.oo
-./bin/ooda outline fixtures/int_main.oo
-# optional std:
-git clone https://github.com/openOODA/std.git "$OODA_STD"</pre>
+./bin/ooda outline fixtures/int_main.oo</pre>
     <p class="links">
+      <a href="https://github.com/openOODA/spec/blob/main/DESIGN.md" target="_blank" rel="noopener">DESIGN.md</a> ·
       <a href="https://github.com/openOODA/ooda/releases" target="_blank" rel="noopener">Releases</a> ·
-      <a href="https://github.com/openOODA/ooda" target="_blank" rel="noopener">ooda repo</a> ·
+      <a href="https://github.com/openOODA/ooda" target="_blank" rel="noopener">ooda</a> ·
       <a href="https://github.com/openOODA/brand" target="_blank" rel="noopener">Brand</a> ·
-      <a href="https://github.com/openOODA/ooda/blob/main/install/install.oo" target="_blank" rel="noopener">install.oo</a> ·
-      <a href="https://github.com/openOODA/spec" target="_blank" rel="noopener">DESIGN</a>
+      <a href="https://github.com/openOODA/ooda/blob/main/install/install.oo" target="_blank" rel="noopener">install.oo</a>
     </p>
   </section>
 
   <footer>
-    <p>© 2026 openOODA. Observe · Orient · Decide · Act. Pure <code>.oo</code> product · C floor · seed bootstrap.</p>
+    <p>© 2026 openOODA. Observe · Orient · Decide · Act. Goals from DESIGN.md · status from PROGRESS.md.</p>
   </footer>
 </body>
 </html>
