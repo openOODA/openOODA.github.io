@@ -33,3 +33,6 @@ However, the architecture has theoretical limits. It cannot prevent attacks if a
 ## 4. Conclusion
 
 The openOODA zero-day defense architecture provides a robust immune system for modern software. By combining memory safety with advanced capability containment and cryptographic integrity, the system neutralizes unknown threats. The multi-layer design anticipates the risks of artificial intelligence code generation. It ensures that generated logic remains contained, verified, and strictly controlled. This theoretical architecture represents a necessary evolution in secure systems programming.
+
+---
+*Series index: [README.md](./README.md).*

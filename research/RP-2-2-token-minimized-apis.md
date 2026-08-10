@@ -44,3 +44,6 @@ However, residual risks remain. The parse-only residual is not a full typecheck.
 ## 4. Conclusion
 
 Token-minimized APIs provide critical infrastructure for AI-native software development. This theoretical framework demonstrates how deterministic, parse-only extraction reduces token consumption. The separation of structural outlines from semantic reflection enables agents to navigate large codebases efficiently. Future research must address incremental caching, cross-file module resolution, and cryptographic signing for package-distributed outlines.
+
+---
+*Series index: [README.md](./README.md).*

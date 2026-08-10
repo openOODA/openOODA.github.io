@@ -42,3 +42,6 @@ Capability-secure by construction is a necessary property for modern systems pro
 2. H. M. Levy, Capability-Based Computer Systems, Digital Press, 1984.
 3. R. N. M. Watson et al., "Capsicum: practical capabilities for UNIX," USENIX Security, 2010.
 4. Fuchsia documentation, "Secure" principle and Zircon capabilities.
+
+---
+*Series index: [README.md](./README.md).*

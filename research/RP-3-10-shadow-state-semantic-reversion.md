@@ -57,3 +57,6 @@ The shadow state must work with other safety features. The system must completel
 
 ## 5. Conclusion
 The Shadow-State Semantic Reversion system provides a necessary safety mechanism for dynamic software architectures. It gives the openOODA system the ability to test critical changes in an isolated environment before they affect the main system. The system uses semantic rules to enforce data integrity. It balances safety and performance through selective application and static analysis integration. The system represents a robust solution for maintaining correct system states during complex operations.
+
+---
+*Series index: [README.md](./README.md).*

@@ -22,3 +22,6 @@ Previous systems implemented contracts as library macros or external specificati
 
 ## 4. Conclusion
 Mathematical contracts provide an executable specification for the openOODA language. They enable automated tools to understand the intended behavior of code. By implementing contracts as first-class keywords, the system ensures that specifications remain synchronized with the implementation. This foundation supports robust fuzzing and future formal verification.
+
+---
+*Series index: [README.md](./README.md).*

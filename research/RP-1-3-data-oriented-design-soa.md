@@ -22,3 +22,6 @@ The system separates core data structures from operating system interactions. Th
 
 ## 4. Conclusion
 Data-Oriented Design provides critical performance guarantees for openOODA. First-class language support prevents systematic cache thrashing. It eliminates hidden copies at protocol boundaries. By integrating memory layout directly into the type system, the language enables both human developers and artificial intelligence agents to write highly efficient software.
+
+---
+*Series index: [README.md](./README.md).*

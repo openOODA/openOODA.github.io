@@ -35,3 +35,6 @@ However, the architecture does not prevent all system performance issues. Fast c
 ## 4. Conclusion
 
 The sub-second development feedback architecture provides the necessary speed for modern software engineering. It separates the execution environment into a fast development tier and an optimized production tier. This design satisfies both human and artificial intelligence development requirements. The background daemon and the incremental analysis system provide instant validation of contracts and capability constraints. This low latency is the fundamental property that enables interactive programming and continuous automated verification in complex systems.
+
+---
+*Series index: [README.md](./README.md).*

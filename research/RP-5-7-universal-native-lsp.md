@@ -45,3 +45,6 @@ Integrating the Language Server Protocol natively into the compiler provides a r
 1. Language Server Protocol Specification.
 2. Salsa Incremental Computation Framework Documentation.
 3. Roslyn Compiler-as-a-Service Design Documents.
+
+---
+*Series index: [README.md](./README.md).*

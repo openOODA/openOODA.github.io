@@ -42,3 +42,6 @@ Narrative diagnostics improve the developer experience for both humans and artif
 2. Elm, "Compiler Errors for Humans," elm-lang.org, 2015.
 3. M. Weiser, "Program Slicing."
 4. Horwitz et al., "Dependence Graphs."
+
+---
+*Series index: [README.md](./README.md).*

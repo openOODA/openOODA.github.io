@@ -34,3 +34,6 @@ Runtime accounting presents challenges. Shared objects across trust domains can 
 
 ## 6. Conclusion
 The parametric allocation capability gives openOODA robust heap sandboxing. It controls memory at the module level. This design prevents untrusted code from crashing the host process. It replaces unpredictable operating system interventions with typed errors. This architecture ensures high-speed, secure execution for artificial intelligence agents and untrusted plugins. The integration of language capabilities with operating system limits provides a strong defense against memory exhaustion.
+
+---
+*Series index: [README.md](./README.md).*

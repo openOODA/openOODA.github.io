@@ -42,3 +42,6 @@ The threat model addresses severe distributed security vulnerabilities. To preve
 ## 4. Conclusion
 
 Global hive-mind fuzzing presents a transformative approach to systems verification. This theoretical architecture leverages idle community computation to validate mathematical contracts at an unprecedented scale. By integrating strict capability sandboxing with distributed semantic mutation, the system protects peer operators while maximizing the discovery of complex logic errors. Future research must determine optimal peer trust models, establish minimal source code packaging requirements, and design robust participant incentive structures.
+
+---
+*Series index: [README.md](./README.md).*

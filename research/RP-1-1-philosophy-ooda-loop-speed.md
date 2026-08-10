@@ -22,3 +22,6 @@ Software engineering applies similar concepts through short feedback cycles. Liv
 
 ## 4. Conclusion
 The philosophy of speed ensures that openOODA remains effective for artificial intelligence agents. The design enforces strict time limits for the OODA loop. The system provides structured metadata to improve orientation quality. This approach prevents the language from becoming too slow for automated use.
+
+---
+*Series index: [README.md](./README.md).*

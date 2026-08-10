@@ -49,3 +49,6 @@ A fourth conflict affects debugging. Debugging tools need a stable map of the co
 ## 6. Conclusion
 
 Polymorphic and metamorphic binaries provide a robust defense against memory corruption exploits and code-reuse attacks. The architecture transforms the memory layout and the instruction sequences at load time or during runtime. It prevents attackers from relying on static offsets. The strict separation between the deterministic disk file and the dynamic memory instance ensures that supply-chain verification remains intact. This design creates a software immune system. This system significantly increases the cost of exploitation while it preserves the trust anchor of reproducible builds.
+
+---
+*Series index: [README.md](./README.md).*

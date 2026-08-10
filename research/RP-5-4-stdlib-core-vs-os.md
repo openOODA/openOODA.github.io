@@ -24,3 +24,6 @@ The strict division of the standard library into core and operating system modul
 1. Rust Embedded Book documentation on no_std and libcore.
 2. WebAssembly System Interface (WASI) specifications.
 3. Capsicum and CloudABI capability frameworks.
+
+---
+*Series index: [README.md](./README.md).*

@@ -70,3 +70,6 @@ The tension between capability sandboxing and FFI requires explicit architectura
 - CHERI Alliance. (2023). Discover CHERI: Rust and CHERI.
 - Vale. (2023). Fearless FFI.
 - In-Process Isolation Research. (2023). Friend or Foe Inside? Exploring In-Process Isolation. arXiv:2306.08127v2.
+
+---
+*Series index: [README.md](./README.md).*

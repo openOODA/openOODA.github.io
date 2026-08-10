@@ -22,3 +22,6 @@ The design separates compile-time macros from edit-time surgical patches. Patche
 
 ## 4. Conclusion
 First-class Abstract Syntax Tree macros provide a safe and readable metaprogramming system. They allow libraries to extend the language syntax without modifying the compiler. By operating on structured data within a capability-secure sandbox, the system enables powerful code generation without compromising security or compile speed.
+
+---
+*Series index: [README.md](./README.md).*

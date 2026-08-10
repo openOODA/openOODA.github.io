@@ -34,3 +34,6 @@ Residual failures remain possible. The language structure requires complex disam
 ## 4. Conclusion
 
 Surgical function replacement provides a vital security layer for autonomous coding operations. This theoretical architecture replaces dangerous whole-file writes with constrained, atomic function replacements. This methodology aligns with the principle of least privilege. Future research must address stable node identifiers across formatting changes, transaction mechanisms for multi-function replacements, and cryptographic attestation for automated modifications.
+
+---
+*Series index: [README.md](./README.md).*

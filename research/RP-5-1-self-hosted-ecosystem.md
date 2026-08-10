@@ -24,3 +24,6 @@ A fully self-hosted ecosystem provides an essential foundation for the security 
 1. K. Thompson, "Reflections on Trusting Trust," Communications of the ACM, vol. 27, no. 8, pp. 761-763, 1984.
 2. J. Dennis and E. Van Horn, "Programming Semantics for Multiprogrammed Computations," Communications of the ACM, vol. 9, no. 3, pp. 143-155, 1966.
 3. M. Miller, "Robust Composition: Towards a Unified Approach to Access Control and Concurrency Control," PhD thesis, Johns Hopkins University, Baltimore, MD, 2006.
+
+---
+*Series index: [README.md](./README.md).*

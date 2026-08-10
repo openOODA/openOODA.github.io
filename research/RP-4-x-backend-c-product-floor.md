@@ -33,3 +33,6 @@ The Backend-C design provides essential capabilities. It creates native binary f
 ## 4. Conclusion
 
 Backend-C provides a stable and reliable theoretical foundation for a self-hosting compiler. It meets the strict requirement for a self-hosted bootstrap procedure without the use of complex external tools. The strict separation of the emit phase, the runtime, and the link phase creates a highly modular architecture. This method relies on a C compiler, but it successfully establishes a clean, self-sufficient build environment. The system maintains strict boundaries to control the inherent risks of the C language. Backend-C serves as the primary theoretical mechanism to make native execution and complete project self-hosting possible.
+
+---
+*Series index: [README.md](./README.md).*

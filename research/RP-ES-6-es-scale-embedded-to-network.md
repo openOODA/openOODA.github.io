@@ -35,3 +35,6 @@ However, the architecture does not stop all systemic threats. It cannot prevent 
 ## 4. Conclusion
 
 The openOODA scale architecture delivers a continuous, verifiable programming environment. By using a single semantic core and a universal capability system, the language connects embedded hardware and global networks. The multi-backend compiler and the verifiable registry ensure that security policies stay consistent across all targets. This unified design is necessary for the construction of trustworthy systems. It also enables effective artificial intelligence programming at every scale.
+
+---
+*Series index: [README.md](./README.md).*

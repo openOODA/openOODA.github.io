@@ -73,3 +73,6 @@ Adversaries might attack the system. They could force massive temporal allocatio
 ## 5. Conclusion
 
 The tension between ARC and temporal memory is a design challenge. Immediate memory destruction conflicts with state preservation. A type-directed boundary resolves this challenge. The system uses ARC by default for fast performance. It uses an Event Log Arena for explicit temporal types. This architecture provides reliable fault recovery. It limits memory growth and maintains system security.
+
+---
+*Series index: [README.md](./README.md).*

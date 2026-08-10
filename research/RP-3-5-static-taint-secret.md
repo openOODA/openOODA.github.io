@@ -64,3 +64,6 @@ This paper presents a theoretical architecture for static taint tracking in open
 6. Krohn, M., et al. Information flow control for operating systems.
 7. Industrial static application security testing taint configurations.
 8. openOODA Architecture Specification and Design Documents.
+
+---
+*Series index: [README.md](./README.md).*

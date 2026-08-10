@@ -51,3 +51,6 @@ The CPU quota design in openOODA makes a strong mechanism for execution sandboxi
 6. Hoffmann, J., et al. (2012). Resource-aware ML (RAML).
 7. AFL++ and libFuzzer timeout and hang detection documentation.
 8. Barnes, J. (1997). SPARK Ada and Ravenscar profiles.
+
+---
+*Series index: [README.md](./README.md).*

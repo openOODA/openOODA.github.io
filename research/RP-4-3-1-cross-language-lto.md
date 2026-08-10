@@ -35,3 +35,6 @@ However, this theoretical method introduces important security risks and supply 
 2. rustc book: linker-plugin LTO.
 3. Red Hat Developer: cross-language LTO with toolsets.
 4. ThinLTO (Clang docs).
+
+---
+*Series index: [README.md](./README.md).*

@@ -24,3 +24,6 @@ A pure product compiler and command-line interface form the necessary foundation
 1. K. Thompson, "Reflections on Trusting Trust", Communications of the ACM, Vol. 27, No. 8, August 1984.
 2. N. Wirth, "The Design of a System Compiler", Software: Practice and Experience, 1971.
 3. Debian Reproducible Builds Project, "Reproducible Builds", 2023.
+
+---
+*Series index: [README.md](./README.md).*

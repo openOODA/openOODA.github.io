@@ -33,3 +33,6 @@ However, the architecture does not prevent all errors. Incorrect contracts will 
 ## 4. Conclusion
 
 The self-testing language surface provides a robust mechanism for continuous verification. By integrating contracts directly into the syntax, openOODA ensures that specifications evolve with the code. Automated generative testing leverages these contracts to find complex edge cases. This architecture is essential for safe artificial intelligence programming. It provides the necessary boundaries and immediate feedback required to maintain high software quality at scale.
+
+---
+*Series index: [README.md](./README.md).*

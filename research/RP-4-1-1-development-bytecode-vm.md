@@ -29,3 +29,6 @@ The memory model uses separate data segments for different procedures. This sepa
 ## 4. Conclusion
 
 A bytecode virtual machine is a necessary theoretical component for the openOODA development cycle. It provides the low latency that interactive programming requires. It protects the host environment through resource limits and capability checks. The virtual machine does not replace native binaries for production use. It operates as an optimized environment for testing and rapid software changes. This theoretical design ensures that developers and autonomous agents can create and validate software securely and efficiently.
+
+---
+*Series index: [README.md](./README.md).*

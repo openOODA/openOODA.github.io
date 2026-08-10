@@ -31,3 +31,6 @@ The verifiable web of code provides a secure foundation for package management. 
 2. S. Torres-Arias et al., "in-toto: Securing the Software Supply Chain," USENIX Security Symposium, 2019.
 3. The Update Framework (TUF) specification.
 4. M. Miller, "Robust Composition: Towards a Unified Approach to Access Control and Concurrency Control," PhD thesis, Johns Hopkins University, 2006.
+
+---
+*Series index: [README.md](./README.md).*

@@ -25,3 +25,6 @@ Fearless concurrency provides a robust and secure model for multithreading in op
 2. G. Agha, Actors: A Model of Concurrent Computation in Distributed Systems, MIT Press.
 3. S. Clebsch et al., Pony reference capabilities documentation.
 4. J. Armstrong, Erlang/OTP concurrency model.
+
+---
+*Series index: [README.md](./README.md).*

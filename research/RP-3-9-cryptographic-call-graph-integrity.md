@@ -50,3 +50,6 @@ Cryptographic Call-Graph Integrity provides a foundational security guarantee fo
 2. Kuznetsov, V., Szekeres, L., Payer, M., Candea, G., Sekar, R., Song, D. (2014). Code-Pointer Integrity. 11th USENIX Symposium on Operating Systems Design and Implementation.
 3. Burow, N., Carrast, S. A., Stefan, P., Payer, M. (2017). Control-Flow Integrity: Precision, Security, and Performance. ACM Computing Surveys.
 4. openOODA DESIGN Specification. Section 3: Cryptographic Call-Graph Integrity.
+
+---
+*Series index: [README.md](./README.md).*

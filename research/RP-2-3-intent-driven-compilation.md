@@ -40,3 +40,6 @@ The threat model identifies severe pipeline risks. The system must fail closed i
 ## 4. Conclusion
 
 Intent-driven compilation offers a revolutionary approach to systems programming. This theoretical framework demonstrates how specification-as-source can eliminate boilerplate implementation while maintaining strict mathematical correctness. The integration of language models for candidate generation, combined with rigorous formal verification, creates a robust synthesis pipeline. Future research must determine the minimal acceptable certificate for verified synthesis, refine the cache topology for global content-addressable storage, and resolve the tension between non-deterministic models and reproducible builds.
+
+---
+*Series index: [README.md](./README.md).*

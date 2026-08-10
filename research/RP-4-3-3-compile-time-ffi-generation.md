@@ -31,3 +31,6 @@ Compile-time foreign function interface generation operates as a necessary featu
 ---
 
 *References: openOODA DESIGN.md §4, §6.3; RP-6.3 Caps vs FFI; RP-4.x Backend-C.*
+
+---
+*Series index: [README.md](./README.md).*

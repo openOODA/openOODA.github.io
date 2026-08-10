@@ -26,3 +26,6 @@ The system must reject reloads that change memory layouts. This rule prevents ty
 
 ## 6. Conclusion
 Native hot-code reloading improves the developer experience. It also enables high-availability systems. The virtual machine model provides a safe and secure way to swap executing code. The system must enforce strict checks during the swap process. These checks prevent capability forgery and memory allocation errors. The architectural design allows developers to edit code without losing the active application state. This capability is essential for modern, long-lived computer processes.
+
+---
+*Series index: [README.md](./README.md).*

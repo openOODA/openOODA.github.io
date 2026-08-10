@@ -52,3 +52,6 @@ An artificial intelligence-native systems language must integrate data compressi
 2. S. Imai, "Is GitHub Copilot a Substitute for Human Pair-programming?" ICSE Companion, 2022.
 3. Q. Ma et al., "Is AI the better programming partner?" CMU, 2023.
 4. X. Zhou et al., "Exploring the problems, their causes and solutions of AI pair programming," Journal of Systems and Software, 2025.
+
+---
+*Series index: [README.md](./README.md).*

@@ -34,3 +34,6 @@ Direct WebAssembly emission provides significant benefits for openOODA. It provi
 2. Bytecode Alliance Component Model and WASI roadmap articles: https://bytecodealliance.org/articles/the-road-to-component-model-1-0
 3. Component Model book (Wasmtime): https://component-model.bytecodealliance.org/running-components/wasmtime.html
 4. WASI and Component Model status surveys: https://eunomia.dev/blog/2025/02/16/wasi-and-the-webassembly-component-model-current-status/
+
+---
+*Series index: [README.md](./README.md).*

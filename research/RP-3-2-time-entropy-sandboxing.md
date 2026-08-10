@@ -83,3 +83,6 @@ Finally, researchers must find ways to sandbox high-resolution hardware timers t
 ## 7. Conclusion
 
 Sandboxing time and entropy through capability tokens provides a robust theoretical foundation for systems programming. By requiring explicit capability tokens, the language guarantees that functions are pure by default. This capability-based architecture enables fully deterministic testing, reproducible builds, and reliable fuzzing. It eliminates hidden side channels and forces developers to declare their use of non-deterministic resources. While challenges remain with foreign function interfaces and hardware timers, explicit effect management is necessary for secure and replayable software systems.
+
+---
+*Series index: [README.md](./README.md).*

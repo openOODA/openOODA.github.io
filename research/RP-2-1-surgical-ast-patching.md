@@ -38,3 +38,6 @@ However, residual risks remain. The system cannot guarantee semantically correct
 ## 4. Conclusion
 
 Surgical AST patching and JSON diagnostics provide a critical interface for AI coding agents. This theoretical framework separates human narrative from machine-readable data. It enables deterministic, single-turn repairs that respect capability security and mathematical contracts. Future research must address schema versioning, multi-span diagnostics, and prompt-injection hardening. The complete AST patch engine will ultimately allow autonomous systems to operate at maximum speed within the OODA loop.
+
+---
+*Series index: [README.md](./README.md).*

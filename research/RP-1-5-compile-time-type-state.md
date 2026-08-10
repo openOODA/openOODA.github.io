@@ -22,3 +22,6 @@ The design requires strict ownership rules to maintain sound state tracking. Unr
 
 ## 4. Conclusion
 Compile-time type-state machines provide strong guarantees for protocol correctness. By embedding lifecycle rules into the type system, the compiler prevents invalid operations without runtime overhead. This mechanism guides artificial intelligence agents toward valid code sequences. It significantly improves the reliability of systems software.
+
+---
+*Series index: [README.md](./README.md).*

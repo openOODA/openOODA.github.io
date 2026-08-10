@@ -82,3 +82,6 @@ A wall-clock window can fight pure deterministic tests. The system must use epoc
 Temporal memory provides a vital resilience feature for software runtimes. It enables agent-driven systems to recover from faults and continue operation. The system keeps past states and moves memory back to a safe state. This action prevents sudden process termination. 
 
 The architecture uses an opt-in model, an epoch clock, and an event log arena. This design ensures that systems can survive faults. It avoids the heavy performance cost of full-process checkpoints. The temporal memory system operates efficiently alongside standard memory management. It provides a robust foundation for automated software agents.
+
+---
+*Series index: [README.md](./README.md).*
