@@ -26,7 +26,8 @@
       background-color: var(--bg-primary);
       color: var(--text-main);
       font-family: var(--font-sans);
-      min-height: 100vh;
+      height: 100vh;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
     }
@@ -136,7 +137,31 @@
     const contentArea = document.getElementById('content');
     
     function renderNav() {
+      const groups = {
+        "RP-ES": "Executive Summaries",
+        "RP-1": "Philosophy & Mechanics",
+        "RP-2": "AI-Native Engineering",
+        "RP-3": "Security & Sandboxing",
+        "RP-4": "Compilation & Backends",
+        "RP-5": "Ecosystem",
+        "RP-6": "Architectural Tensions"
+      };
+      
+      let currentGroup = "";
+      
       papers.forEach((p, index) => {
+        let match = p.file.match(/RP-([A-Z0-9]+)/);
+        let groupKey = match ? "RP-" + match[1] : "Other";
+        
+        if (groupKey !== currentGroup) {
+           currentGroup = groupKey;
+           const header = document.createElement('div');
+           header.className = 'sidebar-title';
+           header.style.marginTop = '20px';
+           header.textContent = groups[groupKey] || groupKey;
+           navList.appendChild(header);
+        }
+        
         const a = document.createElement('a');
         a.href = '#' + index;
         a.className = 'paper-link';
