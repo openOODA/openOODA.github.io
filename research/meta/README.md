@@ -25,7 +25,7 @@ They are **not** product feature papers (`RP-*`) and **not** process-lens papers
 | DOC-floor-chs | `FLOOR.md` + `CHS.md` | [DOC-floor-chs.md](./DOC-floor-chs.md) |
 | DOC-product-readme | Product `README.md` | [DOC-product-readme.md](./DOC-product-readme.md) |
 | DOC-org-hygiene | `ORG_PRODUCT_HYGIENE.md` | [DOC-org-hygiene.md](./DOC-org-hygiene.md) |
-| DOC-rfc-spec | `spec/` DESIGN/SPEC/RFCs | [DOC-rfc-spec.md](./DOC-rfc-spec.md) |
+| DOC-rfc-spec | `openOODA/openOODA` DESIGN/SPEC/RFCs | [DOC-rfc-spec.md](./DOC-rfc-spec.md) |
 | DOC-research-series | Research series itself | [DOC-research-series.md](./DOC-research-series.md) |
 | DOC-stubs-retired | `PROGRESS.md` / `PROJECT.md` stubs | [DOC-stubs-retired.md](./DOC-stubs-retired.md) |
 | DOC-ops-control | DEBT_HANDOFF · RELEASE_CHECKLIST · SPLIT_PLAN · SHUTDOWN_RESUME | [DOC-ops-control.md](./DOC-ops-control.md) |
@@ -40,7 +40,7 @@ Optional later: install README, site-only pages, QA probes — extend this index
 
 | Location | Control docs | Paper |
 |----------|--------------|-------|
-| `ooda/DESIGN.md`, `spec/DESIGN.md` | Vision | DOC-design, DOC-system-triad |
+| `openOODA/DESIGN.md` | Vision | DOC-design, DOC-system-triad |
 | monorepo `PM.md` | Progress vs DESIGN | DOC-pm |
 | monorepo `SPRINT.md` | Cycle board | DOC-sprint |
 | `ooda/TOOLS.md` | Process protocol | DOC-tools (+ `TP-*`) |
@@ -49,7 +49,7 @@ Optional later: install README, site-only pages, QA probes — extend this index
 | `bootstrap/BETA.md` | Beta gates | DOC-beta |
 | `ooda/README.md` | Public honesty | DOC-product-readme |
 | monorepo `ORG_PRODUCT_HYGIENE.md` | Org purity story | DOC-org-hygiene |
-| `spec/` + `rfcs/` | Normative evolution | DOC-rfc-spec |
+| `openOODA/` + `rfcs/` | Normative evolution | DOC-rfc-spec |
 | `docs/research/` | Research corpus | DOC-research-series |
 | monorepo stubs | Retired PROGRESS/PROJECT | DOC-stubs-retired |
 | bootstrap ops + session | Handoff / release / split / resume | DOC-ops-control |

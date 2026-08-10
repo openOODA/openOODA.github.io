@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|--------|
 | **Paper ID** | `DOC-design` |
-| **Subject document(s)** | `ooda/DESIGN.md`, `spec/DESIGN.md` |
+| **Subject document(s)** | `openOODA/DESIGN.md` |
 | **Status** | `draft` |
 | **Series** | Documentation system (`DOC-*`) |
 
@@ -28,7 +28,7 @@ Mutability low. Progress tracking not in DESIGN (use PM). Justification depth in
 
 ## 5. Limits and failure modes
 
-Aspirational language can overclaim (JIT, 0ms, mathematically). Duplication in ooda/ and spec/ can drift.
+Aspirational language can overclaim (JIT, 0ms, mathematically). Canonical DESIGN lives only in openOODA/openOODA.
 
 ## 6. Alternatives considered
 
@@ -36,11 +36,11 @@ Wiki-only, issue-tracker-only, single mega-README, or oral tradition — all fai
 
 ## 7. Reality (honesty)
 
-DESIGN is active north star. Dual paths residual. Site links to spec/DESIGN.md. RP papers cover each leaf.
+DESIGN is active north star in openOODA/openOODA. Site links there. RP papers cover each leaf.
 
 ## 8. Open questions
 
-1. Canonical path: spec only with generated ooda copy?
+1. Site pin and install copy stay aligned with boards DESIGN?
 2. RFC required for new DESIGN leaves?
 
 ## 9. Acceptance criteria

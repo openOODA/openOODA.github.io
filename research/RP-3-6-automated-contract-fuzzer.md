@@ -63,7 +63,7 @@ The openOODA automated contract fuzzer provides a complete theoretical system fo
 5. Eiffel AutoTest; JML-based contract testing literature.
 6. Echidna / Foundry invariant testing; Wake property-based Solidity fuzzer.
 7. Cadar et al. KLEE — symbolic execution.
-8. openOODA: `spec/DESIGN.md` Section 3, Section 1.2, Section 2.4.
+8. openOODA: `openOODA/DESIGN.md` Section 3, Section 1.2, Section 2.4.
 
 ---
 

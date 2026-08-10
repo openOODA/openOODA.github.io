@@ -5,7 +5,7 @@ Purpose: **justify why the item is in DESIGN.md**, with problem, prior art, and 
 
 | Doc | Role |
 |-----|------|
-| `spec/DESIGN.md` / `ooda/DESIGN.md` | Vision |
+| `openOODA/DESIGN.md` | Vision |
 | monorepo `PM.md` | Progress status per item |
 | monorepo `SPRINT.md` | Active engineering work |
 | **this series (`RP-*`)** | Research justification per DESIGN item |

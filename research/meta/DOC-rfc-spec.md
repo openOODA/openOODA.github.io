@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|--------|
 | **Paper ID** | `DOC-rfc-spec` |
-| **Subject document(s)** | `openOODA/spec` — DESIGN.md, SPEC.md, rfcs/ |
+| **Subject document(s)** | `openOODA/openOODA` — DESIGN.md, SPEC.md, rfcs/ |
 | **Status** | `draft` |
 | **Series** | Documentation system (`DOC-*`) |
 
@@ -49,7 +49,7 @@ RFCs 0001/0002 exist; process maturity partial.
 
 ## 10. References
 
-1. openOODA spec/rfcs/
+1. openOODA/openOODA/rfcs/
 2. https://adr.github.io/
 
 ---

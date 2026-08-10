@@ -6,7 +6,7 @@
 
 | Doc | Role |
 |-----|------|
-| `spec/DESIGN.md` §6 | Three canonical tensions (policy one-liners) |
+| `openOODA/DESIGN.md` §6 | Three canonical tensions (policy one-liners) |
 | [RP-6-1](./RP-6-1-tension-metamorphic-vs-deterministic.md) · [RP-6-2](./RP-6-2-tension-arc-vs-temporal-memory.md) · [RP-6-3](./RP-6-3-tension-caps-vs-ffi.md) | Full research drafts for §6 |
 | **This file** | **All** major conflicts known to the research program, including product honesty fights |
 | monorepo `PM.md` | What is actually shipped |
@@ -274,7 +274,7 @@ For every item:
 
 ## References (supporting)
 
-1. openOODA `spec/DESIGN.md` §1–§6; monorepo `PM.md`.  
+1. openOODA `openOODA/DESIGN.md` §1–§6; monorepo `PM.md`.  
 2. Reproducible Builds — <https://reproducible-builds.org/>  
 3. Lamb & Zacchiroli, arXiv:2104.06020 — reproducible builds for supply-chain integrity.  
 4. Swift ARC — lifetime destroy vs retained history.  

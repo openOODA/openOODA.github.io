@@ -73,8 +73,8 @@ The openOODA system requires high performance and high safety. Tracing garbage c
 
 ## 6. References
 
-1. openOODA `spec/DESIGN.md` Section 3, Section 6.
-2. openOODA `spec/SPEC.md` Section 14, Section 16.
+1. openOODA `openOODA/DESIGN.md` Section 3, Section 6.
+2. openOODA `openOODA/SPEC.md` Section 14, Section 16.
 3. Apple Swift.org — *The Swift Programming Language: Automatic Reference Counting*.
 4. Rust Book — *Reference Cycles Can Leak Memory*. Rustonomicon.
 5. Bjarne Stroustrup — RAII as C++ resource idiom.

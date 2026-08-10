@@ -93,7 +93,7 @@ The tension between deterministic builds and metamorphic binaries is a fundament
 This paper establishes a strict phase boundary policy. The on-disk artifact must remain completely deterministic and mathematically verifiable. The system introduces entropy and structural diversity only after the operating system loads the artifact into memory. By separating the identity of the software from its execution state, systems can provide both independent auditability and advanced immune defenses against memory exploitation. This theoretical model provides a robust foundation for building secure, verifiable, and resilient software infrastructure.
 
 ## References
-1. openOODA `spec/DESIGN.md` §3.11, §4.3.2, §6.
+1. openOODA `openOODA/DESIGN.md` §3.11, §4.3.2, §6.
 2. openOODA monorepo `PM.md` rows 3.11, 4.3.2, 6.1, 4.x.
 3. Reproducible Builds project: <https://reproducible-builds.org/>
 4. C. Lamb & S. Zacchiroli, *Reproducible Builds: Increasing the Integrity of Software Supply Chains*, arXiv:2104.06020 — <https://arxiv.org/pdf/2104.06020>

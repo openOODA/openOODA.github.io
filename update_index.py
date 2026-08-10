@@ -12,7 +12,7 @@ old_nav = """    <nav>
       <a href="#sprint">Sprint</a>
       <a href="#install">Install</a>
       <a href="research.html">Research Hub</a>
-      <a href="https://github.com/openOODA/spec/blob/main/DESIGN.md" target="_blank" rel="noopener">DESIGN.md</a>
+      <a href="https://github.com/openOODA/openOODA/blob/main/DESIGN.md" target="_blank" rel="noopener">DESIGN.md</a>
       <a href="https://github.com/openOODA/ooda" class="btn-primary" target="_blank" rel="noopener">GitHub</a>
     </nav>"""
 new_nav = """    <nav>
