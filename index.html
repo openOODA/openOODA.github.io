@@ -18,12 +18,10 @@
       <span class="version-pill">v0.184.0-alpha</span>
     </a>
     <nav>
-      <a href="#design">Design</a>
-      <a href="#pm">PM status</a>
-      <a href="#sprint">Sprint</a>
+      <a href="#overview">Overview</a>
+      <a href="#safety">Safety</a>
       <a href="#install">Install</a>
       <a href="research.html">Research Hub</a>
-      <a href="https://github.com/openOODA/spec/blob/main/DESIGN.md" target="_blank" rel="noopener">DESIGN.md</a>
       <a href="https://github.com/openOODA/ooda" class="btn-primary" target="_blank" rel="noopener">GitHub</a>
     </nav>
   </header>
@@ -56,10 +54,10 @@
   </section>
 
   <!-- DESIGN.md -->
-  <section class="design-section" id="design">
+  <section class="design-section" id="overview">
     <div class="why-header">
-      <h2>Design goals <span class="section-tag">DESIGN.md</span></h2>
-      <p>North star architecture — what openOODA is <em>for</em>. Goals are not claims of full implementation.</p>
+      <h2>Overview</h2>
+      <p>A high-level look at the core mechanics and philosophy behind openOODA.</p>
     </div>
 
     <div class="ooda-ribbon" aria-label="OODA loop design">
@@ -125,93 +123,27 @@
     </div>
   </section>
 
-  <!-- PM.md -->
-  <section class="progress-section" id="pm">
+
+  <!-- Safety -->
+  <section class="progress-section" id="safety">
     <div class="why-header">
-      <h2>Project status <span class="section-tag">PM.md</span></h2>
-      <p>
-        Progress is tracked against <strong>every DESIGN.md main section and sub-item</strong> in monorepo <code>PM.md</code>
-        (summary below; full checklist in the repo).
-        Status keys: <span class="ok">done</span> · <span class="partial">partial</span> · <span class="partial">smoke</span> · <span class="no">not-started / residual</span>.
-      </p>
+      <h2>Safety by Construction</h2>
+      <p>openOODA enforces mathematical contracts and capability-based security at the compiler level.</p>
     </div>
 
     <div class="status-table-wrap">
-      <h3 class="table-title">Pin</h3>
+      <h3 class="table-title">Core Security Features</h3>
       <table class="status-table">
-        <thead><tr><th>Item</th><th>Value</th></tr></thead>
+        <thead><tr><th>Feature</th><th>Description</th></tr></thead>
         <tbody>
-          <tr><td>Release</td><td><code>v0.184.0-alpha</code></td></tr>
-          <tr><td>Tip (board)</td><td><code>ooda</code> <code>84918f7</code> (re-pin after AGY merge)</td></tr>
-          <tr><td>Rebuild</td><td><code>PURE_NO_ARC=0</code>; free leak-safe residual</td></tr>
-          <tr><td>Beta</td><td class="no">Not claimed — owner only</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="status-table-wrap">
-      <h3 class="table-title">Design coverage (summary)</h3>
-      <table class="status-table">
-        <thead><tr><th>Area</th><th>Status</th><th>Honest note</th></tr></thead>
-        <tbody>
-          <tr><td>outline / reflect / patch</td><td class="ok">done</td><td>M1 pure path; parse-only outline/reflect</td></tr>
-          <tr><td>JSON errors</td><td class="partial">partial</td><td>Real diags; full AST auto-fix residual</td></tr>
-          <tr><td>Contracts</td><td class="partial">partial</td><td>Simple requires on native; ensures residual</td></tr>
-          <tr><td>Capability sandbox</td><td class="partial">partial</td><td>Static + magic-token runtime; not crypto caps</td></tr>
-          <tr><td>Contract fuzzer</td><td class="partial">partial</td><td>Pure Int-domain only; multi-type fail-closed</td></tr>
-          <tr><td>ARC / memory</td><td class="partial">partial</td><td>Retain/release on; free residual (leak-safe)</td></tr>
-          <tr><td>Bytecode VM</td><td class="partial">partial</td><td>Interpreter smokes — <strong>not JIT</strong></td></tr>
-          <tr><td>LLVM / WASM</td><td class="partial">smoke</td><td>Emit + execute when tools present; not floors</td></tr>
-          <tr><td>Pure product self-host</td><td class="ok">done (alpha)</td><td>Seed + gcc; zero product <code>.rs</code></td></tr>
-          <tr><td>Hive fuzz / GPU / LSP ecosystem / …</td><td class="no">not-started</td><td>DESIGN goals</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="status-table-wrap">
-      <h3 class="table-title">Residuals (PM.md)</h3>
-      <table class="status-table">
-        <thead><tr><th>Item</th><th>Note</th></tr></thead>
-        <tbody>
-          <tr><td>M2 free</td><td class="partial">Self-host UAF under free — <code>ARC_M2_RESIDUAL.md</code></td></tr>
-          <tr><td>Seed emit host</td><td class="partial">Cold seed still pure-multi host</td></tr>
-          <tr><td>M3 multi-type fuzz</td><td class="partial"><code>FUZZ_DEFER.md</code></td></tr>
-          <tr><td>Shell CI / bootstrap</td><td class="partial">Still bash — seed chicken-egg</td></tr>
-          <tr><td>Beta</td><td class="no">Owner only — <code>BETA.md</code></td></tr>
+          <tr><td><strong>Capability Sandboxing</strong></td><td>Default-deny I/O. File system and network access require explicit <code>FsCap</code> and <code>NetCap</code> tokens.</td></tr>
+          <tr><td><strong>Memory Quotas</strong></td><td>Heap allocations are strictly bounded to prevent out-of-memory denial of service.</td></tr>
+          <tr><td><strong>Mathematical Contracts</strong></td><td><code>requires</code> and <code>ensures</code> clauses are enforced by the compiler.</td></tr>
+          <tr><td><strong>Zero Millisecond GC</strong></td><td>ARC memory management guarantees leak-free execution without pause times.</td></tr>
         </tbody>
       </table>
     </div>
   </section>
-
-  <!-- SPRINT.md -->
-  <section class="progress-section" id="sprint">
-    <div class="why-header">
-      <h2>Active sprint <span class="section-tag">SPRINT.md</span></h2>
-      <p>Living execution board — what is being worked this cycle. Detail in monorepo <code>SPRINT.md</code>.</p>
-    </div>
-
-    <div class="status-table-wrap">
-      <h3 class="table-title">Milestones</h3>
-      <table class="status-table">
-        <thead><tr><th>#</th><th>Name</th><th>Gate</th><th>Depth</th></tr></thead>
-        <tbody>
-          <tr><td>M1</td><td>outline / reflect</td><td class="ok">PASS</td><td>Done</td></tr>
-          <tr><td>M2</td><td>ARC / memory</td><td class="partial">PARTIAL</td><td>free-prep; free blocked self-host</td></tr>
-          <tr><td>M3</td><td>Contract fuzzer</td><td class="partial">PARTIAL</td><td>Pure Int domain depth</td></tr>
-          <tr><td>M4</td><td>WASM</td><td class="ok">PASS +toolenv</td><td>emit + execute smoke</td></tr>
-          <tr><td>M5</td><td>LLVM</td><td class="ok">PASS +toolenv</td><td>emit + execute smoke</td></tr>
-          <tr><td>M6</td><td>Bytecode VM</td><td class="partial">PARTIAL</td><td>11 fixtures interpreter, not JIT</td></tr>
-          <tr><td>M7</td><td>Integration</td><td class="ok">PASS +toolenv</td><td><code>ci_product</code> green</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <p class="progress-foot alpha-note">
-      Concurrent: product debt cleanup (AGY). Sprint residuals include M2 free, multi-type fuzz, backend floors.
-      After each depth push: update <code>SPRINT.md</code> tip SHA and refresh <code>PM.md</code> pin/coverage.
-    </p>
-  </section>
-
   <section class="get-started">
     <h3>After install</h3>
     <pre>. ~/.config/ooda/env
