@@ -1,0 +1,58 @@
+# DOC-pm: PM.md as progress against DESIGN
+
+| Field | Value |
+|-------|--------|
+| **Paper ID** | `DOC-pm` |
+| **Subject document(s)** | monorepo `PM.md` (merged PROGRESS + PROJECT) |
+| **Status** | `draft` |
+| **Series** | Documentation system (`DOC-*`) |
+
+## 1. Why this document exists
+
+PM.md is project management: pin, full DESIGN leaf checklist with honest status keys, milestone summary, rails, residual index. It answers how far without becoming a sprint board.
+
+## 2. Problem statement
+
+PROGRESS went stale; PROJECT over-checked DESIGN items. Two status docs fought. Agents and the website need one DESIGN-aligned progress tracker.
+
+## 3. Related work (university + commercial)
+
+- Requirements traceability matrices (requirements engineering).
+- Product roadmap / coverage matrices.
+- Scrum product backlog as ordered product needs (not sprint commitment). https://scrumguides.org/scrum-guide.html
+- Living documentation — status must be cheap to update or it lies.
+
+## 4. Rationale for openOODA
+
+Status keys: done | partial | smoke | residual | not-started. Row IDs (1.2, 3.6, …) shared with RP papers.
+
+## 5. Limits and failure modes
+
+Monorepo-local unless published. Tip can lag SPRINT mid-cycle. Not a residual deep-dive substitute.
+
+## 6. Alternatives considered
+
+Wiki-only, issue-tracker-only, single mega-README, or oral tradition — all fail multi-agent continuity or honesty. Prefer git-versioned markdown with clear roles.
+
+## 7. Reality (honesty)
+
+PM is the active tracker; PROGRESS/PROJECT are stubs. Site summarizes PM.
+
+## 8. Open questions
+
+1. Publish PM on GH org?
+2. Auto-generate site tables from PM?
+
+## 9. Acceptance criteria
+
+- [ ] Every DESIGN leaf has a PM row.
+- [ ] No false `done` for free/JIT/hive without product proof.
+
+## 10. References
+
+1. https://scrumguides.org/scrum-guide.html
+2. https://www.infoq.com/articles/book-review-living-documentation/
+3. monorepo PM.md
+
+---
+*Index: [README.md](./README.md). DESIGN research: [../README.md](../README.md). TOOLS research: [../tools/README.md](../tools/README.md).*

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>openOODA — Research Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    :root {
+      --bg-primary: #0a0c10;
+      --bg-surface: #12161f;
+      --bg-card: #181e2b;
+      --border-color: #242c3d;
+      --accent-cyan: #00f2fe;
+      --accent-purple: #4facfe;
+      --text-main: #f0f4f8;
+      --text-muted: #8a99ad;
+      --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+      --font-mono: 'Fira Code', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      height: 60px;
+      background: rgba(18, 22, 31, 0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px; position: sticky; top: 0; z-index: 100;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit; }
+    .brand-logo {
+      width: 32px; height: 32px;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 16px; color: #000;
+    }
+    .brand-title { font-size: 18px; font-weight: 700; letter-spacing: -0.5px; }
+    .brand-tag {
+      font-size: 11px; font-weight: 600; background: rgba(0, 242, 254, 0.1);
+      color: var(--accent-cyan); padding: 2px 8px; border-radius: 12px;
+      border: 1px solid rgba(0, 242, 254, 0.2);
+    }
+    .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--text-main); }
+    
+    .container { display: flex; flex: 1; height: calc(100vh - 60px); }
+    
+    .sidebar {
+      width: 350px; background: var(--bg-surface); border-right: 1px solid var(--border-color);
+      overflow-y: auto; padding: 20px;
+    }
+    .sidebar-title { font-size: 12px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 15px; font-weight: 700; }
+    
+    .paper-link {
+      display: block; padding: 10px 12px; margin-bottom: 8px; border-radius: 6px;
+      color: var(--text-muted); text-decoration: none; font-size: 13px; font-weight: 500;
+      transition: all 0.2s ease; border: 1px solid transparent; line-height: 1.4;
+    }
+    .paper-link:hover {
+      background: var(--bg-card); color: var(--text-main);
+    }
+    .paper-link.active {
+      background: rgba(0, 242, 254, 0.05); color: var(--accent-cyan);
+      border-color: rgba(0, 242, 254, 0.2); box-shadow: 0 0 10px rgba(0, 242, 254, 0.05);
+    }
+    
+    .content-area {
+      flex: 1; overflow-y: auto; padding: 40px 60px; background: var(--bg-primary);
+      scroll-behavior: smooth;
+    }
+    .paper-content { max-width: 800px; margin: 0 auto; }
+    
+    /* Markdown Styling */
+    .paper-content h1 { font-size: 32px; font-weight: 800; margin-bottom: 24px; color: #fff; line-height: 1.2; letter-spacing: -0.02em; }
+    .paper-content h2 { font-size: 24px; font-weight: 700; margin: 32px 0 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border-color); color: #fff; }
+    .paper-content h3 { font-size: 18px; font-weight: 600; margin: 24px 0 12px; color: var(--text-main); }
+    .paper-content p { font-size: 15px; line-height: 1.7; margin-bottom: 16px; color: var(--text-muted); }
+    .paper-content a { color: var(--accent-purple); text-decoration: none; }
+    .paper-content a:hover { text-decoration: underline; }
+    .paper-content ul, .paper-content ol { margin: 0 0 16px 24px; color: var(--text-muted); line-height: 1.7; font-size: 15px; }
+    .paper-content li { margin-bottom: 6px; }
+    .paper-content code { font-family: var(--font-mono); font-size: 13px; background: var(--bg-card); padding: 2px 6px; border-radius: 4px; color: var(--accent-yellow); }
+    .paper-content pre { background: var(--bg-card); padding: 16px; border-radius: 8px; overflow-x: auto; margin-bottom: 20px; border: 1px solid var(--border-color); }
+    .paper-content pre code { background: none; padding: 0; color: var(--text-main); }
+    .paper-content blockquote { border-left: 3px solid var(--accent-purple); padding-left: 16px; margin: 0 0 16px 0; font-style: italic; color: #6b7a90; }
+    
+    .loading { display: flex; align-items: center; justify-content: center; height: 100%; color: var(--text-muted); font-size: 14px; }
+    
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg-primary); }
+    ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #3a475e; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="index.html" class="brand">
+      <div class="brand-logo">oo</div>
+      <div class="brand-title">openOODA</div>
+      <div class="brand-tag">Research Hub</div>
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Playground</a>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="sidebar">
+      <div class="sidebar-title">Research Papers</div>
+      <div id="nav-list"></div>
+    </div>
+    <div class="content-area">
+      <div id="content" class="paper-content">
+        <div class="loading">Select a research paper from the sidebar.</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const papers = [{"file": "research/RP-1-1-philosophy-ooda-loop-speed.md", "title": "RP-1.1: Philosophy of speed (OODA loop)"}, {"file": "research/RP-1-2-mathematical-contracts.md", "title": "RP-1.2: Mathematical contracts (requires/ensures)"}, {"file": "research/RP-1-3-data-oriented-design-soa.md", "title": "RP-1.3: Data-oriented design & SoA layout"}, {"file": "research/RP-1-4-first-class-ast-macros.md", "title": "RP-1.4: First-class AST macros"}, {"file": "research/RP-1-5-compile-time-type-state.md", "title": "RP-1.5: Compile-time type-state machines"}, {"file": "research/RP-2-1-surgical-ast-patching.md", "title": "RP-2.1: Surgical AST patching & JSON diagnostics"}, {"file": "research/RP-2-2-token-minimized-apis.md", "title": "RP-2.2: Token-minimized APIs (`outline` / `reflect`)"}, {"file": "research/RP-2-2b-surgical-patch-replace-fn.md", "title": "RP-2.2b: Surgical `patch replace_fn` (safe agent edits)"}, {"file": "research/RP-2-3-intent-driven-compilation.md", "title": "RP-2.3: Intent-driven compilation (telepathic AST)"}, {"file": "research/RP-2-4-global-hive-mind-fuzzing.md", "title": "RP-2.4: Global hive-mind fuzzing"}, {"file": "research/RP-3-1-unified-capability-sandboxing.md", "title": "RP-3.1: Unified capability sandboxing"}, {"file": "research/RP-3-10-shadow-state-semantic-reversion.md", "title": "RP-3.10: Shadow-state semantic reversion"}, {"file": "research/RP-3-11-polymorphic-metamorphic-binaries.md", "title": "RP-3.11: Polymorphic metamorphic binaries"}, {"file": "research/RP-3-2-time-entropy-sandboxing.md", "title": "RP-3.2: Time & entropy sandboxing"}, {"file": "research/RP-3-3-memory-quotas-heap-sandbox.md", "title": "RP-3.3: Memory quotas (heap sandboxing)"}, {"file": "research/RP-3-4-cpu-quotas-maxcycles.md", "title": "RP-3.4: CPU quotas (`#[MaxCycles]`)"}, {"file": "research/RP-3-5-static-taint-secret.md", "title": "RP-3.5: Static taint tracking (`#[Secret]`)"}, {"file": "research/RP-3-6-automated-contract-fuzzer.md", "title": "RP-3.6: Automated contract fuzzer"}, {"file": "research/RP-3-7-zero-ms-gc-arc-raii.md", "title": "RP-3.7: Zero millisecond garbage collection and memory safety (ARC/RAII)"}, {"file": "research/RP-3-8-temporal-memory-rollback.md", "title": "RP-3.8: Temporal memory (state rollback)"}, {"file": "research/RP-3-9-cryptographic-call-graph-integrity.md", "title": "RP-3.9: Cryptographic call-graph integrity"}, {"file": "research/RP-4-1-1-development-bytecode-vm.md", "title": "RP-4.1.1: Development bytecode VM"}, {"file": "research/RP-4-1-2-production-llvm.md", "title": "RP-4.1.2: Production LLVM backend"}, {"file": "research/RP-4-1-3-gpu-npu-acceleration.md", "title": "RP-4.1.3: Universal GPU/NPU acceleration"}, {"file": "research/RP-4-1-4-direct-webassembly.md", "title": "RP-4.1.4: Direct WebAssembly"}, {"file": "research/RP-4-1-5-bare-metal-embedded.md", "title": "RP-4.1.5: Bare-metal embedded (`#![no_std]`)"}, {"file": "research/RP-4-2-native-hot-code-reloading.md", "title": "RP-4.2: Native hot-code reloading"}, {"file": "research/RP-4-3-1-cross-language-lto.md", "title": "RP-4.3.1: Cross-language LTO"}, {"file": "research/RP-4-3-2-deterministic-reproducible-builds.md", "title": "RP-4.3.2: Deterministic reproducible builds"}, {"file": "research/RP-4-3-3-compile-time-ffi-generation.md", "title": "RP-4.3.3: Compile-time FFI generation"}, {"file": "research/RP-4-4-holographic-data-persistence.md", "title": "RP-4.4: Holographic data persistence"}, {"file": "research/RP-4-x-backend-c-product-floor.md", "title": "RP-4.x: Backend-C product floor"}, {"file": "research/RP-5-1-self-hosted-ecosystem.md", "title": "RP-5.1: 100% self-hosted ecosystem"}, {"file": "research/RP-5-1a-pure-product-compiler-cli.md", "title": "RP-5.1a: Pure product compiler + CLI"}, {"file": "research/RP-5-2-verifiable-web-of-code.md", "title": "RP-5.2: Verifiable web of code (zero-trust packages)"}, {"file": "research/RP-5-3-fearless-concurrency.md", "title": "RP-5.3: Fearless concurrency"}, {"file": "research/RP-5-4-stdlib-core-vs-os.md", "title": "RP-5.4: Standard library philosophy (core vs os)"}, {"file": "research/RP-5-5-narrative-diagnostics.md", "title": "RP-5.5: Narrative diagnostics"}, {"file": "research/RP-5-6-hitl-testing.md", "title": "RP-5.6: Human-in-the-loop (`hitl`) testing"}, {"file": "research/RP-5-7-universal-native-lsp.md", "title": "RP-5.7: Universal native LSP"}, {"file": "research/RP-6-1-tension-metamorphic-vs-deterministic.md", "title": "RP-6.1: Tension: metamorphic vs deterministic builds"}, {"file": "research/RP-6-2-tension-arc-vs-temporal-memory.md", "title": "RP-6.2: Tension: ARC vs temporal memory"}, {"file": "research/RP-6-3-tension-caps-vs-ffi.md", "title": "RP-6.3: Tension: capability sandbox vs C/C++ FFI"}, {"file": "research/RP-ES-1-es-ai-native-systems-language.md", "title": "RP-ES.1: AI-native systems language"}, {"file": "research/RP-ES-2-es-capability-secure.md", "title": "RP-ES.2: Capability-secure by construction"}, {"file": "research/RP-ES-3-es-self-testing.md", "title": "RP-ES.3: Self-testing language surface"}, {"file": "research/RP-ES-4-es-subsecond-feedback.md", "title": "RP-ES.4: Sub-second development feedback"}, {"file": "research/RP-ES-5-es-zero-day-defense.md", "title": "RP-ES.5: Zero-day defense goals"}, {"file": "research/RP-ES-6-es-scale-embedded-to-network.md", "title": "RP-ES.6: Embedded to global verifiable network"}];
+    
+    const navList = document.getElementById('nav-list');
+    const contentArea = document.getElementById('content');
+    
+    function renderNav() {
+      papers.forEach((p, index) => {
+        const a = document.createElement('a');
+        a.href = '#' + index;
+        a.className = 'paper-link';
+        a.textContent = p.title || p.file.replace('research/', '');
+        a.onclick = (e) => {
+          document.querySelectorAll('.paper-link').forEach(link => link.classList.remove('active'));
+          a.classList.add('active');
+          loadPaper(p.file);
+        };
+        navList.appendChild(a);
+      });
+    }
+
+    async function loadPaper(filePath) {
+      contentArea.innerHTML = '<div class="loading">Loading paper...</div>';
+      try {
+        const response = await fetch(filePath);
+        if (!response.ok) throw new Error('Network response was not ok');
+        const markdown = await response.text();
+        contentArea.innerHTML = marked.parse(markdown);
+      } catch (error) {
+        contentArea.innerHTML = '<div class="loading" style="color: var(--accent-red)">Error loading paper. Make sure you are serving this over a local web server (e.g., python3 -m http.server).</div>';
+      }
+    }
+
+    renderNav();
+    
+    // Load first paper by default if hash is empty, or load based on hash
+    window.addEventListener('DOMContentLoaded', () => {
+      const hash = window.location.hash.substring(1);
+      const index = hash ? parseInt(hash) : 0;
+      if (papers[index]) {
+        document.querySelectorAll('.paper-link')[index].classList.add('active');
+        loadPaper(papers[index].file);
+      }
+    });
+  </script>
+</body>
+</html>
