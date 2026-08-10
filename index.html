@@ -1,178 +1,157 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>openOODA — Design Goals, Project Status &amp; Sprint</title>
-  <meta name="description" content="openOODA: DESIGN.md north star, PM.md project status, SPRINT.md active work. v0.183.0-alpha pure .oo product.">
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tactical Systems Architecture</title>
+    <meta name="description" content="Observe, Orient, Decide, Act. The definitive open-source standard for autonomous decision loops.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #030305;
+            --text: #f0f0f5;
+            --glass-bg: rgba(20, 20, 25, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --primary: #5ce1e6;
+            --secondary: #38b6ff;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bg-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background-image: url('assets/bg.jpg');
+            background-size: cover;
+            background-position: center;
+            transform: scale(1.05);
+        }
+        
+        .bg-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, rgba(3,3,5,0.9) 0%, rgba(3,3,5,0.4) 50%, rgba(3,3,5,0.9) 100%);
+        }
+
+        nav {
+            padding: 2.5rem 5vw;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .logo {
+            font-weight: 800;
+            font-size: 1.5rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .back-link {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 600;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+        .back-link:hover { opacity: 1; }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 4rem 5vw;
+            z-index: 10;
+        }
+
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 4rem 3rem;
+            max-width: 800px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            opacity: 0;
+            transform: translateY(40px);
+            animation: fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        h1 {
+            font-size: clamp(3rem, 5vw, 5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -1px;
+        }
+        
+        .subtitle {
+            font-size: clamp(1.1rem, 2vw, 1.35rem);
+            font-weight: 300;
+            color: #b4b4c4;
+            max-width: 600px;
+            margin: 0 auto 2.5rem auto;
+        }
+        
+        .cta-btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: #000;
+            font-weight: 800;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(92,225,230,0.3);
+        }
+
+        @keyframes fadeUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
 <body>
-  <div class="bg-glow"></div>
-  <header>
-    <a href="#" class="logo">
-      <img class="logo-img" src="logo_badge.svg" width="38" height="38" alt="openOODA">
-      <div class="logo-text">openOODA</div>
-      <span class="version-pill">v0.183.0-alpha</span>
-    </a>
+    <div class="bg-container"><div class="bg-overlay"></div></div>
     <nav>
-      <a href="#overview">Overview</a>
-      <a href="#safety">Safety</a>
-      <a href="#install">Install</a>
-      <a href="research.html">Research Hub</a>
-      <a href="https://github.com/openOODA/ooda" class="btn-primary" target="_blank" rel="noopener">GitHub</a>
+        <div class="logo">openOODA</div>
+        <a href="https://UberMetroid.github.io" class="back-link">← Ecosystem</a>
     </nav>
-  </header>
-
-  <section class="hero">
-    <h1>AI-native, <span>capability-secure</span>, <span>self-testing</span> systems language</h1>
-    <p>
-      Built around the <strong>OODA loop</strong> (Observe · Orient · Decide · Act).
-      Docs triad: <strong>DESIGN</strong> (vision) · <strong>PM</strong> (status) · <strong>SPRINT</strong> (active work).
-    </p>
-
-    <div class="install-box" id="install">
-      <span>$</span>
-      <span class="install-cmd">curl -fsSL https://openOODA.github.io/install | sh</span>
-      <button type="button" class="copy-btn" onclick="navigator.clipboard.writeText('curl -fsSL https://openOODA.github.io/install | sh'); this.innerText='Copied!'">Copy</button>
-    </div>
-    <p class="install-meta">
-      Install pin <code>v0.183.0-alpha</code> (override with <code>OODA_VERSION</code>).
-      Layout: <code>~/.local/bin/ooda</code>, <code>~/.local/share/ooda</code>, <code>~/.config/ooda/env</code>.
-    </p>
-    <p class="alpha-note">
-      <strong>How to read this site:</strong>
-      <em>Design</em> = long-term goals from
-      <a href="https://github.com/openOODA/spec/blob/main/DESIGN.md" target="_blank" rel="noopener">DESIGN.md</a>
-      (not all shipped).
-      <em>PM status</em> = <a href="https://github.com/openOODA/ooda/blob/main/PM.md" target="_blank">PM.md</a> design coverage + product pin.
-      <em>Sprint</em> = living board (<a href="https://github.com/openOODA/ooda/blob/main/SPRINT.md" target="_blank">SPRINT.md</a>) for current milestones.
-      Product tip SHA lives in <code>ooda</code> git. <strong>Not beta</strong> — owner only.
-    </p>
-  </section>
-
-  <!-- DESIGN.md -->
-  <section class="design-section" id="overview">
-    <div class="why-header">
-      <h2>Overview</h2>
-      <p>A high-level look at the core mechanics and philosophy behind openOODA.</p>
-    </div>
-
-    <div class="ooda-ribbon" aria-label="OODA loop design">
-      <div class="ooda-card observe">
-        <div class="ooda-phase">Observe</div>
-        <div class="ooda-title">Tight feedback</div>
-        <div class="ooda-desc">Fast compile loops, rich metadata, dumps and outlines for humans and agents.</div>
-      </div>
-      <div class="ooda-card orient">
-        <div class="ooda-phase">Orient</div>
-        <div class="ooda-title">Capability sandbox</div>
-        <div class="ooda-desc">Default-deny I/O; explicit <code>&amp;FsCap</code> / <code>&amp;NetCap</code> and richer quota/taint goals.</div>
-      </div>
-      <div class="ooda-card decide">
-        <div class="ooda-phase">Decide</div>
-        <div class="ooda-title">Contracts &amp; proof</div>
-        <div class="ooda-desc">First-class <code>requires</code> / <code>ensures</code>, co-located <code>verify</code>, contract fuzzing.</div>
-      </div>
-      <div class="ooda-card act">
-        <div class="ooda-phase">Act</div>
-        <div class="ooda-title">Native multi-target</div>
-        <div class="ooda-desc">Bytecode for dev, LLVM for native, WASM for edge — plus bare-metal / accelerator goals.</div>
-      </div>
-    </div>
-
-    <div class="design-grid">
-      <article class="design-card">
-        <h3>1. Language philosophy</h3>
-        <ul>
-          <li><strong>OODA speed</strong> — tight observe → orient → decide → act loops.</li>
-          <li><strong>Mathematical contracts</strong> — <code>requires</code> / <code>ensures</code> as first-class bounds.</li>
-          <li><strong>DOD / SoA</strong>, AST macros, type-state machines (goals).</li>
-        </ul>
-      </article>
-      <article class="design-card">
-        <h3>2. AI-native tooling</h3>
-        <ul>
-          <li><strong>outline / reflect / patch</strong> — token-cheap agent surface.</li>
-          <li><strong>JSON diagnostics</strong> — machine-readable errors.</li>
-          <li>Intent synthesis, global overnight fuzzing (goals).</li>
-        </ul>
-      </article>
-      <article class="design-card">
-        <h3>3. Safety &amp; security</h3>
-        <ul>
-          <li><strong>Capability sandbox</strong> — no ambient I/O.</li>
-          <li><strong>Contract fuzzer</strong> — break <code>requires</code>/<code>ensures</code>.</li>
-          <li><strong>ARC / RAII</strong> — 0ms GC direction; advanced integrity goals in DESIGN.</li>
-        </ul>
-      </article>
-      <article class="design-card">
-        <h3>4. Targets &amp; ecosystem</h3>
-        <ul>
-          <li>Bytecode VM, LLVM, WASM; GPU/NPU and bare-metal as goals.</li>
-          <li>Self-hosted ecosystem (LSP, registry, package manager) as goals.</li>
-          <li><code>std::core</code> vs <code>std::os</code> capability split.</li>
-        </ul>
-        <p class="design-foot">
-          Full blueprint:
-          <a href="https://github.com/openOODA/spec/blob/main/DESIGN.md" target="_blank" rel="noopener">spec/DESIGN.md</a>
-        </p>
-      </article>
-    </div>
-  </section>
-
-
-  
-  <!-- Repositories -->
-  <section class="progress-section" id="repos" style="margin-top: 4rem;">
-    <div class="why-header">
-      <h2>Repositories</h2>
-      <p>Explore the source code and documentation across the openOODA organization.</p>
-    </div>
-    <div class="status-table-wrap">
-      <table class="status-table">
-        <thead><tr><th>Repository</th><th>Description</th></tr></thead>
-        <tbody>
-          <tr><td><a href="https://github.com/openOODA/ooda" target="_blank">ooda</a></td><td>The main compiler (oodac), CLI, and C runtime.</td></tr>
-          <tr><td><a href="https://github.com/openOODA/spec" target="_blank">spec</a></td><td>Language specifications, including the <a href="https://github.com/openOODA/spec/blob/main/DESIGN.md" target="_blank">DESIGN.md</a> north star.</td></tr>
-          <tr><td><a href="https://github.com/openOODA/std" target="_blank">std</a></td><td>The standard library.</td></tr>
-          <tr><td><a href="https://github.com/openOODA/docs" target="_blank">docs</a></td><td>General documentation and <a href="research.html">research papers</a>.</td></tr>
-          <tr><td><a href="https://github.com/openOODA/tree-sitter" target="_blank">tree-sitter</a></td><td>Tree-sitter grammar for the .oo language.</td></tr>
-          <tr><td><a href="https://github.com/openOODA/vscode" target="_blank">vscode</a></td><td>VS Code extension for openOODA.</td></tr>
-          <tr><td><a href="https://github.com/openOODA/qa" target="_blank">qa</a></td><td>Quality assurance and testing scripts.</td></tr>
-          <tr><td><a href="https://github.com/openOODA/helloworld" target="_blank">helloworld</a></td><td>Starter templates and examples.</td></tr>
-          <tr><td><a href="https://github.com/openOODA/brand" target="_blank">brand</a></td><td>Logos, SVGs, and brand assets.</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- Safety -->
-  <section class="progress-section" id="safety">
-    <div class="why-header">
-      <h2>Safety by Construction</h2>
-      <p>openOODA enforces mathematical contracts and capability-based security at the compiler level.</p>
-    </div>
-
-    <div class="status-table-wrap">
-      <h3 class="table-title">Core Security Features</h3>
-      <table class="status-table">
-        <thead><tr><th>Feature</th><th>Description</th></tr></thead>
-        <tbody>
-          <tr><td><strong>Capability Sandboxing</strong></td><td>Default-deny I/O. File system and network access require explicit <code>FsCap</code> and <code>NetCap</code> tokens.</td></tr>
-          <tr><td><strong>Memory Quotas</strong></td><td>Heap allocations are strictly bounded to prevent out-of-memory denial of service.</td></tr>
-          <tr><td><strong>Mathematical Contracts</strong></td><td><code>requires</code> and <code>ensures</code> clauses are enforced by the compiler.</td></tr>
-          <tr><td><strong>Zero Millisecond GC</strong></td><td>ARC memory management guarantees leak-free execution without pause times.</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-
-  <footer>
-    <p>© 2026 openOODA. DESIGN · PM · SPRINT. Observe · Orient · Decide · Act.</p>
-  </footer>
+    <main>
+        <div class="glass-panel">
+            <h1>Tactical Systems Architecture</h1>
+            <p class="subtitle">Observe, Orient, Decide, Act. The definitive open-source standard for autonomous decision loops.</p>
+            <a href="https://github.com/openOODA/openOODA" class="cta-btn">View Repository</a>
+        </div>
+    </main>
 </body>
 </html>
