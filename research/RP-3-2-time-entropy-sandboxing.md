@@ -1,208 +1,85 @@
-# RP-3.2: Time & entropy sandboxing
+# Time and Entropy Sandboxing for Deterministic Systems
 
-| Field | Value |
-|-------|--------|
-| **Paper ID** | `RP-3.2` |
-| **DESIGN.md** | §3 Safety — Time & Entropy Sandboxing |
-| **Status** | `draft` |
-| **PM.md row** | `3.2` |
-| **Product mapping** | **not-started** |
+## Abstract
 
-## 1. Why this is in DESIGN.md
+This paper presents a theoretical capability-based architecture for time and entropy management in systems programming. Programs often read the system clock or generate random numbers. These actions break equational reasoning, testing, and deterministic builds. They also permit timing attacks and hidden side channels. We propose a theoretical design where the system clock and random number generators are not ambiently available. Instead, the programming language requires explicit capability tokens to access these resources. This design guarantees that functions remain mathematically pure by default. It also ensures that testing is fully deterministic and builds are reproducible.
 
-DESIGN.md §3 states:
+## 1. Introduction
 
-> Code cannot read the system clock or generate random numbers without `&TimeCap` and `&RandCap`, guaranteeing functions are mathematically pure and testing is 100% deterministic.
+Time and entropy are ambient effects. They cause severe problems in software engineering. When functions call standard time or random functions, they break mathematical purity. This impurity invalidates equational reasoning, compiler optimizations, and formal proofs. Furthermore, ambient time and entropy cause unreliable tests. Branches that depend on the time of day behave differently across environments. Builds embed timestamps in artifacts, which stops reproducible compilation. Random number dependencies cause fuzzing failures that developers cannot replay.
 
-Together with §3.1 capability sandboxing, time and entropy are the two ambient effects that cause the most problems:
+From a security perspective, ambient time and entropy present severe risks. Malicious code can use the wall clock to create timing oracles or hidden side channels. Attackers can use random number generators to implement anti-analysis techniques.
 
-1. **Purity** — Functions that call `now()` or `rand()` break equational reasoning, caching, and contract proofs.
-2. **Replay / determinism** — They cause unreliable tests, non-reproducible builds (§4.3.2), and fuzz failures that you cannot replay.
-3. **Security** — They permit timing oracles, incorrect RNG use, and anti-analysis techniques in malicious code.
+Our core research question is how to provide necessary time and entropy for systems programs while keeping code pure and replayable by default. Systems require time for timeouts, unique identifiers, and cryptography. Decision systems need stable execution runs that developers can replay. Fuzzing methods and rollback tools require that all non-determinism comes from explicit inputs, not from a hidden environment. The theoretical architecture must not treat operating system clocks as ambient mathematical objects.
 
-The openOODA loop needs stable runs that you can replay. Fuzzing methods (§2.4, §3.6) and rollback tools assume that non-determinism comes from inputs, not the environment.
+## 2. Related Work
 
-## 2. Problem statement
+### 2.1 Purity and Effects
 
-### What breaks without it
+Academic languages use various methods to control effects. Haskell uses a specific monad where time and random number generation exist explicitly. Purity is a strict type property. Other functional languages use effect rows or algebraic effects. In these systems, time and random values act as handlers that tests can swap. Verification languages use effect annotations to limit entropy sources in cryptographic code.
 
-| Failure | Example |
-|---------|---------|
-| Flaky tests | `if now() % 2 == 0` branches differently in CI |
-| Unreproducible builds | timestamps embedded in artifacts; “works on my machine” |
-| Non-replayable fuzz crashes | RNG-dependent bug cannot be minimized |
-| False purity | Optimizer or proof assumes purity; clock read invalidates |
-| Hidden side channels | Secret-dependent branches + clock → timing leak (ties to §3.5) |
+### 2.2 Deterministic Replay and Hermetic Builds
 
-### Users
+Industry tools record and replay non-determinism. They capture system calls and random events. Build systems sandbox the build environment. They ban undeclared inputs because timestamps and random data cause common hermeticity bugs. Reproducible build projects actively remove clocks and entropy from compiled artifacts. Research systems virtualize time and entropy for operating system containers.
 
-- **Compiler / proof tools** — They need a closed set of effects for `requires`/`ensures` and MaxCycles (§3.4).
-- **Test harness** — It injects fixed `TimeCap`/`RandCap` schedules to ensure determinism.
-- **Security auditor** — The auditor must see entropy use in the signature, not hidden in libc.
-- **Adversary** — An adversary uses the wall-clock or RNG as a covert channel or to stop fuzzing.
+### 2.3 Capability-Based Systems
 
-### Core research question
+Some operating systems treat clocks and entropy as kernel services. Programs invoke them via capabilities, not ambiently. WebAssembly requires explicit imports for clock and random functions. Web browsers separate standard random functions from cryptographic random functions. They also put high-resolution time behind security headers to stop side-channel attacks.
 
-How do we give enough time and entropy for systems programs (timeouts, UUIDs, crypto) while making code pure and replayable by default? We must not claim that OS clocks are mathematical objects.
+### 2.4 Testing Practices
 
-## 3. Related work
+Property-based testing assumes a deterministic test function. Ambient random generation breaks the shrinking of test cases. Snapshot tests require stable clocks or clock injection. Game engines achieve deterministic replay by using a fixed time step and a seeded random number generator.
 
-### 3.1 Purity and effects (academic)
+## 3. Architecture and Methodology
 
-- **Haskell `IO` / `ST`:** The language passes the world state. Time and RNG exist in IO. Purity is a type property, not a suggestion.
-- **PureScript / Elm:** These use effect rows with explicit `Effect` / `Cmd`.
-- **Koka / Frank / Effekt:** These use algebraic effects. `time` and `random` act as handlers. Tests swap these handlers.
-- **F\* / Low\*:** These use effect annotations for verification. Crypto code limits entropy sources.
+### 3.1 Capability Tokens as Effect Parameters
 
-### 3.2 Deterministic replay and hermetic builds (industry + research)
+The theoretical architecture uses capabilities as effect tokens. A function needs a time capability token to read the wall clock, the monotonic clock, or high-resolution timers. A function needs a random capability token for any random number generator interface. We separate the standard core library from these effects. The core library does not provide access to the clock or the random number generator. The operating system library provides access only if the program holds the correct capability tokens.
 
-- **rr (Mozilla), Undo, TTD (Microsoft):** These tools record and replay nondeterminism (syscalls, RDTSC, RNG).
-- **Bazel / Nix hermeticity:** These tools sandbox builds and ban undeclared inputs. Timestamps and `/dev/urandom` cause common hermeticity bugs.
-- **Reproducible Builds project:** This project removes clocks and entropy from artifacts.
-- **DetTrace / deterministic Linux containers (research):** These systems virtualize time and entropy for containers.
+For example, a logging function takes a time capability to record the event time. A function that generates a unique identifier takes a random capability. A simple addition function takes no capabilities and remains pure. This makes the addition function easy to test and fuzz.
 
-### 3.3 Capability-flavored time/RNG
+### 3.2 Determinism Modes
 
-- **KeyKOS/EROS/seL4:** Clocks and entropy are kernel services. You invoke them via capabilities, not ambiently.
-- **WASI:** `clock_*` and `random_get` are explicit imports. An embedding system can replace them.
-- **CloudABI:** This system has no ambient time. You pass resources in.
-- **Web browser:** Browsers separate `crypto.getRandomValues` and `Math.random`. They put high-resolution time behind COOP/COEP to sandbox entropy and time for Spectre.
+The architecture operates in different determinism modes depending on the context. In a production environment, the system uses the real operating system clock and a cryptographic random number generator. In test and fuzzing modes, a test harness injects a virtual timeline and a seeded random number generator. This ensures perfect replayability. During a build process, the compiler uses a frozen time epoch and a fixed seed, or it bans time and entropy entirely.
 
-### 3.4 Testing practice
+This design means that tests are completely deterministic. The test mode injects deterministic capabilities. Production code receives real entropy through the capability tokens.
 
-- **Property-based testing (QuickCheck):** Shrinking assumes a deterministic test function. Ambient RNG breaks this shrinking.
-- **Golden tests / snapshot tests:** These tests require stable clocks or clock injection.
-- **Game engines / sims:** The industry standard for replay uses a fixed-timestep and seeded RNG.
+### 3.3 Interaction with System Features
 
-## 4. Design rationale for openOODA
+This capability architecture interacts deeply with other system features. For security, high-resolution time combined with secret branches creates a side channel. A security policy can ban time capabilities in secret contexts. For fuzzing, the test harness injects a specific random capability for the system under test. The fuzz generator uses a separate random number generator. For reproducible builds, the compiler cannot read ambient time unless the build policy grants a time capability.
 
-### 4.1 Caps as effect tokens
+### 3.4 Theoretical Implementation Rules
 
-```text
-fn log_line(t: &TimeCap, msg: String)
-fn uuid_v4(r: &RandCap) -> Uuid
-fn hash_password(r: &RandCap, pw: String) -> Hash  // salt from RandCap
-fn add(a: Int, b: Int) -> Int   // no caps → pure; fuzzer-friendly
-```
+The theoretical implementation uses static seal names for builtin functions. At runtime, a program must pass the correct capability token. A runtime harness selects either an operating system backend or a virtual backend for these operations. A system can optionally log non-deterministic events for debugging purposes. This is similar to record and replay tools.
 
-- You need `&TimeCap` to read the wall clock, monotonic clock, or TSC-class APIs.
-- You need `&RandCap` for any CSPRNG or insecure RNG API. (We will split this later: `&SecureRandCap` vs test RNG).
-- `std::core` does not give access to clock/RNG. `std::os` gives access if you have caps.
+## 4. Threat Model and Security
 
-### 4.2 Determinism modes
+### 4.1 Prevented Vulnerabilities
 
-| Mode | TimeCap | RandCap | Use |
-|------|---------|---------|-----|
-| Production | OS clock / VDSO | OS CSPRNG | real systems |
-| Test / fuzz | virtual timeline | seeded LCG or recorded stream | replay |
-| Build | frozen epoch or banned | banned or fixed seed | §4.3.2 |
+This architecture prevents accidental impurity in pure libraries. It eliminates flaky tests caused by clock and random number variations. It stops silent non-reproducible builds caused by standard libraries. It also defeats simple anti-fuzzing techniques that do not declare a random capability.
 
-DESIGN says “100% deterministic testing”. This means the test mode injects deterministic caps. It does not mean production has no entropy.
+### 4.2 Security Limitations
 
-### 4.3 Interaction with other items
+The architecture does not prevent hardware timing channels. Cache timing variations still exist without a language clock. Foreign function interfaces can bypass the sandbox. For example, external code can call the system clock without a capability token. The architecture also cannot fix a poor quality entropy source provided by a kernel. Distributed systems still face clock skew problems. Furthermore, purity is relative to the declared effects, not absolute physical properties.
 
-| Item | Link |
-|------|------|
-| 3.1 Unified caps | Same check/runtime seal story |
-| 3.4 MaxCycles | Time ≠ cycles; wall-clock timeouts need TimeCap, CPU bound needs MaxCycles |
-| 3.5 Secret | High-res time + secret branches = side channel; policy may ban TimeCap in secret contexts |
-| 3.6 Fuzzer | Injected RandCap for SUT; separate RNG for *generator* |
-| 4.3.2 Reproducible builds | Compiler must not read ambient time without build TimeCap policy |
-| 6.1 Metamorphic vs deterministic | Runtime polymorphism must not reintroduce ambient entropy into *build* artifacts |
+### 4.3 Failure Modes
 
-### 4.4 Implementation sketch (not product yet)
+The architecture accounts for specific failure modes. Distributed agents experience clock skew. The system needs a virtual time capability for each logical actor. Cryptographic misuse is a risk if a developer uses a test random capability in production. The system uses type distinctions to separate secure and insecure random capabilities. Deadlocks can occur if a system pauses for external input while holding time-sensitive locks.
 
-1. Static seal names: `now`, `unix_time`, `random`, `rand_bytes`, …
-2. Runtime: Pass the cap. The test harness selects an OS-backed or virtual backend.
-3. Record/replay log: This is optional for debugging (like rr).
+## 5. Alternatives Considered
 
-## 5. Threat / failure model
+We considered purity by convention and linters. This is insufficient for generated code and fails open. We considered virtualizing time globally. This breaks real servers and requires complex mode switching. We considered allowing the clock everywhere but banning it in explicitly pure functions. This makes impurity the default. Our design requires purity by default. We considered thread-local random number generators without capabilities. This creates hidden global state and breaks replay mechanisms. Finally, we considered depending on an external sandbox. However, code runs outside the build system, so we require language-level enforcement.
 
-### Prevents
+## 6. Open Research Questions
 
-- Accidental impurity in “pure” libraries.
-- Flaky tests caused by clock/RNG in the System Under Test (SUT).
-- Silent non-reproducible builds from the language standard library.
-- Simple anti-fuzz techniques (`if rand() ...`) that do not declare RandCap.
+Several open questions remain for future research in this theoretical model.
+First, researchers must determine if the system needs a single capability or separate capabilities for wall time, monotonic time, and processor cycles.
+Second, researchers must decide whether to use a single random capability or split it to prevent test seeds from entering cryptographic functions.
+Third, researchers must analyze how asynchronous timeouts interact with time capabilities and maximum execution cycles.
+Fourth, researchers must design a record and replay format that logs non-determinism without creating excessively large traces.
+Fifth, researchers must resolve how runtime code mutation interacts with entropy. This ensures mutation does not pollute deterministic builds.
+Finally, researchers must find ways to sandbox high-resolution hardware timers that bypass standard libraries.
 
-### Does not prevent
+## 7. Conclusion
 
-| Gap | Notes |
-|-----|-------|
-| Hardware timing channels | Cache/timing still exist without language clock |
-| FFI ambient time | `gettimeofday` via C without cap—needs §6.3 |
-| Kernel entropy quality | Language cannot fix bad `/dev/urandom` |
-| Logical clocks vs wall clocks | Distributed systems still hard |
-| DESIGN overclaim “mathematically pure” | Purity is *relative to declared effects*, not absolute physics |
-
-### Failure modes to design for
-
-- **Clock skew in distributed agents** — We need a virtual TimeCap for each logical actor.
-- **Crypto misuse** — Someone might use a test RandCap in production. (We need a type distinction or lint tool).
-- **Deadlock with biometric + time** — The system pauses for FaceID while holding time-sensitive locks (ties to 3.1).
-
-## 6. Alternatives considered
-
-| Alternative | Decision |
-|-------------|----------|
-| **Purity by convention / linters** | Insufficient for AI-generated code; not fail-closed |
-| **Always virtualize time globally** | Breaks real servers; must be mode-switched |
-| **Allow clock, ban only in `#[pure]`** | Opt-in purity is ambient-by-default; DESIGN wants default pure |
-| **Thread-local RNG without caps** | Hidden global state; breaks replay |
-| **Depend on Bazel sandbox alone** | Language still callable outside Bazel; dual enforcement wanted |
-| **Monotonic-only without wall clock** | Incomplete; logs and TLS need wall or injected time |
-
-## 7. Product reality (alpha honesty)
-
-**PM.md `3.2`: not-started.**
-
-| Claim | Alpha |
-|-------|-------|
-| `&TimeCap` / `&RandCap` types | **not present** as product surface |
-| Static seal on clock/RNG builtins | **not-started** |
-| Deterministic test harness injection | **not-started** (fuzz uses its own LCG for *inputs*, not SUT caps) |
-| Reproducible build clock policy | **not-started** (PM 4.3.2 not-started) |
-
-Related partial work: Capability mechanisms for Fs/Sys/Env/Net (3.1) can extend. There is no time/entropy sealed table yet.
-
-**Honesty rule:** Do not claim “functions are mathematically pure” in product marketing until we seal Time/Rand and cap FFI.
-
-## 8. Open research questions
-
-1. **Clock lattice:** Do we need one cap or three for wall, monotonic, and CPU cycles?
-2. **Secure vs insecure randomness:** Do we use a single `RandCap` or split it to prevent test seeds in crypto?
-3. **Async timeouts:** Does `sleep` consume TimeCap and MaxCycles?
-4. **Record/replay format:** How do we log nondeterminism for agent-bisect without large traces?
-5. **Interaction with metamorphic binaries (3.11):** Runtime code mutation needs entropy. It must not pollute deterministic builds or pure tests.
-6. **VDSO / RDTSC:** Backend-C compiled code can read time without libc. It needs a compiler barrier or OS sandbox.
-
-## 9. Acceptance criteria (for PM status promotion)
-
-### not-started → partial
-
-- [ ] Sealed static check for at least `now`/`unix_time` and `random`/`rand_bytes` (or product-named equivalents)
-- [ ] Runtime require of TimeCap/RandCap magic or opaque tokens on Backend-C path
-- [ ] Pass/fail fixtures: pure fn cannot call them; with cap can
-- [ ] Test harness mode: fixed seed RandCap + frozen or stepped TimeCap; one replay rail
-
-### partial → done
-
-- [ ] std::core has zero clock/RNG; std::os documents caps
-- [ ] Fuzz and verify paths inject deterministic caps by default
-- [ ] Build policy document: ambient time/entropy banned or stubbed for release artifacts
-- [ ] FFI path cannot call ambient time without UnsafeFFICap (with 6.3)
-
-## 10. References
-
-1. Peyton Jones, S. (ed.). *Haskell 2010 Language Report* — IO and purity.
-2. Claessen, K., & Hughes, J. (2000). *QuickCheck: a lightweight tool for random testing of Haskell programs.* ICFP.
-3. Bazel hermeticity documentation (bazel.build); Reproducible Builds project.
-4. O’Callahan, R., et al. *rr: lightweight recording & deterministic debugging.*
-5. Watson et al. Capsicum; WASI clock/random APIs; CloudABI.
-6. Shapiro et al. EROS; seL4 capability invocation model.
-7. DetTrace and related deterministic container research.
-8. openOODA: `spec/DESIGN.md` §3 (Time & Entropy), §4.3.2; `PM.md` 3.2, 4.3.2; related `RP-3-1`, `RP-3-6`.
-
----
-
-*Series: [Research papers index](./README.md). Template: [TEMPLATE.md](./TEMPLATE.md).*
+Sandboxing time and entropy through capability tokens provides a robust theoretical foundation for systems programming. By requiring explicit capability tokens, the language guarantees that functions are pure by default. This capability-based architecture enables fully deterministic testing, reproducible builds, and reliable fuzzing. It eliminates hidden side channels and forces developers to declare their use of non-deterministic resources. While challenges remain with foreign function interfaces and hardware timers, explicit effect management is necessary for secure and replayable software systems.

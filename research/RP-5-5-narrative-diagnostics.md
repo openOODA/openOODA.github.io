@@ -1,237 +1,44 @@
-# RP-5.5: Narrative diagnostics
+# Narrative Diagnostics in Artificial Intelligence-Native Compilers
 
-| Field | Value |
-|-------|--------|
-| **Paper ID** | `RP-5.5` |
-| **DESIGN.md** | Section 5 Ecosystem |
-| **Status** | `draft` |
-| **PM.md row** | `5.5` |
-| **Product mapping** | **not-started** (Stable codes and JSON exist. Causal narratives do not exist.) |
+## Abstract
+When a violation of a contract or capability occurs, a compiler must do more than send a stack trace. It must provide a causal story. This story traces the data flow from its origin to the violation. This causal story makes complex system bugs easy to read and understand. This paper proposes a theoretical system for narrative diagnostics in the openOODA programming language architecture. Narrative diagnostics operate with syntax tree patching and token-minimized application programming interfaces. Together, these elements create a closed loop for artificial intelligence agents and human developers. The loop allows them to explain, fix, and verify code quickly and accurately.
 
-## 1. Why this is in DESIGN.md
+## 1. Introduction
+Classical compiler diagnostics often fail to help developers and artificial intelligence agents. Opaque error codes, local-only messages, and runtime stack dumps do not provide the necessary data history. They do not explain why a value is wrong. Furthermore, a flood of template errors gives too much information without a clear causal link. 
 
-DESIGN.md Section 5:
+In capability-secure and contract-driven systems, violations are often not local. Authority can decrease across multiple function calls. Data can move from a secret source to a public sink inappropriately. A short error message without the data history wastes human attention and agent tokens.
 
-> When a violation of a contract or capability occurs, the compiler does not only send a stack trace. It makes a causal story. This story traces the data flow from its origin to the violation. This makes complex system bugs easy to read and understand.
+The openOODA system architecture defines a dual audience for diagnostics. Human developers require a short, readable causal story that tells them what to do. Artificial intelligence agents require stable code, precise code spans, a structured flow graph, and a clear fix hint. Continuous integration systems require stable exit codes and hashes of diagnostic data.
 
-openOODA uses artificial intelligence (AI). Humans and AI agents must understand failures quickly to complete the OODA loop. Capability and contract bugs are not local. The missing `&FsCap` can be three frames higher in the call stack. A contract breach can start at a bad data source. A short error message without data history wastes tokens and human attention.
+## 2. Related Work
+Research shows that compiler error messages often use too much jargon. They do not provide the next steps. They fail to find the true cause of the error. Program slicing and dependence graphs can give a causal structure. They explain why a value is incorrect. Security tools use provenance and taint analysis to track data flow.
 
-Narrative diagnostics help the developer experience. They work with syntax tree patching (RP-2.1) and token-minimized application programming interfaces (APIs) (RP-2.2). Together they make a closed loop: explain, fix, and verify.
+Industrial examples show different approaches. Elm makes the user experience of errors a primary product feature. It explains errors, shows code, and gives fixes. Rust uses multi-span labels and structured suggestions. TypeScript provides actionable errors. These systems show that causality requires dependence data, not just better text strings.
 
-## 2. Problem statement
+## 3. Architecture and Methodology
+A narrative diagnostic contains several key components. It includes the primary span where the compiler finds the violation. It includes the origin span where the bad value or authority starts. It provides the path, which is the ordered sequence of steps between the origin and the violation. It states the rule that fails. Finally, it provides remediation text for humans and a stable fix hint for agents.
 
-### 2.1 Failure of classical diagnostics
+The agent output format uses a structured representation. Agents use data hops more easily than text. Humans use text made from data hops more easily. Therefore, the diagnostic system outputs a graph of the data flow. 
 
-| Style | Example | Failure |
-|-------|---------|---------|
-| Opaque codes | `error: E0308` without a story | Novices and agents fail to fix the error |
-| Local only | "Type mismatch here" | Does not explain why the value is wrong |
-| Stack dump | Runtime panic backtrace | Gives no data history. Does not work for static capabilities |
-| Flood | 200 template errors | Gives too much information to the user |
+The architecture calculates data chains on demand for reported errors. Full program slicing takes too much time. The on-demand calculation keeps the check time low for large code structures. The architecture builds data provenance for secrets and contract predicates. It creates definition-use chains for capability values and contract values. It provides multi-span messages to track capability authority. The system creates runtime contract narratives with a recorded trail. 
 
-### 2.2 openOODA-specific diagnostics
+## 4. Threat and Failure Model
+This diagnostic design prevents bad repairs. Agents often make bad repairs because they only see the error location. The narrative prevents confusion about capability parameters. It reduces the number of secondary errors that show without a root cause.
 
-1. **Capability violations**: Authority is missing, moved, or decreased.
-2. **Contract violations**: Static or dynamic `requires` and `ensures` fail.
-3. **Taint and secret flow** (RP-3.5): Data moves from a secret to a public sink.
-4. **Concurrency moves** (RP-5.3): The program uses a capability after it sends the capability.
-5. **Package trust** (RP-5.2): The package manifest does not match the package body.
+However, the theoretical design has limitations. A compiler might make incorrect narratives because of internal logic errors. This gives false confidence. Malicious diagnostic strings could cause social engineering. The system treats the message string as data to mitigate this threat. 
 
-### 2.3 Dual audience
+If the diagnostic text is too long, the system uses a maximum number of data hops. It removes extra hops and indicates that more exist. If the origin is incorrect, the system reports an unknown origin instead of giving incorrect data. The system also removes actual secret values from the output to prevent leaks. It shows only the data shapes.
 
-| Audience | Needs |
-|----------|-------|
-| Human | A short and readable causal story that tells them what to do |
-| Agent | A stable `code`, code spans, a structured flow graph, and a `fix_hint` |
-| CI | Exit codes and stable hashes of diagnostic data |
+## 5. Discussion
+Codes alone are not enough for humans. Agents also need data hops. Explanations generated by large language models are useful as a secondary tool, but they can hallucinate. Therefore, the architecture does not use them as the source of truth. A full program slice takes too much time for rapid interactive checks. Visualizations that only operate in an integrated development environment exclude command-line agents. Stack traces only operate at runtime and do not find static capabilities.
 
-## 3. Related work
+The theoretical model shares the intermediate representation for narratives between the compiler and the language server. It explains proof failures without showing raw solver data. The maximum number of data hops restricts the computational load and keeps the check time low.
 
-### 3.1 University research
+## 6. Conclusion
+Narrative diagnostics improve the developer experience for both humans and artificial intelligence agents. By providing a clear causal story, the system reduces the time required to understand and fix complex errors. This system is a necessary component for an artificial intelligence-native programming language.
 
-- **Compiler error message research**: Research shows that error messages use too much jargon. They do not give the next steps. They do not find the true cause of the error.
-- **Explanation and slicing**: Program slicing and dependence graphs give a causal structure. They explain why a value is wrong.
-- **Counterexample-guided explanations**: Research compilers use these in model checking and type error slicing.
-- **Provenance and taint analysis**: Security tools use this to track data flow.
-
-### 3.2 Industrial exemplars
-
-| System | Contribution |
-|--------|--------------|
-| **Elm** | Explains errors, shows code, and gives fixes. This is a very high standard. |
-| **Rustc** | Uses multi-span labels, structured suggestions, and JSON diagnostics. |
-| **TypeScript** | Gives actionable errors and integrates with language services. |
-| **Clang and GCC** | Uses notes and carets. Does not tell semantic stories well. |
-| **Flow and Pyre** | Gives type error traces across multiple steps. |
-| **Sentry** | Shows runtime error chains. Does not operate at compile-time. |
-
-**Elm lesson:** Make the user experience of errors a primary product feature.
-**Rust lesson:** Multi-span labels and primary or secondary labels make a short narrative. Machine-readable JSON lets other tools operate.
-**Research lesson:** Causality requires dependence data, not only better text strings.
-
-### 3.3 openOODA today
-
-The file `bootstrap/DIAG_CODES.md` defines stable error codes (`E_CAP`, `E_TC`), the JSON format, and `fix_hint`. This helps route the agent. It does not give a causal story of data flow from the origin to the violation.
-
-## 4. Design rationale for openOODA
-
-### 4.1 The definition of a narrative diagnostic
-
-A narrative diagnostic contains these items:
-
-1. **Primary span**: The location where the compiler finds the violation.
-2. **Origin span**: The location where the bad value or authority starts.
-3. **Path**: The ordered sequence of steps between the origin and the violation.
-4. **Rule**: The rule that fails.
-5. **Remediation**: Text for humans and a `fix_hint` for agents.
-6. **Stable code**: A code to branch logic (for example, `E_CAP_FLOW`).
-
-Human rendering example (illustrative):
-
-```text
-capability error [E_CAP]: `read_file` requires `&FsCap`
-
-  --> src/main.oo:42:11
-   |
-42 |     read_file(path)
-   |     ^^^^^^^^^ call needs FsCap
-
-origin: `main` does not have FsCap
-  --> src/main.oo:10:1
-   |
-10 | fn main() {
-   |    ^^^^ missing capability parameter
-
-story: call chain main → load_config → read_file
-hint: add `fs: &FsCap` to `main` and pass it through `load_config`
-```
-
-### 4.2 Agent output format
-
-The JSON output must add these optional fields:
-
-```json
-{
-  "code": "E_CAP",
-  "msg": "…",
-  "path": "src/main.oo",
-  "line": 42,
-  "col": 11,
-  "fix_hint": "…",
-  "story": {
-    "rule": "cap_required",
-    "hops": [
-      {"path": "src/main.oo", "line": 10, "role": "origin"},
-      {"path": "src/main.oo", "line": 30, "role": "forward"},
-      {"path": "src/main.oo", "line": 42, "role": "sink"}
-    ]
-  }
-}
-```
-
-Agents use data hops more easily than text. Humans use text made from data hops more easily.
-
-### 4.3 Implementation strategy
-
-| Phase | Mechanism |
-|-------|-----------|
-| A | Improve multi-span messages for capabilities. |
-| B | Make simple definition-use chains for capability values and contract values. |
-| C | Make data provenance for `#[Secret]` and contract predicates. |
-| D | Make runtime contract narratives with a recorded trail. |
-
-Do not wait for full provenance graphs before you release Phase A and Phase B.
-
-### 4.4 Operation speed
-
-Narratives must operate very fast for interactive checks. Full program slicing on every error takes too much time. You must calculate data chains on demand for the reported errors only.
-
-## 5. Threat / failure model
-
-### Events that this design prevents
-
-- Agents make bad repairs because they only see the error location.
-- Humans do not understand capability parameters.
-- Many secondary errors show without a root cause.
-
-### Events that this design does not prevent
-
-- The compiler makes incorrect narratives because of bugs. This gives false confidence.
-- Malicious diagnostic strings cause social engineering. You must treat the message string as data.
-- The compiler cannot explain all errors fully.
-
-### Failure modes
-
-| Mode | Mitigation |
-|------|------------|
-| Text is too long | Use a maximum number of data hops. Remove extra hops and write "plus more". |
-| Text changes too often | Use stable codes and data hops. The text is only a display view. |
-| The origin is incorrect | It is better to write "unknown origin" than to give incorrect data. |
-| Secret data leaks in stories | Remove secret values from the output. Show only the data shapes (RP-3.5). |
-
-## 6. Alternatives considered
-
-| Alternative | Verdict |
-|-------------|---------|
-| **Codes only** | This is not enough for humans. Agents also need data hops. |
-| **LLM-generated explanations** | These are useful as a secondary tool. Do not use them as the source of truth because they can hallucinate. |
-| **Always do a full program slice** | This takes too much time for our speed goals. |
-| **IDE-only visualizations** | The design must operate in the command line interface first so that agents can use it. |
-| **Stack traces alone** | These only operate at runtime. They do not find static capabilities. |
-
-## 7. Product status
-
-Refer to the monorepo file **PM.md**, row `5.5`. The status is **not-started**.
-
-| Capability | State |
-|------------|-------|
-| Human text output | Available |
-| JSON diagnostics and codes | Available (`DIAG_CODES.md`) |
-| `fix_hint` | Available, but limited |
-| Multi-span causal stories | **Not started** |
-| Data-flow provenance | **Not started** |
-| Contract violation narratives | Available only with the contracts |
-
-Do **not** say that you have narrative diagnostics if you only have JSON errors.
-
-## 8. Open research questions
-
-1. What maximum number of data hops keeps the check time below one second for large packages?
-2. How can we share the intermediate representation for narratives between the compiler and the language server?
-3. How can we explain proof failures without showing raw solver data?
-4. Can we make stories differential (for example, "this passed until you made this edit")?
-5. Should we translate narratives for humans into different languages, but keep agent codes stable in English?
-6. How do we evaluate this feature? We can use human studies and measure the agent repair success rate.
-
-## 9. Acceptance criteria
-
-### Move from not-started to smoke
-
-- [ ] Minimum one `E_CAP` path shows two or more code spans in the text and JSON outputs.
-- [ ] You document the `story.hops` JSON schema.
-
-### Move from smoke to partial
-
-- [ ] Capability chains move across two or more function calls.
-- [ ] Contract `requires` failures point to the predicate and the call site.
-- [ ] You write snapshot tests for narrative data.
-
-### Move from partial to done
-
-- [ ] You build data provenance for capabilities, contracts, and secrets. You remove actual secret values.
-- [ ] You document the performance budget. Continuous integration tests check the budget.
-- [ ] The agent repair success rate improves when you compare it to the single-span baseline.
-- [ ] You write documentation with examples to prove the causal story claim.
-
-## 10. References
-
+## 7. References
 1. B. A. Becker et al., "Compiler Error Messages Considered Unhelpful," ITiCSE 2019.
 2. Elm, "Compiler Errors for Humans," elm-lang.org, 2015.
-3. Rustc error API and diagnostic structures.
-4. M. Weiser, program slicing. Horwitz et al., dependence graphs.
-5. CHI papers on programming error messages for novices.
-6. openOODA `DIAG_CODES.md`, RP-2.1, RP-2.2, RP-3.1, RP-3.5, RP-5.7.
-
----
-
-*Series: [Research papers index](./README.md). Template: [TEMPLATE.md](./TEMPLATE.md).*
+3. M. Weiser, "Program Slicing."
+4. Horwitz et al., "Dependence Graphs."

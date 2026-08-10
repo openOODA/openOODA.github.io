@@ -1,254 +1,46 @@
-# RP-2.2: Token-minimized APIs (`outline` / `reflect`)
+# RP-2.2: Token-Minimized APIs
 
-| Field | Value |
-|-------|--------|
-| **Paper ID** | `RP-2.2` |
-| **DESIGN.md** | §2 AI tooling — Token-Minimized APIs |
-| **Status** | `draft` |
-| **PM.md row** | `2.2` |
-| **Product mapping** | **done** (M1 pure path; parse-only; residual richness) |
+**Abstract**
+This paper presents a theoretical framework for token-minimized Application Programming Interfaces (APIs) in the openOODA system. Large language models experience context limits when artificial intelligence agents read full source files. This architecture introduces language-first compression mechanisms. The system exports public APIs, contracts, and capabilities without function bodies. This design decreases token consumption and improves long-range structural comprehension for autonomous coding agents.
 
-## 1. Why this is in DESIGN.md
+## 1. Introduction
 
-DESIGN.md §2 states:
+Large language models have strict context limits. Artificial intelligence agents process repositories by reading full source files. These agents hit context limits quickly. When agents hit these limits, they lose long-range structure. This process increases latency and operational cost. The openOODA system requires language-first compression to solve this problem.
 
-> **Token-Minimized APIs:** `ooda outline` and `ooda reflect` export compressed symbol metadata. This gives an 85 to 90 percent token reduction when AI agents read the source code.
+The theoretical compiler exports necessary data for the agent. This step supports the Orient phase of the Observe, Orient, Decide, Act (OODA) loop. The exported data includes public APIs, mathematical contracts, and security capabilities. The system completely omits function bodies during this phase. This paper explains the theoretical design of token-minimized APIs. It compares this design to existing retrieval-augmented generation and code summarization research.
 
-Large language models have context limits. Agents that read the repository with full source files hit these limits. They lose long-range structure and increase latency and cost. The openOODA AI-native design requires **language-first compression**. The compiler (or a pure parse path) exports the data that an agent needs to Orient. This data includes public APIs, contracts, and capabilities, without the function bodies.
+The context crisis causes multiple failures. Agents paste entire files into the model context. This uses too many tokens and hides contracts in noise. Retrieval-augmented generation alone fails. Retrieval misses rare capabilities and contracts. It operates non-deterministically and suffers from index lag. Human-readable documentation becomes obsolete. It lacks machine verification against the source code. Full typecheck data dumps create excessive cost. They require a complete build graph and are too large for simple orientation.
 
-This document gives the reasons for outline and reflect as product surfaces. It compares them to RAG and code summarization research. It also records the known residuals. (It does not record a full typed AST or import graph).
+Agents need different levels of detail. The outline level provides the lowest cost public surface. This includes names, parameters, returns, and capabilities. The reflect level provides contracts, verification hooks, and richer metadata. The source slice provides the patch target. Agents use the full source only after they decide where to work. The full check tool provides validation, not orientation.
 
-## 2. Problem statement
+The quantitative design goal targets an 85 to 90 percent token reduction. The system measures this reduction by comparing the token count of the outline and reflect outputs against the full source code.
 
-### 2.1 The context crisis
+## 2. Related Work
 
-| Approach | Failure mode |
-|----------|--------------|
-| Paste entire files | Uses too many tokens. It hides contracts in noise. |
-| Embedding RAG only | Retrieval misses rare capabilities and contracts. It is non-deterministic and has index lag. |
-| Human README only | The data becomes obsolete. It is not machine-checked against the source code. |
-| Full typecheck dump | It has a high cost. It can require a build graph. It is too large to find the API. |
+Modern coding agents use multiple context strategies. These systems combine repository maps, semantic search, model-generated summaries, and open editor tabs. Language-owned outline tools decrease the need for model-generated summaries. Probabilistic model summaries frequently invent incorrect APIs.
 
-Agents need different **levels of detail**:
+Retrieval-augmented generation improves data accuracy. However, splitting APIs separates signatures from their documentation. Capability and contract clauses use few tokens. Consequently, embedding models easily miss these critical security constraints. Furthermore, private code cannot always use cloud services for embeddings. Deterministic extractors operate alongside retrieval systems. The continuous structure uses outlines, while the retrieval system manages text documentation and examples.
 
-1. **Outline** — the lowest cost public surface (names, parameters, returns, capabilities).
-2. **Reflect** — contracts, verify hooks, and richer metadata (but no bodies).
-3. **Source slice / patch target** — use this only after you decide *where* to do the work.
-4. **Full check / test** — use this for validation, not orientation.
+Academic code summarization and neural documentation tools compress semantic meaning. These systems translate functions to natural language. However, they operate probabilistically and have high computational cost. They do not reliably include critical capability requirements or mathematical contracts. They make frequent errors. These errors present severe danger for capability-sensitive APIs. Consequently, openOODA uses lossy but accurate structured compression instead of natural language summaries.
 
-### 2.2 Users
+Industrial systems use different extraction tools. Existing documentation generators produce heavy artifacts that do not suit interactive agent streams. Type declaration files emit public types but do not function as interactive agent command-line interfaces. Abstract syntax tree queries extract symbols but lack contract or capability semantics. Language Server Protocol tools provide hierarchical symbols but require a running server instance. No mainstream systems language includes a command-line extractor that operates natively, understands capabilities, enforces contracts, and minimizes tokens for artificial intelligence agents.
 
-| Actor | Use |
-|-------|-----|
-| Coding agent | Map modules before you edit them. Choose `replace_fn` targets. |
-| Package consumer (future) | Use precomputed outlines in packages (ooda-future "context-optimized packages"). |
-| Human | Read the API quickly without an IDE. |
-| Adversary | Must not execute code through introspection. Must not leak secrets from bodies (the design omits bodies). |
+## 3. Architecture and Methodology
 
-### 2.3 Quantitative design goal
+The theoretical openOODA architecture provides two distinct commands for context compression. These tools execute a parse-only operation. They never execute user code and fail securely on unreadable paths.
 
-DESIGN claims an **85 to 90 percent token reduction**. Treat this as a **target range**, not a strict mathematical proof. Measure `tokens(outline+reflect) / tokens(full source)` on the stdlib and compiler source files. The Alpha version can claim a large decrease in orientation cost with published methods, even if it does not reach 85 percent on every file.
+The first command provides the structural outline. This outline prints public function signatures. The system omits private functions to present only the public API. It removes function bodies, mathematical contracts, and verification hooks to save tokens. The parser detects capabilities directly from parameter types.
 
-## 3. Related work
+The second command provides rich reflection data. This tool emits structured data objects. These objects include mathematical requirements, security guarantees, and necessary capabilities. Agents filter this stream by specific symbols when they need focused context. The reflection tool also omits all function bodies.
 
-### 3.1 Context windows and agent practice
+This pipeline integrates with the complete agent OODA loop. The outline phase answers what the agent can call. The reflection phase answers what mathematical properties must hold. The diagnostic phase answers what broke. Finally, the patch phase changes the isolated function. In the future, the package manager will supply outlines with all packages. This prevents agents from downloading large codebases just to learn an API.
 
-Modern agents (Cursor, Copilot, Claude Code, Aider) combine these items:
+Deterministic extraction provides multiple benefits over embeddings. It supports offline operation and pure bootstrapping. Most importantly, it guarantees capability and contract accuracy. Embeddings remain optional for natural language documentation.
 
-- **Repository maps / file trees** (names only).  
-- **Grep / semantic search** (on-demand).  
-- **Summaries** (model-generated, frequently obsolete).  
-- **Editor open tabs** as implicit context.
+The threat model addresses several security concerns. The system prevents the agent from executing code while it reads the API. It prevents token budget exhaustion by omitting bodies. It prevents accidental secret exfiltration because it never emits function implementations. Agents run the outline tool continuously to prevent stale model memory.
 
-Language-owned outline tools decrease the need for model-generated summaries. Model-generated summaries can **invent incorrect APIs**.
+However, residual risks remain. The parse-only residual is not a full typecheck. The output can disagree with the full compiler check. The intentional omission of private helpers requires agents to read targeted source files. Malicious public function names or strings still enter the agent context. Outline data does not prove that the underlying implementation is correct. Agents must treat outline and reflection outputs as claims about source text. Agents must validate these claims with the full compiler check before they trust safety properties.
 
-### 3.2 RAG for code
+## 4. Conclusion
 
-Retrieval-augmented generation (Lewis et al., 2020) improves data accuracy, but:
-
-- Splitting APIs can separate signatures from their documentation.  
-- Capability and contract clauses use few tokens. It is easy to miss them in the embedding space.  
-- Private code cannot always use cloud services for embeddings.
-
-**outline** and **reflect** are **deterministic extractors**. They work together with RAG. Use outline as the continuous structure. Use RAG for text documentation and examples.
-
-### 3.3 Code summarization and documentation generation
-
-Academic code summarization (function to natural language) and neural documentation tools compress *meaning*, but:
-
-- They are probabilistic and have high cost.  
-- They do not make sure to include `&FsCap` or `requires`.  
-- They make errors frequently. This is dangerous for capability-sensitive APIs.
-
-openOODA uses **lossy but accurate** structured compression instead of natural language summaries for agent Orient.
-
-### 3.4 Existing language tooling
-
-| Tool | Similarity | Difference |
-|------|------------|------------|
-| `go doc` / `rustdoc` JSON | API extract | They are doc-oriented and heavier. They do not use an NDJSON agent stream. |
-| TypeScript `--declaration` | Public types | They emit artifacts. They are not an interactive agent CLI. |
-| `ctags` / tree-sitter queries | Symbols | They have no contract or capability semantics. |
-| LSP `documentSymbol` | Hierarchical symbols | It requires a running LSP. Outline is batch-friendly. |
-
-### 3.5 Gap
-
-No mainstream systems language includes CLI extractors that are **first-class, parse-only, capability-aware, contract-aware, and token-budgeted** as part of the *language* product for AI agents. This is the core idea of the DESIGN.
-
-## 4. Design rationale for openOODA
-
-### 4.1 Two commands, two budgets
-
-Documented in `bootstrap/OUTLINE_REFLECT.md`:
-
-```text
-ooda outline <file.oo>
-ooda reflect <file.oo> [symbol]
-```
-
-| Command | Fidelity | Token posture |
-|---------|----------|---------------|
-| `outline` | Public `fn` lines: parameters, return, `caps=` | Minimal |
-| `reflect` | NDJSON: requires, ensures, capabilities, verify names, and an optional symbol filter. | Small to medium |
-
-**Security:** parse-only. It **never executes** user `.oo` code. It fails closed on unreadable paths.
-
-### 4.2 Outline format (product)
-
-```text
-pub fn NAME(param: Type, …) [-> Ret] [caps=Cap1,Cap2]
-```
-
-- It omits private `fn` (it shows the public API only).  
-- It does **not** print bodies, requires/ensures, or verify (this saves tokens).  
-- It detects capabilities from parameter types (`NetCap|FsCap|SysCap|EnvCap`).
-
-### 4.3 Reflect format (product)
-
-NDJSON objects, e.g.:
-
-```json
-{"kind":"fn","name":"add","pub":true,"params":[…],"ret":"Int","requires":["a >= 0"],"ensures":["result >= 0"],"caps":[]}
-{"kind":"verify","name":"add"}
-```
-
-Agents filter by symbol when they focus. A full-file reflect also omits the function bodies.
-
-### 4.4 Pipeline fit
-
-```
-outline  → “what can I call?”
-reflect  → “what must hold / what caps?”
-json-errors → “what broke?”
-patch    → “change this fn only”
-```
-
-Package-manager future (ooda-future §2): supply outlines **with** packages. This prevents agents from downloading 100,000 lines of code to learn an API.
-
-### 4.5 Why not only embeddings?
-
-Determinism, offline pure bootstrap, auditability, and **capability and contract accuracy**. Embeddings are optional for natural language documentation.
-
-## 5. Threat / failure model
-
-### 5.1 Prevents
-
-| Risk | Mitigation |
-|------|------------|
-| Agent executes code while it reads the API | The implementation only parses the code. |
-| Token budget exhaustion on Orient | The design omits bodies and only outlines public data. |
-| Stale model memory of APIs | Run outline again after every patch. |
-| Accidental secret exfiltration from function bodies | The design does not emit bodies. |
-
-### 5.2 Does not prevent
-
-| Risk | Notes |
-|------|-------|
-| **Stale outline vs semantics** | A text/scan residual is not a full typecheck. It can disagree with `check`. |
-| **Missing private helpers** | This is by design. Agents can need to read targeted source files. |
-| **Import graph blindness** | Residual: there are no import lines in the MVP. |
-| **Adversarial public signatures** | Malicious `pub fn` names or strings still go into the agent context. |
-| **Over-trust** | Outline does not prove that the implementation is correct. |
-
-### 5.3 Integrity
-
-Agents must treat outline and reflect as **claims about source text**. Agents must validate these claims with `check` before they trust safety properties.
-
-## 6. Alternatives considered
-
-| Alternative | Rejection / deferral reason |
-|-------------|----------------------------|
-| **Model-summarize on the fly** | It is non-deterministic and has high cost. It invents capabilities. |
-| **Always full-file context** | It fails the OODA cost goals. |
-| **Binary symbol tables only** | It is not easy to use for external agents and humans. |
-| **JSON-Schema mega dump of typed AST** | It uses many tokens and needs a full checker. The residual comes later as `reflect --full`. |
-| **Documentation comments only** | They are not enforced and are frequently missing. |
-
-## 7. Product reality (alpha honesty)
-
-**PM.md `2.2`: done** (M1 pure path).
-
-| Piece | Reality |
-|-------|---------|
-| Pure `oodac outline` / `reflect` via product CLI | **Done** (not Python helper as primary) |
-| Parse-only / no execution | **Done** |
-| Format docs + smoke rails | **Done** (`OUTLINE_REFLECT.md`, `outline_reflect_smoke.sh`) |
-| Full typed AST outline | **Residual** |
-| Import graph / type-alias lines | **Residual** |
-| `--json` outline variant | **Residual** |
-| Measured 85–90% token reduction published | **Not formalized** (design claim; measure in §9) |
-| Package-shipped outlines | **Not-started** (ecosystem) |
-
-**Honest summary:** outline and reflect are **real products and usable by agents**. They have an intentional residual depth. “Done” means they are an M1 pure path. It does not mean they have the maximum features from the DESIGN.
-
-## 8. Open research questions
-
-1. **Compression metrics:** What standard source files and tokenizer do we use for the 85 to 90 percent claim?  
-2. **Incremental outline:** How do we do module-level cache invalidation for monorepos?  
-3. **Cross-file outline:** How do we summarize `std` and the user tree without an import graph?  
-4. **Privacy tiers:** Do we use `reflect --public-only`, or do we include non-public data for local agents?  
-5. **Outline as package artifact:** How do we manage signing and freshness? (This connects to RP-5.2 web of code).  
-6. **Hybrid RAG:** What is the best practice prompt? Do we use outline first, and then retrieve bodies only for named symbols?
-
-## 9. Acceptance criteria (for PM status promotion)
-
-### Maintain `done` (regression bar)
-
-- [x] `ooda outline` / `reflect` on pure path; smoke pass/fail cases.  
-- [x] Never execute user code.  
-- [x] Fail-closed unreadable / missing symbol.
-
-### `done` → richer (optional PM note, not status demotion)
-
-- [ ] Put the import graph or `mod` lines in the outline.  
-- [ ] Add a typed or checked reflect mode. (This can require check-class work).  
-- [ ] Publish token-reduction numbers on the `std/` and `oodac/` source files.  
-- [ ] Add an optional machine-wide `ooda outline --project` command.
-
-## 10. References
-
-1. DESIGN.md §2 — Token-Minimized APIs; ooda-future “Context-Optimized Package Ecosystem.”  
-2. openOODA `bootstrap/OUTLINE_REFLECT.md`, `BUILD_OUT.md`, `PM.md` row 2.2.  
-3. Lewis, P. et al. — Retrieval-Augmented Generation for Knowledge-Intensive NLP (NeurIPS 2020 lineage).  
-4. Surveys on repository-level code generation and long-context agents (2023–2025 literature).  
-5. Code summarization surveys (neural source code summarization, ASE/ICSE lines).  
-6. GitHub Copilot, Cursor codebase indexing — commercial context selection (product documentation).  
-7. rustdoc JSON, TypeScript declaration emit, Go doc — industrial API extraction prior art.  
-8. LSP `textDocument/documentSymbol` — editor-oriented symbol compression.  
-9. Tree-sitter / ctags — generic symbol extraction without semantic contracts.
-
----
-
-## Conflicts with other DESIGN items
-
-| Tension | Conflict | Resolution direction |
-|---------|----------|----------------------|
-| **Token compression vs narrative diagnostics (§5.5)** | Rich stories use many tokens. | Keep outline and reflect small. Use narratives only on failure paths. |
-| **Outline pub-only vs self-host debugging** | Compiler developers need private symbols. | Allow a future `--all` option for local trusted use. The default is public for agents. |
-| **Parse-only honesty vs “85–90%” marketing** | An incomplete parse can omit a real API. | Measure on parsable source files. Do not claim typechecked accuracy in the MVP. |
-| **§2.2 vs §2.3 telepathic AST** | Synthesis needs contracts from reflect. | Reflect is the Orient input for the future intent compile. Keep the formats stable. |
-| **Package outlines vs zero-trust (§5.2)** | A shipped outline can give false capability data. | Outline is a hint. The **check** command and capability minting are authoritative. |
-
----
-
-*Series: [Research papers index](./README.md). Template: [TEMPLATE.md](./TEMPLATE.md). Sibling: [RP-2.1](./RP-2-1-surgical-ast-patching.md), [RP-2.2b](./RP-2-2b-surgical-patch-replace-fn.md).*
+Token-minimized APIs provide critical infrastructure for AI-native software development. This theoretical framework demonstrates how deterministic, parse-only extraction reduces token consumption. The separation of structural outlines from semantic reflection enables agents to navigate large codebases efficiently. Future research must address incremental caching, cross-file module resolution, and cryptographic signing for package-distributed outlines.

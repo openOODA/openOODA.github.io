@@ -1,252 +1,52 @@
-# RP-3.9: Cryptographic call-graph integrity
+# Theoretical Framework for Cryptographic Call-Graph Integrity in openOODA
 
-| Field | Value |
-|-------|--------|
-| **Paper ID** | `RP-3.9` |
-| **DESIGN.md** | Section 3 Safety — *Cryptographic Call-Graph Integrity* |
-| **Status** | `draft` |
-| **PM.md row** | `3.9` |
-| **Product mapping** | **not-started** (advanced zero-day integrity) |
-| **Conflicts** | Overhead against 1.1 OODA speed. Dynamism against 3.11 runtime mutation. Hot reload 4.2. See Section Conflicts. |
+## Abstract
 
-## 1. Why this is in DESIGN.md
+Memory corruption vulnerabilities permit attackers to control the execution flow of a software program. The openOODA architecture prevents these hijack operations through a theoretical mechanism called Cryptographic Call-Graph Integrity. In this model, the compiler calculates a cryptographic hash of all valid function transitions. If an unauthorized control transfer occurs, the hardware or the software stops the incorrect return pointer. Subsequently, the system stops the compromised process immediately. This theoretical mechanism provides robust control-flow integrity. It prevents return-oriented programming, jump-oriented programming, and function-pointer overwrites. This paper details the theoretical design, the enforcement methodology, and the security guarantees of this conceptual system within the openOODA environment.
 
-DESIGN.md Section 3 says:
+## 1. Introduction
 
-> **Cryptographic Call-Graph Integrity:** The compiler makes a cryptographic hash of all valid function transitions. If an attacker uses a vulnerability (for example, a ROP attack), the CPU stops the incorrect return pointer. Then, the CPU stops the process.
+Modern software systems face continuous threats from memory corruption. Residual bugs, such as those in foreign function interfaces or logic errors, can cause these corruptions. Without control-flow integrity, attackers can use these bugs to redirect program execution. For example, return-oriented programming chains existing code snippets to bypass non-executable memory protections. Jump-oriented programming and counterfeit object-oriented programming take control of indirect calls or virtual tables. Furthermore, attackers can overwrite return addresses or smash function pointers to change the direction of function calls.
 
-This feature is the language-level commitment of openOODA to control-flow integrity (CFI). This feature has a cryptographic element. The labels must match. Also, the hashes or MACs must connect to the transitions. Thus, forged return addresses and indirect calls do not operate. This feature stops the attack sequence after memory corruption occurs. Examples include ROP, JOP, return address overwrite, and function-pointer hijack.
+The conceptual openOODA environment operates as a high-value target because it includes artificial intelligence generation and self-hosting compilers. Therefore, it is critical to stop the process upon any mismatch rather than permit a silent compromise. Cryptographic Call-Graph Integrity serves as the language-level commitment to control-flow integrity. This feature includes a cryptographic element. The labels of the transitions must match. Also, the hashes or message authentication codes must connect securely to the transitions. Thus, forged return addresses and indirect calls fail to operate. This mechanism stops the attack sequence immediately after memory corruption occurs.
 
-It is a main part of the ES.5 zero-day defense goals. It adds to memory safety (3.7) and capabilities (3.1). It does not replace them.
+In this theoretical design, the term cryptographic refers to three distinct but related components. First, it includes a static control-flow graph commitment. This is a secure hash of the allowed edge set. Second, it uses dynamic edge authentication. This involves a message authentication code or a digital signature for return addresses and code pointers. Third, it uses label identification for equivalence classes. Although label identification is a weaker baseline, it provides portable software protection. The openOODA architecture prioritizes dynamic edge authentication on hardware that supports it. It uses the static commitment to measure the software supply chain.
 
-## 2. Problem statement
+## 2. Architecture and Methodology
 
-### 2.1 What breaks without it
+The theoretical openOODA architecture uses a layered enforcement strategy for call-graph integrity. The base layer relies on portable software labels and a shadow stack for all target addresses. The second layer integrates hardware-specific enforcement. This includes shadow stacks and indirect branch tracking on supported processors. The third layer embeds the static control-flow graph commitment hash into the binary metadata. Finally, an optional layer provides full code-pointer separation for high-assurance builds.
 
-Residual bugs can cause memory corruption. Examples of residual bugs are FFI, logic bugs, and future free bugs. Without CFI, these attacks can occur:
+The compiler has specific responsibilities to support this architecture. It calculates a precise control-flow graph from the strict openOODA type system. It avoids the ambiguity present in standard system languages. The compiler then generates landing pads, pointer authentication codes, or branch targets as the target hardware requires. It hashes and embeds the allowed transition set into the binary for runtime and offline verification. If a mismatch occurs at runtime, the compiler-injected checks stop the process. The system does not attempt to continue in a reduced security mode. The compiler also connects these checks with the capability sandboxes, because a control-flow violation is a critical security event.
 
-| Attack | Result |
-|--------|--------|
-| ROP | Chain gadgets. Bypass NX. |
-| JOP / COOP | Take control of indirect calls or vtables. |
-| Return address overwrite | Change the direction of `ret`. |
-| Function pointer smash | Change the direction of calls. |
+Various language features interact with this theoretical integrity mechanism. First-class functions and closures require precise indirect call sets. The hot reload feature must update the control-flow graph hash and the landing pads atomically. Code that originates from foreign function interfaces is untrusted. Thus, external calls require strict boundary stubs. Finally, code generated by artificial intelligence must pass through the identical control-flow integrity pipeline.
 
-AI-generated systems code and self-host compilers are high-value targets. It is better to stop the process on a mismatch than to allow a silent compromise.
+## 3. Threat Model and Failure Policy
 
-### 2.2 Stakeholders
+The Cryptographic Call-Graph Integrity system provides strong defense against specific attack vectors. The shadow stack and pointer authentication prevent classic return-oriented programming. Fine-grained integrity checks and hardware target identification prevent arbitrary indirect call hijacks. Hardware-backed shadow stacks stop return address overwrites. The optional high-assurance isolation protects against most code-pointer corruptions.
 
-| Actor | Need |
-|-------|------|
-| **Defender** | Stop operation when a control-flow violation occurs. |
-| **Compiler** | Make metadata and checks portably. (x86 CET, ARM PAC, software fallback). |
-| **Performance owner** | Limit overhead to keep agent loops tight (1.1). |
-| **Adversary** | Bypass coarse CFI. Do data-only attacks. Find a gadget in the allowed set. |
+However, this theoretical system does not prevent all possible attacks. It does not stop data-only attacks, because the control flow remains legal while the data becomes corrupted. It does not stop logic or capability abuse, which requires separate contractual defenses. If the transition labels are too broad, attackers might find valid gadget sets within the allowed paths. Furthermore, out-of-process compromises, such as kernel or hypervisor attacks, fall outside the scope of this system.
 
-### 2.3 “Cryptographic” meaning (precise)
+The failure policy of the theoretical system is strict. The secure default action is to stop the process or task immediately when a violation occurs. In a debug environment, the system provides a rich narrative diagnostic that includes the last legal execution edge. The system never changes the control flow to the nearest safe point silently.
 
-In DESIGN, “cryptographic hash of valid transitions” means one or more of these items:
+## 4. Resolution of Architectural Conflicts
 
-1. **Static CFG commitment** — A hash of the allowed edge set.
-2. **Dynamic edge authentication** — MAC or sign for return addresses and code pointers. (PAC-like).
-3. **Label IDs** — Classic CFI equivalence-class IDs. These IDs are weaker and are not always cryptographic.
+The implementation of call-graph integrity creates conflicts with other system goals. The conceptual openOODA architecture resolves these conflicts through careful design.
 
-openOODA must prefer item (2) on hardware that supports it. Use item (1) to measure the supply-chain. Use item (3) as a portable software baseline.
+The first conflict involves execution speed. Fine-grained checks consume processor cycles on every indirect call and return. To resolve this, openOODA prefers hardware-accelerated checks. It also uses profile-guided optimization to convert hot execution paths into direct calls. The system supports tiered builds. Development builds use software checks. Release builds use hardware checks. Secure builds use full pointer isolation.
 
-## 3. Related work
+The second conflict involves polymorphic and metamorphic binaries. Runtime code mutation invalidates static landing pads, signatures, and graph hashes. To resolve this, the system re-signs pointers and refreshes branch target maps under a secure lock after a mutation occurs. Alternatively, it morphs only the data layout without moving the executable code.
 
-### 3.1 Classic CFI
+The third conflict involves the hot reload feature. Reload transactions must install new code, generate a new control-flow graph commitment, and establish a secure barrier. The system prohibits concurrent calls into partially updated text segments.
 
-- **Abadi, Budiu, Erlingsson, Ligatti (2005)** — *Control-Flow Integrity*. Make sure that execution follows a set CFG. Check labels on indirect transfers. Use an optional shadow stack for returns.
-- **Fine-grained against coarse-grained CFI** — The precision of allowed target sets. Coarse CFI is weaker against advanced ROP.
-- **Burow et al.** — Surveys of CFI precision, security, and performance.
+The final conflict involves temporal recovery. A control-flow violation is an adversarial event, whereas temporal rollback is for non-adversarial faults. Therefore, a cryptographic detonation does not trigger an automatic temporal rollback. Instead, the system permits a supervised restart of a fresh task without restoring an attacker-tainted temporal state log.
 
-### 3.2 Code-Pointer Integrity (CPI)
+## 5. Conclusion
 
-- **Kuznetsov et al. (OSDI 2014)** — *Code-Pointer Integrity*. Keep the integrity of all code pointers. Keep the integrity of pointers to code pointers. Use a safe region or safe stack. This stops control-flow hijacks because it protects the pointers.
-- **CPS (code-pointer separation)** — A related design point with different performance tradeoffs.
-- **SafeStack (LLVM)** — Industrial ideas for stack separation.
+Cryptographic Call-Graph Integrity provides a foundational security guarantee for the theoretical openOODA architecture. It combines static cryptographic commitments with dynamic hardware and software authentication. This methodology stops advanced control-flow hijack attacks reliably. By enforcing a strict detonation policy upon a mismatch, the system prevents silent compromises. The theoretical design successfully balances rigorous security requirements with execution speed and dynamic runtime features.
 
-### 3.3 Hardware enforcement
+## 6. References
 
-| Mechanism | Platform | Role |
-|-----------|----------|------|
-| **Intel CET** | x86 | Shadow stack for returns and IBT for forward-edge. |
-| **ARM PAC** | Armv8.3-A+ / PACBTI M-profile | Cryptographic pointer authentication. |
-| **ARM BTI** | Armv8.5-A+ | Branch target identification for forward-edge. |
-| **ARM GCS** | newer A-profile | Guarded control stack. |
-| **LLVM CFI** | software | Type-based or scheme-based forward-edge checks. |
-
-V8 and major OSes combine PAC and shadow stacks for strong backward-edge CFI.
-
-### 3.4 Industrial deployment notes
-
-- Clang and LLVM CFI schemes operate for C++ virtual calls and indirect functions.
-- Android and Apple platforms use PAC and BTI on supported silicon.
-- The Linux kernel supports the CET shadow stack and IBT.
-
-## 4. Design rationale for openOODA
-
-### 4.1 Layered enforcement plan
-
-```text
-Layer 0  Portable software CFI labels and shadow stack for all targets.
-Layer 1  Hardware: CET SS and IBT (x86). PAC, BTI, and GCS (ARM).
-Layer 2  CFG commitment hash in binary metadata.
-Layer 3  Optional full CPI-style safe region for high-assurance builds.
-```
-
-### 4.2 Compiler responsibilities
-
-1. Make a precise CFG from openOODA types. Do not use C++-level ambiguity.
-2. Make landing pads, PAC sign-auth, or ENDBR as the target requires.
-3. Hash and embed the allowed transition set for runtime and offline verify.
-4. On mismatch, stop the process. Do not continue in secure mode.
-5. Connect with capability sandboxes. A CFI fault is a security event.
-
-### 4.3 Interaction with language features
-
-| Feature | CFI impact |
-|---------|------------|
-| **First-class functions / closures** | Indirect call sets must be precise. |
-| **Hot reload (4.2)** | You must update the CFG hash and landing pads atomically. |
-| **Metamorphic (3.11)** | You must re-sign and re-label runtime code moves. See Section Conflicts. |
-| **FFI (6.3)** | External code is untrusted. Calls need boundary stubs. |
-| **Intent / LLM codegen (2.3)** | Generated code must lower through the CFI pipeline. |
-
-## 5. Threat / failure model
-
-### 5.1 Prevents (strong schemes)
-
-| Attack | Defense |
-|--------|---------|
-| Classic ROP | Shadow stack or PAC-ret. |
-| Arbitrary indirect call | Fine-grained CFI or BTI and type sets. |
-| Return address overwrite | Hardware SS or PAC. |
-| Many code-pointer corruptions | CPI-class protection. |
-
-### 5.2 Does not prevent
-
-| Attack | Why |
-|--------|-----|
-| Data-only attacks | Control flow is legal. Data is corrupted. |
-| Logic / capability abuse | Requires 3.1 or contracts. |
-| Coarse-CFI gadget sets | Occurs if labels are too wide. |
-| Kernel / hypervisor compromise | Out of process trust. |
-| Speculative side channels | Separate problem (Spectre class). Related to 3.10 research. |
-
-### 5.3 Failure policy
-
-- **Secure default:** Stop the process or task when a CFI violation occurs.
-- **Debug:** Give a rich narrative diagnostic (5.5) with the last legal edge.
-- **Never:** Do not silently change the control flow to the nearest safe point.
-
-## 6. Alternatives considered
-
-| Alternative | Decision | Why |
-|-------------|----------|-----|
-| Software CFI only | Baseline. Not sufficient alone. | Hardware PAC or CET is better for backward-edge. |
-| Coarse CFI (few labels) | Reject as sole defense. | There is known bypass literature. |
-| CPI full isolation only | Optional high-assurance. | Complexity and portability. |
-| Rely only on memory safety | Insufficient. | Residual bugs and FFI remain. |
-| Continuous CFG re-hash every call | Too expensive. | Prefer pointer MAC and static labels. |
-
-## 7. Product reality (alpha honesty)
-
-**PM.md `3.9`: not-started.**
-
-| Item | Status |
-|------|--------|
-| CFG extraction for CFI | **not-started** |
-| Software label CFI emit | **not-started** |
-| Shadow stack (soft or CET) | **not-started** |
-| PAC / BTI codegen | **not-started** |
-| Transition-set cryptographic hash metadata | **not-started** |
-| CPI safe region | **not-started** |
-| Detonate-on-mismatch runtime | **not-started** |
-
-No production binary currently uses call-graph integrity checks as a language feature. It is false to claim ROP immunity today.
-
-## 8. Open research questions
-
-1. **Granularity:** Function-level, basic-block, or type-based sets for the simpler object model of openOODA?
-2. **Hash algorithm & keying:** Static binary hash or keyed PAC-like MAC with per-process keys?
-3. **Self-host compiler:** Can `oodac` start CFI and not break pure Backend-C bootstrap?
-4. **Wasm / embedded targets:** Portable subset without PAC or CET?
-5. **Multi-language LTO (4.3.1):** CFI across Rust and C++ boundaries?
-6. **False positives:** setjmp, longjmp, computed goto equivalents, plugin reload?
-
-## 9. Acceptance criteria (for PM status promotion)
-
-### not-started to smoke
-
-- [ ] Software forward-edge checks on indirect calls in Backend-C or LLVM path for a microbenchmark.
-- [ ] Documented detonate policy and test that corrupted return address traps.
-
-### smoke to partial
-
-- [ ] Shadow-stack or PAC-ret path on at least one real ISA.
-- [ ] CFG metadata emitted and verifiable offline.
-- [ ] Overhead measured on self-host compile workload.
-
-### partial to done
-
-- [ ] Default-on for release builds on supported hardware. Portable fallback elsewhere.
-- [ ] FFI boundary stubs documented and tested.
-- [ ] No systematic false positives on stdlib and oodac self-host.
-
-## 10. References
-
-1. openOODA `spec/DESIGN.md` Section 3 Cryptographic Call-Graph Integrity. ES.5 zero-day goals.
-2. openOODA `PM.md` row 3.9. Advanced integrity not-started note.
-3. Abadi, M., Budiu, M., Erlingsson, Ú., Ligatti, J. (2005). *Control-Flow Integrity.* CCS / TISSEC.
-4. Kuznetsov, V. et al. (2014). *Code-Pointer Integrity.* OSDI. https://dslab.epfl.ch/research/cpi/
-5. Intel — Control-flow Enforcement Technology (CET): shadow stack and IBT.
-6. Arm — Pointer Authentication (PAC), Branch Target Identification (BTI), PACBTI for M-profile.
-7. Burow, N. et al. — *Control-Flow Integrity: Precision, Security, and Performance* (CSUR survey).
-8. LLVM / Clang CFI documentation. V8 control-flow integrity notes.
-9. Linux kernel docs — x86 CET shadow stack.
-
----
-
-## Conflicts
-
-### Conflict A — CFI checks against OODA loop speed (1.1)
-
-Fine-grained CFI and PAC auth use cycles on every indirect call and return.
-
-**Solutions**
-
-| Approach | Detail |
-|----------|--------|
-| Hardware first | Prefer CET or PAC. |
-| Profile-guided edge sets | Hot paths monomorphize to direct calls. |
-| Tiered builds | `dev` has soft checks. `release` has hardware CFI. `secure` has CPI. |
-| Contract strip analogy | Mirror SPEC: heavy checks in test. Measured budget in release. |
-
-### Conflict B — CFI against polymorphic and metamorphic binaries (3.11)
-
-Runtime code mutation invalidates static landing pads, PAC signatures, and CFG hashes.
-
-**Solutions**
-
-| Approach | Detail |
-|----------|--------|
-| **Mutate then re-auth** | After morph, re-sign pointers and refresh IBT maps under lock. |
-| **Morph only data layout** | Diversify stack and heap layout without moving code. |
-| **Phase separation** | On-disk deterministic (4.3.2). Morph in loader with CFI reinit. |
-| **Disable morph in CFI-secure profile** | Product flag: `secure-static` against `immune-morph`. |
-
-### Conflict C — CFI against hot reload (4.2)
-
-**Solution:** Reload transactions: install new code, new CFG commitment, and barrier. Do not make concurrent calls into half-updated text.
-
-### Conflict D — Detonate against temporal recovery (3.8)
-
-CFI violation is an adversarial class. Temporal rollback is for non-adversarial faults.
-
-**Solution:** CFI detonation **does not** automatically roll back. You can do a supervised restart of a fresh task without restoring an attacker-tainted temporal log.
-
----
-
-*Series: [Research papers index](./README.md). Template: [TEMPLATE.md](./TEMPLATE.md).*
+1. Abadi, M., Budiu, M., Erlingsson, Ú., Ligatti, J. (2005). Control-Flow Integrity. Proceedings of the 12th ACM conference on Computer and communications security.
+2. Kuznetsov, V., Szekeres, L., Payer, M., Candea, G., Sekar, R., Song, D. (2014). Code-Pointer Integrity. 11th USENIX Symposium on Operating Systems Design and Implementation.
+3. Burow, N., Carrast, S. A., Stefan, P., Payer, M. (2017). Control-Flow Integrity: Precision, Security, and Performance. ACM Computing Surveys.
+4. openOODA DESIGN Specification. Section 3: Cryptographic Call-Graph Integrity.

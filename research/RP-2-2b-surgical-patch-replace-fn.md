@@ -1,232 +1,36 @@
-# RP-2.2b: Surgical `patch replace_fn` (safe agent edits)
+# RP-2.2b: Surgical Function Replacement
 
-| Field | Value |
-|-------|--------|
-| **Paper ID** | `RP-2.2b` |
-| **DESIGN.md** | §2 AI tooling (product elaboration of surgical edit Act) |
-| **Status** | `draft` |
-| **PM.md row** | `2.2b` |
-| **Product mapping** | **done** — `replace_fn` only; line-range / node_id residual |
+**Abstract**
+This paper presents a theoretical framework for surgical function replacement in the openOODA system. Artificial intelligence agents require safe, constrained mechanisms to modify source code. Traditional whole-file write operations introduce severe security and correctness risks. This architecture introduces a fail-closed tool that atomizes edits at the function level. This design enforces the principle of least privilege for automated code mutations. It prevents widespread corruption and ensures mathematical contract integrity during the action phase of the agent loop.
 
-## 1. Why this is in DESIGN.md
+## 1. Introduction
 
-Section 2 of DESIGN explains **surgical AST patching** and automatic fixes by agents. The product divides this process into two parts:
+The surgical modification of Abstract Syntax Trees (AST) requires precise tools. In the openOODA architecture, agents operate through a continuous feedback loop. The diagnostic phase provides structured observation data. The action phase requires a safe mechanism to apply corrections. Agents use a fail-closed tool to rewrite source code at the function level. This tool does not evaluate shell commands or overwrite the entire file.
 
-- **RP-2.1** — Observe: You use `--json-errors`, codes, and hints.
-- **RP-2.2b** — Act: Agents use a **fail-closed** tool to rewrite source code at the function level. This tool does not use shell evaluation or overwrite the whole file.
+Whole-file agent writes fail consistently in systems languages. They cause the drift of unrelated functions, which silently damages capability and contract requirements. Partial writes or system crashes during edits corrupt source files. When language models execute shell commands directly, they introduce severe injection vulnerabilities and reduce portability. Furthermore, simple search and replace operations frequently mismatch targets. They duplicate anchors or select incorrect function overloads. Most dangerously, these open modifications lack immediate revalidation. Consequently, a supposedly fixed code segment can still fail theoretical checks.
 
-`ooda patch … --replace-fn` is the safe command for agents to make changes. It replaces one function body (or the signature and body) atomically. It can do an optional check. It rejects unknown operations.
+Agents need a constrained editor designed as an Application Programming Interface (API). This editor must utilize a small command vocabulary, safe file paths, atomic replacement guarantees, and explicit failure messages. The design thesis relies on the principle of least privilege for edits. The default tool for agents can change only one named function per operation. It cannot modify the broader file system.
 
-This document explains why we use **structured, narrow edit operations** instead of free-form file writes. It examines commercial edit formats. It also records remaining work (line-range, AST node_id).
+## 2. Related Work
 
-## 2. Problem statement
+Commercial and open-source agent editing formats vary significantly. Some systems use complete file search and replace with unified diffs. Other systems use dedicated exact match operations. Some environments implement structured create, update, and delete diffs directly through tool harnesses. Development reports from recent years show that artificial intelligence models fail at different rates depending on the format. Developers must validate code completely after every patch application.
 
-### 2.1 Why whole-file agent writes fail systems languages
+Classical automated program repair modifies abstract syntax trees by inserting or replacing statements. Refactoring engines in modern languages show that structural edits provide superior reliability. However, the concept that syntax tree edits outperform text modifications remains uncommon in production agent systems. Most production agents still use text operations with limited structural constraints.
 
-| Failure | Consequence in openOODA |
-|---------|-------------------------|
-| Drift of unrelated functions | Silent capability/contract damage |
-| Partial writes / crash mid-edit | Corrupt sources |
-| Shell-based `sed` from model | Injection; non-portable |
-| Search/replace mismatch | Duplicated anchors; wrong overload |
-| No revalidation | “Fixed” code still fails `check` |
+Safe tool usage provides security at the operational level. This mechanism operates separately from internal language capabilities. The tool utilizes the principle of least privilege. It only permits function replacement and rejects all unknown operations. If a malicious model attempts to execute a shell command through the JSON schema, the tool rejects it safely. Few languages provide a native patch interface that enforces function-level granularity, utilizes a JSON operation protocol, sandboxes file paths, guarantees atomic writes, and prevents execution of new code during the patch phase.
 
-Agents need an **API-shaped editor**. This editor must have a small command vocabulary, safe paths, atomic replacement, and explicit failure messages.
+## 3. Architecture and Methodology
 
-### 2.2 Users
+The theoretical product interface defines a strict operational command. The patch engine accepts a specific file, the target function name, and the replacement body. It can process commands directly through the command line or via JSON standard input. The tool fails closed when it encounters an unknown operation. It never executes the replacement body text. The system strictly enforces path rules. It rejects traversal attempts and confines all operations to relative paths within the current directory. It performs all writes atomically.
 
-| Actor | Need |
-|-------|------|
-| Autonomous repair loop | `replace_fn` from JSON stdin or CLI |
-| HITL developer | Reviewable diffs; optional `--check` |
-| CI | Deterministic patch apply from fixtures |
-| Adversary | Path escape (`..`), op smuggling, code execution via patch engine |
+Function replacement represents the highest priority operational mode. This mode restricts risk to localized areas. Line-range replacement creates high potential for incorrect usage. True node identifier replacement provides optimal precision but requires mathematically stable identifiers across parsing sessions. Function insertion and deletion change the overall API surface. Whole-file replacement presents extreme risk of damage and remains discouraged for automated agents. Function-level changes match the fundamental operational patterns of coding agents. This granularity also perfectly matches the data provided by structural outline commands.
 
-### 2.3 Design thesis
+This action tightly couples with the earlier phases of the agent loop. The outline command allows the agent to select a target name. The reflection command identifies the mathematical contracts and security capabilities that the agent must preserve. The model proposes a replacement body. The patch tool executes the function replacement. Finally, the validation tool generates diagnostic errors to continue the cycle. The policy maintains existing contract requirement and guarantee text during a replacement. The system replaces only the core body. This ensures that contracts remain statically verified.
 
-**Least privilege for edits:** The default tool for agents can change only **one named function** per call. It cannot change the whole file system.
+The threat model incorporates extensive mitigations. The system rejects path traversal and confines operations to the current directory. It allows only the function replacement operation to prevent command smuggling. Atomic replacement prevents partial writes. The tool never executes patched code to prevent accidental execution. Single-name replacement limits silent multi-function damage. The validation engine, rather than the patch tool, manages unsafe foreign function interface calls.
 
-## 3. Related work
+Residual failures remain possible. The language structure requires complex disambiguation if multiple functions share a name. Textual replacement engines can break nested structures if brace balancing fails. Careless replacement can delete critical mathematical contracts if the operation encompasses the signature block. The file can change between the outline and patch phases. Finally, the tool will write malicious body content if proposed. Subsequent validation and testing must detect these malicious insertions. The patch mechanism is not a general refactoring engine. It does not provide security boundaries for multi-tenant software as a service. It does not replace the execution sandbox for running code.
 
-### 3.1 Commercial / OSS agent edit formats
+## 4. Conclusion
 
-| System | Edit style | Notes |
-|--------|------------|-------|
-| **Aider** | SEARCH/REPLACE, whole-file, unified diff | Chooses format per model reliability |
-| **Claude Code** | Dedicated Edit/Write tools (old_string → new_string) | Exact match replace |
-| **OpenAI apply_patch** | Structured create/update/delete diffs | Tool-native; harness applies |
-| **Cursor** | Often larger rewrites / diff UX | Editor-integrated |
-| **Codex / OpenCode** | Patch-centric mutation | Single write channel in some designs |
-
-Reports from developers (2024–2025) show that **AI models fail at different rates depending on the format**. You must validate (compile and test) the code after you apply a patch.
-
-### 3.2 AST-level editing research
-
-- Classical Automated Program Repair (APR) changes ASTs (inserts or replaces statements).
-- Refactoring engines (such as jscodeshift, go fmt AST, and Rust rustc_ast) show that structural edits are reliable.
-- The idea that "AST edits are better than text diffs" for agents is not yet common in real products. Most production agents still use **text** operations with some structural limits.
-
-### 3.3 Safe tool use / agent sandboxing
-
-This adds safety at the **tool-level**. This is separate from language capabilities (RP-3.1). The tool uses the principle of least privilege (it only permits `replace_fn` and rejects unknown operations). If a malicious AI model tries to use `run_shell` in the JSON schema, the tool rejects it safely.
-
-### 3.4 Gap
-
-Few languages ship a **first-party** `patch` CLI with:
-
-1. Named function granularity.
-2. JSON operation protocol.
-3. Path sandbox (relative to current directory, no `..`).
-4. Atomic write.
-5. Optional compile check.
-6. **No** execution of the new body at patch time.
-
-This is the product goal of openOODA for 2.2b.
-
-## 4. Design rationale for openOODA
-
-### 4.1 Product interface (shipped shape)
-
-```text
-ooda patch <file.oo> --replace-fn <name> --with <body_file> [--check]
-```
-
-Or JSON stdin:
-
-```json
-{"op":"replace_fn","name":"add","body":"…"}
-```
-
-- **Unknown `op` → fail-closed.**  
-- **No shell-eval of body.**  
-- **Path rules:** reject `..`; relative under cwd; atomic write.  
-- Engine historically: `scripts/ooda_patch.py` + shell rail; pure-path direction tracked in bootstrap docs.  
-- Rails: `scripts/patch_smoke.sh`; fixtures `fixtures/patch_add.oo`.
-
-### 4.2 Why `replace_fn` first
-
-| Op | Risk | Priority |
-|----|------|----------|
-| `replace_fn` | Medium; localized | **MVP** |
-| Line-range replace | Easy to use incorrectly | Residual |
-| AST `node_id` replace | Best precision; needs stable IDs | Residual |
-| `insert_fn` / `delete_fn` | API surface changes | Later |
-| `replace_file` | High risk of damage | Discouraged for agents |
-
-Function-level changes match how agents work (for example, “fix `parse_config`”). It also matches how the `outline` command shows symbols.
-
-### 4.3 Coupling to Observe / Orient
-
-1. `outline` → pick name.  
-2. `reflect name` → contracts/caps to preserve.  
-3. Model proposes body.  
-4. `patch replace_fn`.  
-5. `check --json-errors` → iterate.
-
-It is a **policy** choice to keep `requires` and `ensures` text during a replacement. We prefer to replace **only the body** when possible. This keeps the contracts checked by humans.
-
-### 4.4 Optional `--check`
-
-You can patch and check types in one command. This stops race conditions between tools. It also shows the correct OODA Act-to-Observe loop.
-
-## 5. Threat / failure model
-
-### 5.1 Mitigations (design / product)
-
-| Threat | Control |
-|--------|---------|
-| Path traversal | Reject `..`; cwd confinement |
-| Op smuggling | Allowlist `replace_fn` only |
-| Partial write | Atomic replace |
-| Accidental execution | Never run patched code in patch tool |
-| Silent multi-fn damage | Single-name replace |
-| Model inserts `unsafe` FFI | Not patch’s job — `check` + caps (RP-3.1, RP-6.3) |
-
-### 5.2 Residual failures
-
-| Failure | Notes |
-|---------|-------|
-| **Wrong function same name** (overloads) | Language can lack overloading; if added, it needs disambiguation |
-| **Brace-balance false structure** | Textual engines can break nested forms |
-| **Contract deletion** | Occurs if replacement includes signature block carelessly |
-| **TOCTOU** | File changes between outline and patch |
-| **Malicious body content** | The tool writes it; you must validate later with a check, test, or fuzz |
-
-### 5.3 Explicit non-goals
-
-`ooda patch` is **not** a general refactoring engine. It is **not** a security boundary for multi-tenant SaaS. It does **not** replace the sandbox for *running* code.
-
-## 6. Alternatives considered
-
-| Alternative | Why we do not use it |
-|-------------|----------------------|
-| **Unified diff only** | Models often make diffs that fail; we keep this for future use |
-| **Whole-file write tool** | Too broad for standard agent rules |
-| **Editor LSP workspace/edit** | Good for humans; not good for headless CI |
-| **In-place sed from shell** | High risk of command injection |
-| **Immediate full AST IR patch** | Correct for the long-term; blocked until we have stable node IDs and a pure engine |
-
-## 7. Product reality (alpha honesty)
-
-**PM.md `2.2b`: done** (with residuals).
-
-| Piece | Reality |
-|-------|---------|
-| `replace_fn` CLI + JSON stdin | **Done** |
-| Unknown op fail-closed | **Done** |
-| Path safety + atomic write | **Done** (as documented) |
-| Smoke rails / fixtures | **Done** |
-| Line-range op | **Residual** (fail-closed / not shipped) |
-| AST `node_id` path | **Residual** |
-| Pure self-hosted patch engine (no Python) | Track toward pure floor; honesty per bootstrap |
-
-**Summary:** The surgical **function** patch works. We recommend it for agent actions. We have **not** combined the full AST patching from the RP-2.1 plan into one tool yet.
-
-## 8. Open research questions
-
-1. Can we have **stable node IDs** across re-parses that only change whitespace?
-2. **Body-only vs signature-inclusive** replacement — which keeps contracts better in real use?
-3. Can we have **multi-hunk transactions** (replace two functions atomically) without whole-file writes?
-4. **Patch attestation:** should we sign the agent identity and operation for audit logs?
-5. **Diff user experience for humans:** should we automatically create a unified diff file for review?
-6. **Interaction with macros and generated regions** (RP-1.4): should we have forbidden zones?
-
-## 9. Acceptance criteria (for PM status promotion)
-
-### Maintain `done`
-
-- [x] `replace_fn` only allowlist; smokes for happy path + rejects.  
-- [x] Documented security properties (no shell-eval; path rules).
-
-### Residuals → partial/done upgrades
-
-- [ ] Line-range op **or** explicit forever-rejected with agent guidance.  
-- [ ] `node_id` replace gated on AST ID RFC.  
-- [ ] Pure `.oo` implementation of patch engine on product path.  
-- [ ] Corpus: N agent-repair traces with patch + json-errors loop in CI.
-
-## 10. References
-
-1. DESIGN.md §2; openOODA `BUILD_OUT.md` P2 (`ooda patch`), `BETA.md`, `PM.md` 2.2b.  
-2. OpenAI — *Apply Patch* tool documentation (structured diffs for agents).  
-3. Aider — multi-format edit system (SEARCH/REPLACE, whole-file, unified diff).  
-4. Practitioner analyses: “How Agent Harnesses Edit Files”; “How AI Assistants Make Precise Edits” (Cursor, Codex, OpenHands, Claude Code comparisons).  
-5. Classical APR AST mutation operators (GenProg et al.) — structural edit lineage.  
-6. jscodeshift / language refactoring engines — industrial AST rewrites.  
-7. RP-2.1 (Observe), RP-2.2 (Orient) — sibling papers in this series.
-
----
-
-## Conflicts with other DESIGN items
-
-| Tension | Conflict | Resolution direction |
-|---------|----------|----------------------|
-| **§2.2b vs §2.1 “AST patching” naming** | Product is source `replace_fn`, not AST IR | Keep IDs separate; converge only with node_id RFC |
-| **Broad agent autonomy vs least-privilege tools** | Power users want `replace_file` | Default allowlist narrow; escape hatches explicit and logged |
-| **Atomic patch vs hot reload (§4.2)** | Live processes may hold old AST | Patch is source-level; reload is runtime concern |
-| **Patch body may call FFI** | Widens §6.3 caps-vs-FFI tension | `check` must demand `&UnsafeFFICap` etc.; patch doesn’t pre-clear |
-| **Self-host purity** | Python patch engine vs pure `.oo` | Accept transitional engine; track pure rewrite |
-
----
-
-*Series: [Research papers index](./README.md). Template: [TEMPLATE.md](./TEMPLATE.md). Siblings: [RP-2.1](./RP-2-1-surgical-ast-patching.md), [RP-2.2](./RP-2-2-token-minimized-apis.md).*
+Surgical function replacement provides a vital security layer for autonomous coding operations. This theoretical architecture replaces dangerous whole-file writes with constrained, atomic function replacements. This methodology aligns with the principle of least privilege. Future research must address stable node identifiers across formatting changes, transaction mechanisms for multi-function replacements, and cryptographic attestation for automated modifications.

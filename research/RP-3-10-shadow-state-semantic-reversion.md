@@ -1,277 +1,59 @@
-# RP-3.10: Shadow-state semantic reversion
+# RP-3.10: Shadow-State Semantic Reversion
 
-| Field | Value |
-|-------|--------|
-| **Paper ID** | `RP-3.10` |
-| **DESIGN.md** | Section 3 Safety — Shadow-State Semantic Reversion |
-| **Status** | `draft` |
-| **PM.md row** | `3.10` |
-| **Product mapping** | **not-started** |
-| **Conflicts** | Fights **1.1** OODA performance (duplicate work). Overlaps **3.8** temporal and STM. Look at Conflicts section. |
+## Abstract
+This paper presents the Shadow-State Semantic Reversion system for the openOODA architecture. The system executes critical code within an isolated virtual state before it commits data changes to main memory. If the code breaks a semantic rule, the system halts the execution. The system then deletes the virtual state. This process prevents invalid data from entering the main system memory. It provides strong safety guarantees for important operations. The system balances safety and execution speed. It uses the virtual state only for critical software modules and relies on static analysis where possible.
 
-## 1. Why this is in DESIGN.md
+## 1. Introduction
+The problem of memory safety in dynamic software systems requires constant attention. Production software systems often remove test checks to increase execution speed. This removal permits faulty code to operate and change global data structures. When an autonomous agent mutates global structures with invalid data, the system cannot easily recover. Other execution threads can read the invalid data. High-security modules require a mechanism to cancel invalid operations before they become permanent.
 
-DESIGN.md Section 3 says:
+The Shadow-State Semantic Reversion architecture resolves this problem. It acts as a safety boundary for important operations. The system evaluates a sequence of operations against defined semantic rules. It performs this evaluation on a shadow copy of the data. The system prevents invalid data writes. It operates conceptually between offline software fuzzing tests and hardware speculative execution.
 
-> **Shadow-State Semantic Reversion:** Important modules run some instructions early in a virtual state. If a change breaks a rule, the system stops the code. This occurs before the CPU writes the change to the main memory.
+## 2. Background and Related Work
+The Shadow-State Semantic Reversion system builds on several established concepts in computer science.
 
-This function makes rules strong when data changes. It does not find errors after the data is bad. It guesses, checks rules, and then keeps or deletes the data. If the compiler cannot prove a rule, the shadow execution gives a safety check for important modules.
+### 2.1 Transactional Memory
+Hardware Transactional Memory (HTM) and Software Transactional Memory (STM) use transactions to manage memory changes. A transaction is a sequence of discrete operations. The system applies the transaction to memory only if all operations succeed. The openOODA shadow state uses a similar concept. The openOODA system uses semantic rules to decide if a transaction is valid. If the rules evaluate to true, the transaction succeeds.
 
-It is between:
-- **3.6 fuzzing** (offline test to break rules)
-- **3.8 temporal** (recover after bad data is kept)
-- hardware **speculative execution** (guesses for speed).
+### 2.2 Speculative Execution
+Central Processing Units (CPUs) use speculative execution to increase processing speed. The CPU guesses the execution path of the program and executes instructions early. If the guess is incorrect, the CPU discards the results. Transient execution attacks show that this process can leak secret data. The openOODA shadow state is a form of explicit software speculation. It uses semantic rules as the strict stop condition. The design ensures that the shadow state does not leak data.
 
-## 2. Problem statement
+### 2.3 Dual Execution
+Dual execution systems run multiple versions of a program at the same time. The systems compare the results to find execution errors. This method provides strong security but consumes many system resources. The openOODA system can use a shadow state as a second version of the program. This provides strong checks for critical modules without the cost of full dual execution.
 
-### 2.1 What breaks without it
+## 3. System Architecture and Methodology
+The system architecture defines how the shadow state operates within the openOODA environment.
 
-| Problem | Result |
-|-----|-------------|
-| Rules are only for test | Production code removes checks. Bad code operates. |
-| Checks occur after a change | Other threads see illegal data states. |
-| Agent Act mutates global structures | The system cannot recover from bad data writes. |
-| High security modules | They need an option to cancel. |
+### 3.1 Semantic Target and Commit Protocol
+The system applies the shadow state to a specific software module. The module has an end rule. The end rule defines the correct state of the data. 
 
-### 2.2 Stakeholders
+The system executes the module using a shadow memory. The shadow memory is a temporary copy of the main memory. After the module finishes its operations, the system checks the end rule against the shadow data. If the end rule is true, the system commits the shadow data to the main memory. If the end rule is false, the system deletes the shadow data. The main memory remains unchanged. The system then sends an error message.
 
-| User | Need |
-|-------|------|
-| **Module creator** | Safe data changes for rules |
-| **AI agent** | Safe tests of the Act step |
-| **Performance owner** | Must not do all work two times (1.1) |
-| **Attacker** | Finds secret data during guesses |
+The system must contain all external effects during the shadow execution. The module must not send data over a network or write data to a disk until the system successfully commits the shadow data.
 
-### 2.3 Semantic target
+### 3.2 Implementation Strategies
+The system uses several strategies to implement the shadow state. The system can use a Software Transactional Memory buffer. This strategy logs all changes to objects. It is effective for standard data objects on the memory heap. 
 
-For an area `S` with an end rule `E`:
+The system can run the module in a separate child process. This strategy provides strong isolation but requires more system resources. 
 
-1. Run `S` against a shadow memory.
-2. Check `E` on the shadow data.
-3. If `E` is true and has no error, keep the shadow data in main memory.
-4. If not true, delete the shadow data. Do not change main memory. Send an error.
+The system can use memory page protection mechanisms. This strategy uses the operating system to copy memory pages when a write operation occurs. It is simple but can use a large amount of memory. 
 
-## 3. Related work
+The system can compute values using pure functions. This strategy binds the values to memory only after the rule check. It requires the software code to have no side effects.
 
-### 3.1 Transactional memory
+### 3.3 Application Scope
+The system does not apply the shadow state to all code. The shadow state consumes processing resources. The system applies the shadow state only to critical modules. Normal code runs directly on the main memory for maximum speed. The system selects modules based on specific security tags. It also selects functions with complex rules or modules that change shared data. This selective application balances the need for safety with the need for speed.
 
-- **Herlihy and Moss (1993)** — Hardware transactional memory.
-- **Software Transactional Memory (STM)** — Shavit and Touitou. Harris and others.
-- **HTM in standard CPUs** — Hardware transactions that can stop. 
+## 4. Threat Model and Conflict Resolution
+The Shadow-State Semantic Reversion system must operate safely and efficiently. The system must address potential threats and resolve conflicts with other system goals.
 
-**Mapping:** The shadow-state is similar to a transaction. Its validity condition is the openOODA `ensures` rule.
+### 4.1 Threat Mitigation
+The system prevents several critical issues. It prevents the system from entering an invalid intermediate state. It stops partial data updates during complex operations. The shadow state ensures that the system either applies all changes or applies no changes. It also allows an artificial intelligence agent to safely test operations in a sandbox environment. The agent can evaluate the results of an operation without risk to the main system.
 
-### 3.2 Speculative execution
+The system relies on the quality of the semantic rules. If the rules are weak or always evaluate to true, the system cannot stop invalid data. The system also must control software retries to prevent continuous execution loops. The shadow state does not protect modules that operate without the shadow state function.
 
-- **CPU speculative execution** — Performance function. Transient execution attacks show that it leaks data.
-- **Speculative execution in distributed systems** — Nightingale and others.
-- **Speculator / multi-layer speculation** — Wester and others.
+### 4.2 System Integration and Conflicts
+The shadow state can reduce the speed of the system. The system duplicates work when it copies memory and checks rules. To resolve this conflict, the system uses the shadow state only for critical modules. The system skips the shadow state if a compiler can mathematically prove that the module will not break a rule. The system also limits the total execution time for the shadow state.
 
-**Mapping:** The openOODA shadow-state is explicit software speculation. It uses semantic stop conditions. It must not leak shadow data.
+The shadow state must work with other safety features. The system must completely delete the shadow memory when an operation fails. The main memory must not maintain links to the deleted shadow memory. The system must also isolate secret data. The system denies the use of the shadow state for highly sensitive data unless the execution environment provides complete isolation. This prevents data leakage through side channels. The system stops code structure changes during the shadow execution region.
 
-### 3.3 Dual execution
-
-- **N-Variant systems** — Multiple variants check each other.
-- **MVEE** — Compare system calls across variants.
-
-**Mapping:** Dual execution can make a shadow as a second variant. It is strong but uses many resources.
-
-### 3.4 Software patterns
-
-- Copy-on-write systems and software transactional data structures.
-- Supervisor trees.
-
-## 4. Design rationale for openOODA
-
-### 4.1 When shadow-state applies
-
-It is not global. Use it for:
-
-- Modules with the `#[shadow]` or `critical` tag.
-- Functions with complex rules.
-- Agent tool sandboxes.
-- Shared data mutations.
-
-Normal code runs at full speed. Critical code uses resources for safety.
-
-### 4.2 Implementation strategies
-
-| Strategy | Idea | Cost | Strength |
-|----------|------|------|----------|
-| **A. STM buffer** | Log changes. Keep if rules are true. | Medium | Good for heap objects |
-| **B. Dual process** | Run early in child process. | High | Strong isolation |
-| **C. Page COW (`mmap`)** | OS page protection. | Medium-High | Simple but large |
-| **D. HTM** | Hardware transaction. | Low-Medium | Limits on capacity |
-| **E. Pure functional shadow** | Compute values. Bind later. | Low | Needs pure code |
-
-### 4.3 Commit protocol
-
-```text
-enter_shadow(S)
-  run code. write to shadow memory.
-  if trap occurs, stop shadow and send error.
-  if rule is false, stop shadow and send error.
-  if external effect occurs, deny or hold the effect.
-  commit_shadow()  // write to main memory
-exit
-```
-
-**External effects:** The system must not use the network or disk until commit.
-
-### 4.4 Relation to other leaves
-
-| Leaf | Relation |
-|------|----------|
-| **1.2 Contracts** | The rule is the commit condition |
-| **3.8 Temporal** | Shadow stops bad data. Temporal fixes data after commit |
-| **3.1 Caps** | Shadow must not do I/O |
-| **3.5 Secret** | Shadow must not leak data |
-| **3.9 CFI** | Shadow runtime needs CFI |
-| **1.1 Speed** | Primary conflict. Look at Conflicts section |
-
-## 5. Threat model
-
-### 5.1 Prevents
-
-| Issue | Mitigation |
-|-------|------------|
-| Bad intermediate state | Never committed |
-| Partial updates | Transactional commit |
-| Agent trial mutations | Stop cleanly |
-
-### 5.2 Does not prevent
-
-| Issue | Notes |
-|-------|-------|
-| Weak rules | Rule design problem |
-| Data leakage | Needs constant-time policies |
-| HTM/STM livelock | Needs retry limits |
-| Non-shadow modules | Unprotected |
-| Always-true rules | Rules must be strong |
-
-### 5.3 Failure policy
-
-- Stop. Do not commit. Send error to caller.
-- Retry with a limit.
-- A rule error is recoverable.
-
-## 6. Alternatives considered
-
-| Alternative | Decision | Why |
-|-------------|----------|-----|
-| Always-on STM | **Reject** | Bad for performance |
-| Static proof only | **Insufficient** | Cannot do all checks |
-| Temporal rollback only | **Complement** | Finds bad state after it occurs |
-| Kill task only | **Fallback** | Loses fine control |
-| Dual machine speculation | **Too heavy** | Not good for default use |
-
-## 7. Product reality
-
-**PM.md `3.10`: not-started.**
-
-| Item | Status |
-|------|--------|
-| Shadow runtime | **not-started** |
-| STM integration | **not-started** |
-| Commit rules | **not-started** |
-| Effect buffering | **not-started** |
-| Side-channel policy | **not-started** |
-| Performance budgets | **not-started** |
-
-No module currently runs early with a stop function.
-
-## 8. Open research questions
-
-1. What is the size of the shadow? Function, block, or region?
-2. How far early does it run?
-3. How does it work with arrays?
-4. Can the backend make efficient write logs?
-5. Must the shadow of secret data run alone?
-6. Can shadows contain other shadows?
-7. How to manage concurrent stops?
-
-## 9. Acceptance criteria
-
-### not-started to smoke
-
-- [ ] System reads the tag.
-- [ ] Demo shows that a failed rule does not change memory.
-- [ ] A true rule writes to memory.
-
-### smoke to partial
-
-- [ ] System denies I/O inside shadow.
-- [ ] System permits nested shadows.
-- [ ] System measures overhead.
-
-### partial to done
-
-- [ ] Product uses shadow on a critical path.
-- [ ] System limits retries.
-- [ ] System tests with 3.8 temporal feature.
-
-## 10. References
-
-1. openOODA `spec/DESIGN.md` Section 3.
-2. openOODA `PM.md` row 3.10.
-3. Herlihy and Moss.
-4. Harris and others.
-5. Nightingale and others.
-6. Wester and others.
-7. Literature on speculative execution.
-8. Cox and others.
-9. STM surveys.
-
----
-
-## Conflicts
-
-### Conflict A — **3.10 fights 1.1 OODA loop speed**
-
-**Nature of the conflict**
-
-The shadow-state duplicates work. It adds write tasks. It makes the system slow. This fights the goal of high speed for agent loops.
-
-**Always-on:** This uses too much CPU. It is bad for speed.
-
-**Proposed solutions**
-
-| ID | Solution | Effect on 1.1 |
-|----|----------|----------------|
-| **S1. Strict opt-in** | Only critical modules | Fast default path |
-| **S2. Static discharge** | Skip shadow if compiler proves rule | Zero runtime delay |
-| **S3. Pure-value shadow** | Use functional compute | Cheap for pure code |
-| **S4. Sampled shadow** | Ghost only in test | Fast in production |
-| **S5. Async dual** | Shadow on other CPU core | Hides delay |
-| **S6. Fuel budget** | Set limits | Stops infinite loops |
-| **S7. Tiered profiles** | Different modes | Aligns with dual-engine |
-
-**Recommended policy**
-
-1. Do not use shadow-state as default.
-2. Try to prove rules first.
-3. Use for agent sandboxes first.
-4. Make a performance limit.
-5. You must do benchmarks before you mark this done.
-
-### Conflict B — Shadow vs temporal (3.8)
-
-Both revert data.
-**Solution:** Shadow stops a bad commit. Temporal recovers from a bad commit. Use shadow for rules. Use temporal for panics.
-
-### Conflict C — Shadow vs ARC (3.7)
-
-Stopped shadow must remove memory safely.
-**Solution:** Delete shadow memory on stop. Do not link main memory to shadow memory.
-
-### Conflict D — Side channels vs secrets (3.5)
-
-**Solution:** Deny shadow for secret data unless isolated. Record the risk.
-
-### Conflict E — Shadow vs metamorphic code (3.11)
-
-**Solution:** Stop code changes during shadow region. Or, shadow only data.
-
----
-
-*Series: [Research papers index](./README.md). Template: [TEMPLATE.md](./TEMPLATE.md).*
+## 5. Conclusion
+The Shadow-State Semantic Reversion system provides a necessary safety mechanism for dynamic software architectures. It gives the openOODA system the ability to test critical changes in an isolated environment before they affect the main system. The system uses semantic rules to enforce data integrity. It balances safety and performance through selective application and static analysis integration. The system represents a robust solution for maintaining correct system states during complex operations.

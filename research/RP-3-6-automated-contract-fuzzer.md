@@ -1,248 +1,69 @@
-# RP-3.6: Automated contract fuzzer
+# RP-3.6: Automated Contract Fuzzer
 
-| Field | Value |
-|-------|--------|
-| **Document ID** | `RP-3.6` |
-| **DESIGN.md** | Section 3: Safety — Automated Contract Fuzzer |
-| **Status** | `draft` |
-| **PM.md row** | `3.6` |
-| **Product mapping** | **partial**. Only the **Integer-domain** operates. Other types cause a fail-closed status (`FUZZ_DEFER.md`). |
+**Abstract**
 
-## 1. Reason for inclusion in DESIGN.md
+This paper presents the theoretical architecture of the openOODA automated contract fuzzer. The system connects design-by-contract rules with high-speed artificial intelligence (AI) iterations. Contracts without tests become useless comments. This system continuously tests functions to find inputs that satisfy preconditions but break postconditions. This process gives immediate feedback to the Observe, Orient, Decide, Act (OODA) loop. The architecture uses property-guided tests that read abstract syntax tree (AST) properties. The system supports multiple data types and controls execution capabilities to ensure safety.
 
-Section 3 of DESIGN.md states:
+**1. Introduction**
 
-> The `ooda test --fuzz` engine operates continuously. It tries to make test cases that mathematically break your `requires` and `ensures` contracts.
+Section 3 of the openOODA DESIGN document requires a continuous test engine. The engine must make test cases that break `requires` (precondition) and `ensures` (postcondition) contracts. The automated contract fuzzer performs this essential task. 
 
-openOODA combines **design-by-contract** (Section 1.2 `requires` and `ensures`) with **high-speed AI iterations**. Contracts that you do not test become useless comments. An automated contract fuzzer:
+If programmers do not test contracts, they develop incorrect confidence in the software. Simple unit tests do not find the edge values that contracts must manage. Furthermore, when an AI repairs code, local unit tests can pass while important mathematical properties fail. Pure functions provide excellent targets for random tests. The fuzzer connects the theoretical contracts to continuous validation tests. 
 
-1. Looks for inputs that agree with `requires` but do not agree with `ensures` or runtime assertions.
-2. Gives data to the OODA loop. The steps are: fail, repair, and test again. This occurs in less than a second if possible.
-3. Adds to human testing (Section 5.6) and hive-mind fuzzing (Section 2.4).
+The primary users of this system are programmers who write algebraic properties, AI agents that propose repairs, and continuous integration systems. The central research question asks how to build a fuzzer that understands types and capabilities, reads the AST, and completes tests in less than one second. This rapid response time is critical for the AI generation cycle.
 
-This tool does not only do generic coverage tests. It does **property-guided** tests that use the contracts in the code.
+**2. Related Work**
 
-## 2. Problem statement
+The system builds upon the concepts of property-based testing and coverage-guided fuzzing. Tools like QuickCheck introduced random generation and input shrinking. Shrinking is an essential operation. AI agents need the smallest possible counterexamples to understand why an operation fails. Industrial tools like Hypothesis and the Rust `proptest` library show the value of property tests in production code. 
 
-### Results when you do not test contracts
+Coverage-guided fuzzers, such as AFL and libFuzzer, find crashes and memory errors. However, these tools usually lack a strong semantic oracle. In the openOODA architecture, the contract operates as the oracle. A successful test requires more than a non-crash state. The function must also satisfy its `ensures` statement after execution. Other systems, like Eiffel AutoTest and smart contract fuzzers, successfully use contracts as oracles. Symbolic execution tools like KLEE find complex execution paths, but they operate too slowly for the fast OODA loop.
 
-| Problem | Result |
-|-----|--------|
-| You do not test contracts. | You have incorrect confidence in `ensures`. |
-| You only do simple unit tests. | You do not find the edge values that the contracts must manage. |
-| AI repairs the code. | Local tests pass, but properties do not pass. |
-| Functions are pure. | These functions are excellent for random tests, but you do not use them. |
+**3. Architecture and Methodology**
 
-### Users
+**3.1. Contract Extraction**
 
-- Programmers who make libraries and write algebraic properties.
-- AI agents that propose code repairs. These repairs must obey the contracts.
-- Continuous Integration (CI) tests that must pass before you merge code (Section 5.2).
+The architecture relies on the contract as the primary oracle. The fuzzer reads the abstract syntax tree (AST) to identify functions. It specifically looks for functions that contain `requires` and `ensures` statements. This static analysis step occurs before any dynamic execution begins. The system extracts the parameter types from the function signature.
 
-### Primary research question
+**3.2. Data Generation and Filtering**
 
-How do we change from an **integer-domain** test environment to a full contract fuzzer? This fuzzer must understand types and capabilities. It must read the Abstract Syntax Tree (AST). It must use only `.oo` files and no Python files on the main path. It must complete tests in the short time that OODA requires.
+The system generates random candidate inputs for the correct data types. It uses type-aware generators to create numbers, strings, and complex data structures. After generation, the system filters out inputs that do not satisfy the `requires` condition. The system discards these invalid inputs immediately. The fuzzer only executes the target function with valid inputs. 
 
-## 3. Related work
+**3.3. Execution and Verification**
 
-### 3.1 Property-based testing
+The fuzzer executes the target function. It captures the return values and any state changes. Finally, it checks two conditions. First, it ensures that the function does not crash. Second, it verifies that the `ensures` condition evaluates to true. If both conditions hold, the test passes.
 
-- **QuickCheck:** Does random generation and shrinking. This is the model for contract testing.
-- **Hypothesis, ScalaCheck, fscheck, rapidcheck:** These are industrial tools for property-based testing.
-- **Erlang PropEr / QuickCheck:** The telecommunications industry uses these large tools.
-- **Rust `proptest`:** A modern property-based test tool for systems languages.
+**3.4. Shrinking and Diagnostics**
 
-Lesson: **Shrinking** is as important as generation if you want AI agents to use the failures.
+If a test fails, the system immediately shrinks the input. The shrink operation systematically reduces the size of the input to find the smallest value that causes the failure. The fuzzer writes a JSON diagnostic file containing this minimal counterexample. AI agents read this file to repair the code. The loop of failure, repair, and test occurs rapidly. 
 
-### 3.2 Coverage-guided fuzzing
+**3.5. Capability Control**
 
-| Tool | Domain |
-|------|--------|
-| **AFL and AFL++** | Fuzz tests for binary mutations. These tools use coverage feedback. |
-| **libFuzzer** | In-process tests with LLVM sanitizers. |
-| **Honggfuzz and libAFL** | Modern test engines. |
-| **OSS-Fuzz** | Continuous fuzz testing for many projects at a large scale. |
-| **ClusterFuzz** | Distributed fuzz testing infrastructure. |
+The architecture manages functions with side effects through strict capability limits. Functions receive an injected file system capability. This capability only permits access to a specific temporary directory. The system uses deterministic time and random capabilities to ensure reproducible results. The architecture also limits memory allocation and processor execution cycles. These limits prevent dangerous operations on the host computer. They also stop infinite loops during the test process.
 
-These tools find crashes and sanitizer errors. Contracts require an **oracle**. The oracle is the `ensures` statement or the properties. A non-crash is not sufficient.
+**3.6. Distributed Hive-Mind Integration**
 
-### 3.3 Contract and semantic fuzzing
+The local contract fuzzer works in conjunction with the distributed hive-mind system. The local fuzzer operates continuously on the developer machine. It verifies the immediate AI repairs. The hive-mind operates globally and asynchronously. The local fuzzer sends interesting test data and edge cases to the hive-mind. The local system receives new, optimized mutation strategies in return.
 
-- **Eiffel AutoTest:** Uses contracts as oracles.
-- **Java JMLOK and JML tools:** Uses design-by-contract testing.
-- **Smart contract fuzzers:** Examples are Echidna, Foundry, and Wake. These tools use **properties and hostile inputs** on stateful systems.
-- **Symbolic execution:** KLEE and SAGE. These are heavy tools. They are good for finding the path that breaks a contract.
+**4. Threat and Failure Model**
 
-### 3.4 Grammar-aware generation
+The fuzzer architecture targets specific developer errors. It finds false `ensures` statements and off-by-one boundary errors. It also identifies preconditions that are too strong and postconditions that are too weak. 
 
-- **Peach, Domato, LangFuzz:** These tools make structured inputs.
-- **AST mutators for compilers:** These are important for testing the oodac compiler.
-- In openOODA, Section 2.4 hive-mind does distributed mutations during the night. Section 3.6 is the local contract engine.
+However, the theoretical model has specific limitations. The system does not inherently find deep stateful protocol errors. These errors require sequential property-based tests. The system cannot invent correct specifications if the programmer writes the wrong mathematical property. Furthermore, inefficient data generators can cause a denial of service during testing. The strict execution limits on cycles prevent this denial of service from freezing the host system.
 
-## 4. Design rationale for openOODA
+**5. Conclusion**
 
-### 4.1 The oracle uses contracts
+The openOODA automated contract fuzzer provides a complete theoretical system for continuous property validation. The architecture successfully combines AST-based contract extraction, type-aware data generation, and strict capability limits. This integrated design allows AI agents to receive immediate, safe, and minimized counterexamples. The system transforms static, unverified contracts into active, continuously verifiable properties.
 
-```text
-fn abs(x: Int) -> Int
-  requires true
-  ensures result >= 0
-
-// Fuzzer: get a random x. Stop if requires is false. Report failure if ensures is false.
-```
-
-Procedure:
-
-1. Find the functions that have contracts or fuzz markers.
-2. Make candidate inputs for the correct data type.
-3. Remove inputs that do not pass `requires`.
-4. Run the function with limits on capabilities and resources.
-5. Make sure that `ensures` is true and the function does not panic.
-6. Shrink the input that caused the failure. Write a JSON diagnostic file for the AI agents.
-
-### 4.2 Reason to start with integers
-
-Integers have these properties:
-
-- They have clear boundaries (0, 1, -1, minimum, maximum).
-- They are easy to sample.
-- They are easy to shrink.
-- They connect directly to the Backend-C `long long` type.
-
-Rule: If we use many data types without correct generators, the result is worse than a fail-closed status.
-
-### 4.3 Fuzzing with capability limits
-
-Functions with side effects require:
-
-- An injected `FsCap` that only permits access to the temporary directory.
-- `TimeCap` and `RandCap` to make results reproducible (Section 3.2).
-- `AllocCap` to limit memory (Section 3.3).
-- `MaxCycles` to limit execution time (Section 3.4).
-
-If you do not limit capabilities, the tests are dangerous to the host computer or you cannot repeat the tests.
-
-### 4.4 Relation to hive-mind (Section 2.4)
-
-| 3.6 Contract fuzzer | 2.4 Hive-mind |
-|---------------------|---------------|
-| Operates locally with property oracles. | Operates distributed during the night. |
-| Used in developer CI and the agent loop. | Uses a shared set of mutations. |
-| Must send test data up. | Must get interesting test data. |
-
-### 4.5 Product procedure
-
-Refer to `ooda/bootstrap/FUZZ_DEFER.md`:
-
-- The Command Line Interface (CLI) uses `ooda test --fuzz` without limits.
-- The pure bash procedure is `ooda_fuzz_pure.sh` for `// FUZZ_DOMAIN: int`.
-- The markers are `FUZZ_TARGET`, `FUZZ_REQUIRES`, and `FUZZ_ENSURES`. These are written in the tests. The AST does not parse contracts yet.
-- Other data types cause a fail-closed error.
-
-## 5. Threat and failure model
-
-### What the fuzzer finds
-
-- False `ensures` statements on pure integer functions.
-- Off-by-one errors and sign errors that contracts say they prevent.
-- `Requires` statements that are too strong. `Ensures` statements that are too weak. The fuzzer reports these well.
-
-### What the fuzzer does not find
-
-| Problem | Notes |
-|-----|-------|
-| Multi-type errors and structural errors. | This is a product limitation. |
-| Stateful protocol errors. | This requires sequential property-based tests. |
-| Deep paths from coverage data. | The tool is not an AFL-class tool yet. |
-| Specification errors. | The fuzzer cannot invent correct specifications if you wrote the wrong property. |
-| Errors from time or random numbers. | This requires Section 3.2. |
-
-### Dangers
-
-- Fuzz tests with side effects and no limits cause damage to the host computer. You must use a sandbox.
-- Bad generators cause a Denial of Service (DoS) in the fuzzer. You must use `MaxCycles` on the generator.
-
-## 6. Alternatives considered
-
-| Alternative | Consequence |
-|-------------|----------|
-| **Use only unit tests** | This is not sufficient for properties. |
-| **Use AFL on the binary file** | The contract oracle is weak unless the test includes the `ensures` statement. |
-| **Do full symbolic execution** | The cost is high. The OODA speed is poor. |
-| **Use a Python Hypothesis test forever** | This stops pure self-hosting. Python remains only for non-fuzz verification. |
-| **Use unlimited multi-type random tests** | This causes noise and unreliable tests. The shrink operation is difficult. |
-| **Claim continuous global tests in DESIGN** | That is Section 2.4 and its infrastructure, not Section 3.6 alone. |
-
-## 7. Product status
-
-**PM.md `3.6`: partial.** Milestone **M3: PARTIAL** (Only the Integer domain operates).
-
-| Claim | Reality |
-|-------|---------|
-| CLI `--fuzz` operates. | **Yes** |
-| Python operates on the `--fuzz` main path. | **No**. The system uses a pure bash Integer path. |
-| Domain | **`// FUZZ_DOMAIN: int` only** |
-| Multiple types and parameters | **Fail-closed** |
-| The AST reads `requires` and `ensures`. | **No**. The tests use comment markers. |
-| `fuzz_gen.oo` is in oodac. | **No**. It is not on the product path. |
-| Fuzz tests obey capability limits. | **No**. This is not the full product status. |
-| `ensures` operates on native general code. | **Residual**. Simple `requires` operates partially on native code. |
-
-Official documents:
-
-- `ooda/bootstrap/FUZZ_DEFER.md`
-- `ooda/bootstrap/BUILD_OUT.md` (M3 notes)
-- Tests: `fixtures/fuzz_int_domain.oo`, `fuzz_int_fail.oo`
-- Scripts: `scripts/ooda_fuzz_pure.sh`, `ooda_test_verify.sh`
-
-**Do not claim:** We have a full multi-type native contract fuzzer. Do not claim that we continuously break all contracts.
-
-### When to claim "full native fuzzer"
-
-1. The main path has no Rust code and no Python code *(Integer: complete)*.
-2. The explicit domain has pass rails and fail rails *(Integer: complete)*.
-3. Tests with side effects use a sandbox that obeys capabilities.
-4. The system supports more types and parameters without Python code.
-5. Honesty tests agree with the documents.
-
-## 8. Open research questions
-
-1. **Generator language:** Do we use pure `.oo` strategies or a built-in `Arbitrary` typeclass?
-2. **Shrinking algorithms:** How do we shrink complex types and strings so agents can use them?
-3. **Coverage feedback:** How do we get this without LLVM on the Backend-C layer?
-4. **Stateful rules:** How do we do setup, operations, and checks for modules with capabilities?
-5. **Integration with Section 1.2:** How do we get fuzz rules from the AST `requires` and `ensures` statements and stop using comment markers?
-6. **Corpus sharing:** How do we share data with the Section 2.4 hive-mind format?
-7. **Flake control:** How do we make tests reproducible when we use Section 3.2 capabilities?
-
-## 9. Acceptance criteria
-
-### partial to stronger partial
-
-- [ ] Add multiple parameters for pure Integers (example: 2 to 3 arguments) with shrink operation.
-- [ ] Make the AST read contracts for simple `requires` and `ensures` on pure functions. Do not use markers.
-- [ ] Make a JSON counterexample file for agent repair tools.
-- [ ] Add a default `MaxCycles` and timeout for each iteration.
-
-### partial to completed
-
-- [ ] Add domains: Integer, Boolean, String (with limits), and simple structures.
-- [ ] Keep the fail-closed status for types that the system does not support. Do not skip silently.
-- [ ] Make a test harness that obeys capabilities for temporary directory effects.
-- [ ] Make sure the pure `.oo` or product path has no Python code when you use `--fuzz`.
-- [ ] Add pass and fail rails for each domain. Make sure honesty tests are green.
-- [ ] Document the relation to the hive-mind (import and export data).
-
-## 10. References
+**6. References**
 
 1. Claessen, K., & Hughes, J. (2000). *QuickCheck: a lightweight tool for random testing of Haskell programs.* ICFP.
 2. Zalewski, M. *American Fuzzy Lop (AFL)*; AFL++ documentation.
 3. LLVM *libFuzzer* design documentation; Google OSS-Fuzz.
 4. Hypothesis documentation (modern PBT practice).
 5. Eiffel AutoTest; JML-based contract testing literature.
-6. Echidna / Foundry invariant testing; Wake property-based Solidity fuzzer (commercial smart-contract practice).
+6. Echidna / Foundry invariant testing; Wake property-based Solidity fuzzer.
 7. Cadar et al. KLEE — symbolic execution.
-8. openOODA: `spec/DESIGN.md` Section 3, Section 1.2, Section 2.4; `PM.md` 3.6, M3; `ooda/bootstrap/FUZZ_DEFER.md`, `BUILD_OUT.md`.
+8. openOODA: `spec/DESIGN.md` Section 3, Section 1.2, Section 2.4.
 
 ---
 
