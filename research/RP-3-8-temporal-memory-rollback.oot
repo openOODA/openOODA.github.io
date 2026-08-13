@@ -1,0 +1,87 @@
+# Temporal Memory (State Rollback) for Resilient Agent Systems
+
+**Paper ID:** RP-3.8
+**Status:** Theoretical Design
+
+## Abstract
+
+This paper presents the design of a temporal memory system. The system provides state rollback capabilities for a programming runtime. It operates as an undo mechanism for random access memory. Variables keep their past states for a short duration. If a fatal crash occurs, the runtime moves memory back to a known safe state. It then executes a defined fallback path. This mechanism makes the damage area smaller when contract failures, panics, or memory safety violations occur. The system allows agent-driven applications to recover instead of stopping abruptly. We outline the problem statement, related work, and the architectural methodology for this system.
+
+## 1. Introduction
+
+Modern software systems face critical failures during execution. When contract assertions fail during state mutation, the software process typically halts. This halt results in partial corrupt states. It also causes the loss of live user sessions. Furthermore, agent-generated code patches can cause hard faults at runtime. Memory safety issues, such as use-after-free errors, cause segmentation faults. These faults have no automatic recovery path. A single fault can stop the execution loop of a long-running daemon.
+
+To solve these problems, a temporal memory system is necessary. This system must allow a runtime environment to survive normal faults. It must keep memory usage within bounded limits. Artificial intelligence agents require the ability to retry an action. They also need a fallback path after an incorrect action. An adversary must not use the rollback mechanism as a state confusion gadget. 
+
+The scope of this design includes a crash recovery window. This window lasts for approximately three seconds. The design includes historical values for opted-in state variables. It also includes fallback path execution. It excludes full-process migration. It excludes distributed snapshot consensus. It also excludes unlimited state history.
+
+## 2. Related Work
+
+### 2.1 Software Transactional Memory
+
+Previous research details software transactional memory formulations. Software transactional memory provides optimistic mutation and abort functions. This approach is similar to shadow-state operations for semantic commits. In contrast, temporal memory provides a time-indexed history. It also provides crash rollback capabilities. The two concepts overlap only when a transaction equals the last mutations of a specific time window.
+
+### 2.2 Checkpoint and Restore
+
+Checkpoint and restore tools freeze entire operating system processes. One example is Checkpoint/Restore In Userspace. These tools dump memory, file descriptors, and network connections. They restore these elements later. Operators use these tools for live migration and system snapshots. This method uses an operating-system process grain. 
+
+Our system requires a language-grain temporal type. It also requires ring buffers. The system must not dump the full process on every fault. That operation is too slow for a fast execution loop.
+
+### 2.3 Time-Travel Debugging
+
+Time-travel debuggers record and replay program execution. They perform reverse execution through code checkpoints. These tools optimize developer diagnosis. They do not optimize production crash fallback. The temporal memory production path must stay lighter than a debugger.
+
+### 2.4 Persistent Memory
+
+Holographic persistence provides immortal disk-backed state. It does not provide short-window random access memory undo capabilities. The two mechanisms must remain separate to ensure fast operation.
+
+## 3. Architecture and Methodology
+
+### 3.1 Opt-In Temporal Model
+
+The proposed architecture uses an opt-in temporal model. Default data types use standard memory management. They release memory upon object death. Temporal types use an append-only log or a copy-on-write log. This log exists in an event log arena. 
+
+The system deletes data older than a three-second limit. It also deletes data if it reaches a specific capacity limit. When a fault occurs, the system restores temporal roots. It restores them to the last safe epoch. It then runs a fallback path. This process ensures a reliable recovery path.
+
+### 3.2 Runtime Components
+
+The runtime architecture includes several core components. First, an epoch clock provides a monotonic runtime epoch. This epoch acts as a logical tick. It ensures that all events have a correct time order. 
+
+Second, the event log arena holds a ring buffer. This buffer contains snapshots or deltas for temporal allocations. The arena separates the temporal data from the standard heap. 
+
+Third, the system defines safe points. Safe points include contract boundaries and capability checks. They also include explicit checkpoint calls. The system can only roll back to these defined safe points. 
+
+Furthermore, a supervisor or a user defines the fallback path. The system executes this fallback path after a rollback event. The fallback path must not perform silent retries indefinitely. This limit prevents denial-of-service conditions. Finally, a rollback must not resurrect revoked capabilities. It must perform a new security check. This measure prevents unauthorized access after a state restore.
+
+### 3.3 Interaction with System Features
+
+Temporal objects do not use instant free mechanisms. The shadow-state is speculative and looks ahead. In contrast, temporal memory looks behind. They can operate together in the same system. A shadow abort means no log append occurs. A temporal restore moves the state to an earlier epoch. 
+
+A contract failure causes a restore to the pre-condition snapshot. Log size counts against the capacity limit. The system deletes old data under memory pressure. 
+
+A hot code reload can invalidate code pointers in old snapshots. Therefore, the system requires the use of version epochs. The system uses separate temporal logs for each individual task. This separation avoids cross-task silent rollbacks.
+
+### 3.4 Failure Model and Security
+
+The system mitigates fatal panics with partial heap mutation. It restores memory to a pre-call snapshot when a contract violation occurs. It performs a bounded retry with a clean state for transient errors. 
+
+However, the system requires strong integrity checks. These checks prevent adversarial memory corruption of the temporal log. The system does not undo disk or network operations. A maximum restore count is necessary. This count prevents infinite fault loops. 
+
+The rollback mechanism is not a full security sandbox. The security design includes several caveats. Restored secrets can show again after a logical wipe. The timing of prune operations against memory free operations can create oracle channels. This risk exists if the system does not use a constant time policy. A rollback across a foreign function interface is not safe. The system must gate external effects to ensure memory safety.
+
+### 3.5 Conflict Resolution
+
+The temporal memory system requires separation from standard memory release mechanisms. Instant free erases the bytes that a temporal restore requires. A restore without free coordination causes a use-after-free error. Holding all frees stops normal garbage collection. 
+
+To solve this problem, the system uses an opt-in temporal keyword. The event log arena must operate separately from the standard heap. The system uses generational prune operations. These operations drop old epochs safely. Non-temporal pointers become invalid after a restore operation.
+
+A wall-clock window can fight pure deterministic tests. The system must use epoch counters in test builds. It must use a wall clock in production environments. A rollback cannot undo sent network packets. Temporal memory controls random access memory only. Input and output operations must remain capability-journaled or idempotent.
+
+## 4. Conclusion
+
+Temporal memory provides a vital resilience feature for software runtimes. It enables agent-driven systems to recover from faults and continue operation. The system keeps past states and moves memory back to a safe state. This action prevents sudden process termination. 
+
+The architecture uses an opt-in model, an epoch clock, and an event log arena. This design ensures that systems can survive faults. It avoids the heavy performance cost of full-process checkpoints. The temporal memory system operates efficiently alongside standard memory management. It provides a robust foundation for automated software agents.
+
+---
+*Series index: [README.oot](./README.oot).*

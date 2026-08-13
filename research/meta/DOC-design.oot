@@ -1,0 +1,62 @@
+# DOC-design: DESIGN.oot as north star
+
+| Field | Value |
+|-------|--------|
+| **Paper ID** | `DOC-design` |
+| **Subject document(s)** | `openOODA/DESIGN.oot` |
+| **Status** | `draft` |
+| **Series** | Documentation system (`DOC-*`) |
+
+## 1. Why this document exists
+
+DESIGN.oot is the architectural blueprint: philosophy, AI tooling, safety engine, multi-target execution, ecosystem, and tension resolutions. It answers what we build toward, not what alpha shipped this week.
+
+## 2. Problem statement
+
+Without a stable north star, agents invent features, redefine purity, or ship soft-pass narratives. PM and research need a fixed target; SPRINT needs a fence.
+
+## 3. Related work (university + commercial)
+
+- Architecture vision documents / SADs separate from issue trackers.
+- **ADRs** capture individual decisions; DESIGN holds the integrated narrative. https://adr.github.io/
+- **Language RFCs** (Rust RFCs, PEPs) for evolutionary change under a constitution.
+- **Living documentation** — vision changes slowly; living detail belongs in PM/SPRINT/residuals (Martraire).
+
+## 4. Rationale for openOODA
+
+Mutability low. Progress tracking not in DESIGN (use PM). Justification depth in RP papers. Product honesty: residual docs + README override DESIGN when claiming shipped.
+
+## 5. Limits and failure modes
+
+Aspirational language can overclaim (JIT, 0ms, mathematically). Canonical DESIGN lives only in openOODA/openOODA.
+
+## 6. Alternatives considered
+
+Wiki-only, issue-tracker-only, single mega-README, or oral tradition — all fail multi-agent continuity or honesty. Prefer git-versioned markdown with clear roles.
+
+## 7. Reality (honesty)
+
+DESIGN is active north star in openOODA/openOODA. Site links there. RP papers cover each leaf.
+
+## 8. Open questions
+
+1. Site pin and install copy stay aligned with boards DESIGN?
+2. RFC required for new DESIGN leaves?
+
+## 9. Acceptance criteria
+
+- [ ] Agents do not edit DESIGN for sprint status.
+- [ ] Each DESIGN leaf has PM row + RP paper.
+
+## 10. References
+
+1. https://adr.github.io/
+2. https://www.infoq.com/articles/book-review-living-documentation/
+3. openOODA DESIGN.oot; research/CONFLICTS.oot
+
+## Conflicts with other docs / series
+
+DESIGN slogans vs product → PM/RP honesty gates public claims.
+
+---
+*Index: [README.oot](./README.oot). DESIGN research: [../README.oot](../README.oot). TOOLS research: [../tools/README.oot](../tools/README.oot).*

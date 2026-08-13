@@ -1,0 +1,40 @@
+# RP-ES.6: Embedded to Global Verifiable Network Architecture
+
+## Abstract
+
+This paper presents the unified scale architecture of the openOODA system. The system operates consistently from bare-metal microcontrollers to global compute networks. Traditional development uses different programming languages and security models for different environments. This fragmentation decreases security. It also restricts the use of artificial intelligence tools. The openOODA architecture implements a single semantic core, a tiered capability system, and a multi-backend compiler. This design permits developers and agents to create verifiable, secure software that functions identically across all hardware levels.
+
+## 1. Introduction
+
+Modern software architectures span many different environments. Engineers typically use C or Rust for microcontrollers. They use WebAssembly for edge computing systems. They use various other languages for cloud services. This fragmentation causes multiple significant problems. Engineers must rewrite business logic for each new platform. Security models change between environments. For example, embedded devices use raw memory access, while cloud systems use complex identity meshes. Furthermore, artificial intelligence agents cannot easily translate their skills across these language boundaries.
+
+The openOODA architecture solves this fragmentation through a unified scale model. The language contains a shared semantic core. This core executes safely in any environment. The system replaces environment-specific permissions with a universal capability system. A multi-backend compiler creates optimized binaries for bare-metal, edge, and cloud targets. The system distributes these binaries through a verifiable, decentralized network. This network ensures that security guarantees stay intact from the smallest sensor to the global registry.
+
+## 2. Architecture and Methodology
+
+### 2.1 The Unified Semantic Core
+
+The architecture strictly separates pure logic from environmental side effects. The core semantic subset includes only pure functions and mathematical contracts. This core code compiles directly for any target device without modification. When the software requires side effects, it must use explicit capability tokens.
+
+The compiler uses multiple backends to support the different target environments. It creates freestanding code for microcontrollers that operate without an operating system. It creates WebAssembly for portable edge execution. It creates optimized native binaries for cloud servers. This single-language approach gives artificial intelligence agents the ability to analyze and modify code across the entire spectrum of devices.
+
+### 2.2 Tiered Capability System
+
+The capability system scales across all environments. It uses the same type-system rules for all targets. On a bare-metal microcontroller, the capabilities represent physical hardware resources. These resources include specific general-purpose input/output pins or communication buses. On a hosted operating system, the capabilities represent file system access or network sockets. In a cloud network, the capabilities represent secure remote procedure call handles. This consistency ensures developers enforce the principle of least privilege using identical syntax, regardless of the target platform.
+
+### 2.3 Verifiable Web of Code
+
+The scale architecture features a decentralized distribution network. This verifiable web of code uses cryptographic proofs and capability manifests to distribute software safely. When a user or agent downloads a package, the registry verifies the mathematical contracts. It also verifies the capability requirements. This system prevents the installation of malicious dependencies. The distribution network acts as an extension of the language security model. It ensures trust at a global scale.
+
+## 3. Threat and Failure Model
+
+The unified scale architecture mitigates several significant security risks. By using a single language, it prevents logic mismatch errors. These errors often occur when engineers rewrite code for a new platform. The tiered capability system eliminates the general-permission vulnerabilities that are common in embedded C programming. The verifiable web of code stops supply-chain attacks. It does this by requiring strict capability manifests for all external packages.
+
+However, the architecture does not stop all systemic threats. It cannot prevent attacks that originate from malicious hardware. It cannot prevent attacks that use compromised boot sequences. It does not stop network-level denial-of-service attacks. If a developer creates a manifest that requests overly broad capabilities, the system will grant them. This action bypasses the principle of least privilege. Finally, the system stays vulnerable if developers use unsafe foreign function interfaces to link unrestricted C code on the local device.
+
+## 4. Conclusion
+
+The openOODA scale architecture delivers a continuous, verifiable programming environment. By using a single semantic core and a universal capability system, the language connects embedded hardware and global networks. The multi-backend compiler and the verifiable registry ensure that security policies stay consistent across all targets. This unified design is necessary for the construction of trustworthy systems. It also enables effective artificial intelligence programming at every scale.
+
+---
+*Series index: [README.oot](./README.oot).*

@@ -1,0 +1,52 @@
+# RP-4.4: Holographic data persistence
+
+## Abstract
+
+This paper describes a theoretical system for holographic data persistence. The system maps data in random access memory directly to a persistent storage drive. It uses a Merkle tree to keep the data safe and verifiable. The architecture removes the manual save function. A power loss does not destroy data. A computer restores the exact memory state when it receives power again. This paper explains the theory, the design constraints, and the security model for this system. The proposed architecture creates a single, continuous data environment.
+
+## 1. Introduction
+
+### 1.1 The persistence gap
+
+Computer applications usually save data manually. They use a save function, a database map, or a checkpoint. These manual methods cause failures. A system loses data if a user forgets to save. A system corrupts data if it saves only a part of the data. Software engineers find it difficult to change data structures later. Software agents must learn complex input and output rules instead of simple logic. This gap between volatile memory and persistent storage creates unnecessary complexity.
+
+### 1.2 The meaning of holographic persistence
+
+Holographic persistence solves these problems. This concept relies on four main properties. First, the system uses orthogonal persistence. The objects in memory stay durable without a conversion step. Second, the system uses a byte-addressable map. The storage drive acts as an addressable memory space. Third, the system uses a Merkle tree. The software links data versions together as hash trees. This ensures data integrity and helps with synchronization. Fourth, the system ensures crash continuity. A power loss results in a safe and consistent restore operation. These four properties create a single, continuous data environment.
+
+## 2. Architecture and Methodology
+
+### 2.1 Memory-mapped databases
+
+The architecture uses a memory-mapped database to hold the data tree. A read operation returns a pointer into the map. The system does not copy the data during a read operation. This provides high speed and disk durability. The software must obey strict rules to achieve this. Native operating system pointers do not survive a remap operation. Therefore, the system must use copy-on-write pages and strict data layouts. The memory pages reflect the exact state of the persistent storage.
+
+### 2.2 Persistent memory hardware
+
+Some computer hardware lets software use persistent memory operations. These operations include cache flushes and atomic updates. However, the software must still manage the crash consistency. General data structures do not receive this safety automatically. The system must carefully control the data updates. The architecture defines a strict update sequence to prevent data corruption. This sequence ensures that the hardware writes the most important data first.
+
+### 2.3 Merkle trees and verifiable state
+
+Merkle trees give the system a verifiable state. The trees provide snapshots that show unauthorized changes. They offer cheap proofs that data exists. They also help synchronize data through hash reconciliation. However, Merkle trees do not map a random memory space automatically. The system must store the data in an explicit tree format. The architecture forces all persistent objects into this tree format. This design choice combines persistence with immediate cryptographic verification.
+
+### 2.4 Language restrictions
+
+The programming language must restrict the persistent data types. The data cannot use raw operating system pointers. The data must use explicit handles or offsets into a managed memory area. The program needs a capability token to create or map the data. The system must publish a Merkle root to verify the data. These rules ensure that the data remains portable and safe. The compiler must enforce these rules before the program runs.
+
+### 2.5 Security and threat model
+
+The system design must manage several security threats. Merkle trees detect data corruption on the disk. The system needs an atomic transaction protocol to prevent incomplete writes. The compiler must stop the use of native pointers in persistent types. The system needs signed roots or capability tokens to stop rollback attacks. The system must also provide tombstone markers. These markers delete data permanently when privacy laws require it. These security layers protect the holographic data from external and internal threats.
+
+## 3. Conclusion
+
+Holographic data persistence offers a new theoretical model to manage memory and storage. It removes the manual save process entirely. It connects orthogonal persistence with Merkle tree verification. Future research must solve several remaining problems. Researchers must compare pointer swizzling with offset-only heaps. They must find a way to change the schemas of persistent structures. They must design rules for shared memory maps across multiple processes. They must determine the correct order for encryption and Merkle hashing. These solutions will create a fully verifiable and persistent computing environment.
+
+## 4. References
+
+1. Lightning Memory-Mapped Database (LMDB) documentation.
+2. ElectricSQL introduction and synchronization scope.
+3. Industry articles on Sparse Merkle Trees and persistent tree systems.
+4. openOODA DESIGN.oot, sections 4, 3.8, and 6.2.
+
+---
+
+*Series: [Research papers index](./README.oot). Related: [RP-3.8 Temporal memory](./RP-3-8-temporal-memory-rollback.oot), [RP-5.2 Web of code](./RP-5-2-verifiable-web-of-code.oot).*

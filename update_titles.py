@@ -8,7 +8,7 @@ html_path = os.path.join(base_dir, "research.html")
 
 papers = []
 for filename in sorted(os.listdir(research_dir)):
-    if filename.startswith("RP-") and filename.endswith(".md"):
+    if filename.startswith("RP-") and filename.endswith(".oot"):
         path = os.path.join(research_dir, filename)
         with open(path, "r", encoding="utf-8") as f:
             content = f.read()

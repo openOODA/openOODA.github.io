@@ -301,7 +301,7 @@ nav a:hover {
   line-height: 1.45;
 }
 
-/* Design goals (DESIGN.md) */
+/* Design goals (DESIGN.oot) */
 .design-section,
 .progress-section {
   max-width: 1100px;
@@ -389,7 +389,7 @@ nav a:hover {
   padding: 0;
 }
 
-/* Progress tables (PROGRESS.md) */
+/* Progress tables (PROGRESS.oot) */
 .status-table-wrap {
   overflow-x: auto;
   border: 1px solid var(--border-color);

@@ -1,0 +1,38 @@
+# RP-4.1.3: Universal GPU/NPU Acceleration Architecture
+
+## Abstract
+
+The openOODA project introduces a systems language that requires native compilation to multiple hardware accelerators. The language architecture does not force artificial intelligence and high-performance computing tasks through foreign language bindings. This paper examines the multi-vendor landscape for graphics processing units and neural processing units. It defines the term "universal acceleration" in a practical context. The theoretical design provides zero-overhead tensor mathematics and parallel computation. The architecture achieves this performance without compromising security or capability controls.
+
+## 1. Introduction
+
+Modern systems languages use hardware accelerators to run training kernels, inference models, simulation algorithms, cryptography programs, and media codecs. Traditional language bindings and wrappers break the control loop between the central processing unit and the accelerator. These wrappers cause problems with software tools, data types, and capability enforcement. Graphics processing unit drivers and kernels contain a large trusted computing base. Language-level security capabilities must include strict control over device memory and execution cycles.
+
+A universal compiler architecture is difficult to build because hardware vendors do not share one portable design. NVIDIA uses the Compute Unified Device Architecture (CUDA) programming model and compiles to Parallel Thread Execution (PTX) code. Advanced Micro Devices (AMD) uses the Radeon Open Compute (ROCm) platform and the Heterogeneous-Compute Interface for Portability (HIP). Intel uses oneAPI, SYCL, and Open Computing Language (OpenCL). Apple Silicon uses Metal shaders. Existing portability layers, such as SYCL or the Multi-Level Intermediate Representation (MLIR), have incomplete coverage or performance problems. A theoretical universal compiler must use multiple specialized backends or a very strong portability layer to solve these problems.
+
+## 2. Architecture and Methodology
+
+The standard industrial platforms provide rich libraries and mature software tools. NVIDIA CUDA operates only on NVIDIA hardware. AMD ROCm gives a similar programming model but requires different architecture rules. SYCL provides a single-source model to run code on many different devices. Implementations of SYCL have different performance characteristics across these devices. Modern artificial intelligence compilers use intermediate representations to launch computation kernels. The MLIR framework provides middle-level abstractions that connect language dialects to vendor-specific code. Good systems languages must provide multiple backends with a shared host interface.
+
+The openOODA architecture extends its capability security model to device memory. Programs must use specific capability tokens to launch hardware kernels or to allocate device memory. The compiler sets strict memory quotas for host allocations and device allocations. The system does not permit silent unified-memory allocations without an explicit capability token. The core standard library operates only on the host central processing unit. Accelerator operations exist only in explicit, restricted modules. A program cannot use a mathematical tensor on an accelerator without the correct capability token.
+
+The theoretical compiler lowers parallel operations into an internal intermediate representation. The compiler passes this data through MLIR dialects for optimization. Finally, the compiler outputs vendor-specific code such as PTX, ROCm, Standard Portable Intermediate Representation (SPIR-V), or Metal. The host processor must always launch kernels, copy memory buffers, and enforce capability limits. This host interaction does not replace standard central processing unit backends. It integrates accelerator capabilities directly into the core language semantics.
+
+The security threat model includes hardware driver exploits and data leaks. Software capabilities cannot fix bad hardware drivers. Memory operations require taint-tracking rules to prevent the exfiltration of secret data. Device cycle quotas are difficult to build. These quotas are necessary to stop denial-of-service attacks on the shared hardware. The language must avoid false portability and foreign function interfaces to maintain security. Only a limited, mathematically verifiable subset of the language operates on the accelerator device.
+
+## 3. Conclusion
+
+Native accelerator compilation is a primary design objective for openOODA. The language requires a robust multi-vendor strategy to compile code for different hardware targets. A shared host interface manages security capabilities, memory quotas, and kernel launches. This theoretical design provides zero-overhead computation without the risks of foreign language wrappers. The architecture successfully integrates high-performance graphics and neural processing units into a strict capability-based security model.
+
+## 4. References
+
+1. NVIDIA. CUDA Toolkit Documentation. https://developer.nvidia.com/cuda-toolkit
+2. ENCCS. GPU Programming Models Overview. https://enccs.github.io/gpu-programming/5-intro-to-gpu-prog-models/
+3. Mongkolsmai, T. SYCL and Multi-vendor Discussion. https://medium.com/@tonymongkolsmai/cuda-rocm-oneapi-running-code-on-a-gpu-any-gpu-28b7bf4cf1d0
+4. LLVM Project. MLIR GPU Dialect. https://mlir.llvm.org/docs/Dialects/GPU/
+5. TensorWave. ROCm Migration Literature. https://tensorwave.com/blog/transitioning-to-high-performance-a-comprehensive-guide-to-switching-from-cuda-to-rocm
+6. openOODA. `DESIGN.oot` Section 4.
+
+---
+
+*Series: [Research papers index](./README.oot). Related: [RP-4.1.2 LLVM](./RP-4-1-2-production-llvm.oot).*

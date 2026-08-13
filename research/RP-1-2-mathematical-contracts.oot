@@ -1,0 +1,27 @@
+# RP-1.2: Mathematical contracts (requires/ensures)
+
+## Abstract
+This paper examines the integration of mathematical contracts into the openOODA language. Preconditions and postconditions act as first-class language keywords. They mathematically bound function behavior. These contracts form the foundation for local fuzzing, global verification, and intent-driven compilation.
+
+## 1. Introduction
+Mathematical contracts connect automated tools to the safety engine of the language. The intent-driven compilation process builds code directly from contracts. The automated fuzzer tests these contracts to find errors. The shadow-state reversion system prevents actions that violate postconditions. Furthermore, narrative diagnostics explain contract failures as clear stories.
+
+Without mathematical contracts, types alone do not specify value limits or relationships. Automated agents might write code that passes type checks but ignores unwritten rules. A fuzzer requires a failure rule to operate effectively. Simple assertions do not connect to the public interface. Systems that rely only on tests cannot easily transition to static verification.
+
+## 2. Architecture
+The architecture implements contracts as first-class keywords. The syntax includes `requires` for preconditions and `ensures` for postconditions. These keywords allow the compiler to parse and export contract text uniformly. The system compiles code without reading comments. This design supports future static analysis tools.
+
+The system restricts the expression language for contracts. Contracts must use pure predicates with no side effects. They must not perform input or output operations. The design defines clear rules for referencing the result of a function before the system checks the postcondition.
+
+The architecture separates contracts from capabilities. A function can require a specific input value and still need a capability to execute. Authority and correctness remain separate concepts.
+
+## 3. Methodology
+The methodology builds upon Design by Contract principles. The system uses a continuous loop. A programmer or agent writes the preconditions and postconditions. Then, they write the code body. The compiler generates runtime checks from the contracts. Next, the fuzzer creates inputs that satisfy the preconditions. It attempts to generate outputs that violate the postconditions. Finally, diagnostic tools report which specific rule failed.
+
+Previous systems implemented contracts as library macros or external specification files. openOODA embeds contracts directly into the syntax. This approach prevents silent interface errors. It prevents code changes that violate established postconditions. It also guides automated code generation.
+
+## 4. Conclusion
+Mathematical contracts provide an executable specification for the openOODA language. They enable automated tools to understand the intended behavior of code. By implementing contracts as first-class keywords, the system ensures that specifications remain synchronized with the implementation. This foundation supports robust fuzzing and future formal verification.
+
+---
+*Series index: [README.oot](./README.oot).*

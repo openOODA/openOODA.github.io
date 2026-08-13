@@ -1,0 +1,29 @@
+# RP-5.4: Standard Library Architecture: Core Versus Operating System Separation
+
+## Abstract
+A monolithic standard library mixes pure algorithms with operating system services. This mixture creates security risks and portability problems. This research paper presents a new standard library architecture for the openOODA ecosystem. The design strictly divides the standard library into a core module and an operating system module. The core module contains pure logic, requires zero capabilities, and runs in any environment. The operating system module requires explicit capability tokens and runs only in a hosted environment. This division ensures capability security, enables extreme portability, and prevents ambient authority.
+
+## Introduction
+Classic large standard libraries mix pure algorithms with operating system services and ambient global functions. In a capability-based programming language, ambient operating system access in the standard library is a fundamental design flaw. If the standard library does not enforce a strict division, every software dependency becomes a potential security risk. Pure algorithms could hide network access or file system access inside standard library helper functions.
+
+The openOODA project requires a standard library that scales across many environments. It must scale from bare-metal microcontrollers to full operating system agents. It must provide this scalability without requiring two different programming languages. This paper explains the theoretical division of the standard library into two distinct parts: the core module and the operating system module. This division keeps capability security honest and guarantees portability across diverse execution environments.
+
+## Architecture and Methodology
+The proposed architecture enforces a strict division between pure logic and system effects. The core module provides algorithms, data collections, mathematical functions, pure cryptography, and data parsing functions. It must not use ambient input or output. It must not use hidden system calls. It must not use thread schedulers that need operating system access. Code in the core module requires zero capability tokens to operate. It runs in any execution environment. This includes bare-metal hardware and pure WebAssembly profiles.
+
+The operating system module provides access to files, networks, time, and randomness. Every entry point in this module that causes an effect must receive explicit capability parameters. Functions cannot use ambient system calls. To access the file system, a function must receive a file system capability token. To read the system clock, a function must receive a time capability token. This requirement makes all system effects visible in the function signature.
+
+The design establishes strict import laws. Modules in the core library must not import modules from the operating system library. However, operating system modules can import core modules. Software packages that claim core safety must not depend on the operating system module. This architecture prevents libraries that appear pure from performing hidden network operations or file operations. It ensures that algorithmic packages remain fully portable.
+
+This architecture does not prevent algorithmic denial of service attacks in pure core code. Developers must use computational quotas to prevent infinite loops. They must also use memory quotas to prevent excessive memory allocation. The design does not prevent logic bugs in pure code. However, it ensures that such logic bugs cannot compromise system capabilities.
+
+## Conclusion
+The strict division of the standard library into core and operating system modules is essential for the openOODA ecosystem. This architecture eliminates ambient authority. It ensures that capability tokens control all system effects. The core module guarantees portability and purity for algorithms and data structures. The operating system module provides secure, capability-gated access to system resources. This theoretical design provides a secure foundation for verifiable packages, artificial intelligence agents, and highly portable software systems.
+
+## References
+1. Rust Embedded Book documentation on no_std and libcore.
+2. WebAssembly System Interface (WASI) specifications.
+3. Capsicum and CloudABI capability frameworks.
+
+---
+*Series index: [README.oot](./README.oot).*

@@ -12,7 +12,7 @@ old_nav = """    <nav>
       <a href="#sprint">Sprint</a>
       <a href="#install">Install</a>
       <a href="research.html">Research Hub</a>
-      <a href="https://github.com/openOODA/openOODA/blob/main/DESIGN.md" target="_blank" rel="noopener">DESIGN.md</a>
+      <a href="https://github.com/openOODA/openOODA/blob/main/DESIGN.oot" target="_blank" rel="noopener">DESIGN.oot</a>
       <a href="https://github.com/openOODA/ooda" class="btn-primary" target="_blank" rel="noopener">GitHub</a>
     </nav>"""
 new_nav = """    <nav>
@@ -26,7 +26,7 @@ html = html.replace(old_nav, new_nav)
 
 # 2. Rename Design to Overview
 html = html.replace('<section class="design-section" id="design">', '<section class="design-section" id="overview">')
-html = html.replace('<h2>Design goals <span class="section-tag">DESIGN.md</span></h2>', '<h2>Overview</h2>')
+html = html.replace('<h2>Design goals <span class="section-tag">DESIGN.oot</span></h2>', '<h2>Overview</h2>')
 html = html.replace('<p>North star architecture — what openOODA is <em>for</em>. Goals are not claims of full implementation.</p>', '<p>A high-level look at the core mechanics and philosophy behind openOODA.</p>')
 
 # 3. Replace PM and Sprint sections with Safety section
@@ -53,8 +53,8 @@ safety_section = """
   </section>
 """
 
-# Extract everything up to <!-- PM.md -->
-start_idx = html.find('  <!-- PM.md -->')
+# Extract everything up to <!-- PM.oot -->
+start_idx = html.find('  <!-- PM.oot -->')
 # Extract everything from <section class="get-started"> onwards
 end_idx = html.find('  <section class="get-started">')
 

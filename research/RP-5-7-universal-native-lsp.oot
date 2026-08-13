@@ -1,0 +1,50 @@
+# Universal Native Language Server Protocol Integration
+
+## Abstract
+Modern programming languages require fast and interactive feedback in various editing environments. A dedicated compiler analysis engine often leads to editor lock-in and high maintenance costs. This paper describes the architecture for a universal and native Language Server Protocol daemon for the openOODA programming language. The system embeds the language server directly into the compiler. This ensures a single set of rules for all clients. It provides portability for artificial intelligence agents. It maintains self-hosting purity. The daemon operates with sub-millisecond response times using incremental queries and virtual file systems.
+
+## 1. Introduction
+Language development teams often release official editor extensions that use private protocols. This practice creates editor lock-in. It requires new implementations for different editors. This leads to different software bugs across environments. It also excludes artificial intelligence agents. These agents typically rely on standard protocols or command-line interfaces.
+
+Building a separate analysis engine incurs high costs. Maintaining a compiler and a separate analyzer requires significant effort. This often results in divergent rules. Conversely, running a standard batch compiler for every keystroke is too slow for interactive use.
+
+The openOODA system requires interactive feedback in less than one millisecond. The proposed architecture achieves this through shared file systems and incremental queries. The system avoids a full compile for each keystroke. The users of this system include human developers using various editors, headless artificial intelligence agents, and continuous integration systems.
+
+## 2. Related Work
+The Language Server Protocol is an open standard that uses JSON-RPC. It supports diagnostics, code completion, hover information, symbol rename, and code actions. Incremental query engines use a dependency graph of calculations to save processing time.
+
+Industrial systems show various approaches to this problem. Some languages use a separate incremental frontend. This provides excellent tools but requires dual maintenance. Other languages offer compiler-as-a-service application programming interfaces. This allows batch and interactive tools to share components. Some language servers wrap the primary compiler to reuse its parser and semantic models. Dedicated language servers written in the target language integrate well into a self-hosted ecosystem.
+
+The openOODA architecture uses compiler libraries to power the Language Server Protocol. It utilizes lazy evaluation. The system analyzes only the data that the user interface requires. The design implements the host in the native language to maintain architectural purity.
+
+## 3. Architecture and Methodology
+The system architecture operates as a universal, native, pure, and fast engine. It supports any client without editor lock-in. It operates as a compiled daemon rather than a bridge to another language. The system uses the openOODA language exclusively. It shares the exact core logic with the command-line interface. It maps codes and actions directly to source patches. This supports an agent-first workflow. It uses incremental updates to meet a strict time budget.
+
+The architecture consists of an external interface layer. This layer handles JSON-RPC communication. A session and virtual file system layer operates below the external interface. This layer feeds data into an incremental query engine. The query engine connects directly to the core compiler logic.
+
+The system processes code analysis through a sequence of continuous operations. It maps batch check results to diagnostic outputs in real time. It maintains parsed modules in memory. It deletes these modules only when a source file changes. The system provides symbol indexing, hover information, and definition routing from a shared memory layer. It applies source code patches directly as workspace edits.
+
+The daemon reads the workspace using an explicit file system capability. It stops network access by default. It operates under a strict workspace trust model. The system maintains self-host purity. An implementation in a different language might ignore capability rules for external plugins.
+
+## 4. Threat and Failure Model
+This system design prevents editor lock-in. It prevents rule divergence because the wrapper shares the core compiler components. It ensures that agents operate without a specific integrated development environment.
+
+The design cannot prevent malicious workspace files from attacking the daemon. The system relies on explicit capabilities and a sandbox to mitigate this risk. It does not prevent slow performance on very large repositories if the incremental work operates poorly. It does not control clients that ignore the protocol and execute unsafe commands.
+
+If the dual engines drift, the system shares more libraries and tests command-line diagnostics against server diagnostics. If the system performs a full compile for each keystroke, it must implement strict debouncing and caching mechanisms. If the pure implementation operates too slowly, developers must profile and optimize the native code.
+
+## 5. Discussion
+Previous iterations examined several architectural alternatives. A single-editor extension caused unacceptable lock-in. A system relying solely on syntax highlighting provided insufficient data for deep semantic analysis. A separate analyzer written in a different language violated the purity rule. A batch-compile-only approach provided a poor user experience. An in-browser WebAssembly implementation functioned well but did not replace a native desktop daemon.
+
+Open research questions remain regarding performance scaling. Future studies must determine the optimal memory limit for a daemon that runs continuously on developer machines. Research must find methods to display capability signatures in hover messages without overwhelming the user with text. Further optimization of incremental deletion for multi-root workspaces is necessary. The investigation of streaming narrative diagnostics as related information within standard diagnostic payloads presents another area for future work.
+
+## 6. Conclusion
+Integrating the Language Server Protocol natively into the compiler provides a robust, fast, and unified experience. This benefits both human developers and artificial intelligence agents. The architecture shares the core analysis engine and relies on incremental queries. This approach avoids the dual-maintenance problem and ensures consistent behavior across all editing environments.
+
+## 7. References
+1. Language Server Protocol Specification.
+2. Salsa Incremental Computation Framework Documentation.
+3. Roslyn Compiler-as-a-Service Design Documents.
+
+---
+*Series index: [README.oot](./README.oot).*

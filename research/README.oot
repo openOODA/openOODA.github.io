@@ -1,0 +1,95 @@
+# openOODA design research papers
+
+One research paper **per DESIGN.oot item** (main and sub-items).
+Purpose: **justify why the item is in DESIGN.oot**, with problem, prior art, and openOODA rationale.
+
+| Doc | Role |
+|-----|------|
+| `openOODA/DESIGN.oot` | Vision |
+| monorepo `PM.oot` | Progress status per item |
+| monorepo `SPRINT.oot` | Active engineering work |
+| **this series (`RP-*`)** | Research justification per DESIGN item |
+| **[tools/](./tools/README.oot) (`TP-*`)** | Process research for `ooda/TOOLS.oot` |
+| **[meta/](./meta/README.oot) (`DOC-*`)** | Why control docs exist (DESIGN/PM/SPRINT/TOOLS/…) |
+
+## Draft status (2026-08-09)
+
+All **49** DESIGN leaf papers are filled as **`draft`** (not stubs).  
+Cross-design fights and owner decisions: **[CONFLICTS.oot](./CONFLICTS.oot)**.
+
+Promote individually: `draft` → `review` → `accepted` after human read.
+
+## Status of papers
+
+Baseline: all leaf papers are **`draft`**. Promote to `review` → `accepted` after human review. New DESIGN leaves start as `planned` stubs from TEMPLATE.oot.
+
+## Template
+
+Copy [TEMPLATE.oot](./TEMPLATE.oot) only if adding a new DESIGN leaf; prefer the pre-created stub for each ID.
+
+## Index (by DESIGN.oot)
+
+| ID | Title | DESIGN | Paper |
+|----|-------|--------|-------|
+| `ES.1` | AI-native systems language | Executive Summary | [RP-ES-1-es-ai-native-systems-language.oot](./RP-ES-1-es-ai-native-systems-language.oot) |
+| `ES.2` | Capability-secure by construction | Executive Summary | [RP-ES-2-es-capability-secure.oot](./RP-ES-2-es-capability-secure.oot) |
+| `ES.3` | Self-testing language surface | Executive Summary | [RP-ES-3-es-self-testing.oot](./RP-ES-3-es-self-testing.oot) |
+| `ES.4` | Sub-second development feedback | Executive Summary | [RP-ES-4-es-subsecond-feedback.oot](./RP-ES-4-es-subsecond-feedback.oot) |
+| `ES.5` | Zero-day defense goals | Executive Summary | [RP-ES-5-es-zero-day-defense.oot](./RP-ES-5-es-zero-day-defense.oot) |
+| `ES.6` | Embedded to global verifiable network | Executive Summary | [RP-ES-6-es-scale-embedded-to-network.oot](./RP-ES-6-es-scale-embedded-to-network.oot) |
+| `1.1` | Philosophy of speed (OODA loop) | §1 Language | [RP-1-1-philosophy-ooda-loop-speed.oot](./RP-1-1-philosophy-ooda-loop-speed.oot) |
+| `1.2` | Mathematical contracts (requires/ensures) | §1 Language | [RP-1-2-mathematical-contracts.oot](./RP-1-2-mathematical-contracts.oot) |
+| `1.3` | Data-oriented design & SoA layout | §1 Language | [RP-1-3-data-oriented-design-soa.oot](./RP-1-3-data-oriented-design-soa.oot) |
+| `1.4` | First-class AST macros | §1 Language | [RP-1-4-first-class-ast-macros.oot](./RP-1-4-first-class-ast-macros.oot) |
+| `1.5` | Compile-time type-state machines | §1 Language | [RP-1-5-compile-time-type-state.oot](./RP-1-5-compile-time-type-state.oot) |
+| `2.1` | Surgical AST patching & JSON diagnostics | §2 AI tooling | [RP-2-1-surgical-ast-patching.oot](./RP-2-1-surgical-ast-patching.oot) |
+| `2.2` | Token-minimized APIs (outline/reflect) | §2 AI tooling | [RP-2-2-token-minimized-apis.oot](./RP-2-2-token-minimized-apis.oot) |
+| `2.2b` | Surgical patch replace_fn | §2 AI tooling | [RP-2-2b-surgical-patch-replace-fn.oot](./RP-2-2b-surgical-patch-replace-fn.oot) |
+| `2.3` | Intent-driven compilation (telepathic AST) | §2 AI tooling | [RP-2-3-intent-driven-compilation.oot](./RP-2-3-intent-driven-compilation.oot) |
+| `2.4` | Global hive-mind fuzzing | §2 AI tooling | [RP-2-4-global-hive-mind-fuzzing.oot](./RP-2-4-global-hive-mind-fuzzing.oot) |
+| `3.1` | Unified capability sandboxing | §3 Safety | [RP-3-1-unified-capability-sandboxing.oot](./RP-3-1-unified-capability-sandboxing.oot) |
+| `3.2` | Time & entropy sandboxing | §3 Safety | [RP-3-2-time-entropy-sandboxing.oot](./RP-3-2-time-entropy-sandboxing.oot) |
+| `3.3` | Memory quotas (heap sandboxing) | §3 Safety | [RP-3-3-memory-quotas-heap-sandbox.oot](./RP-3-3-memory-quotas-heap-sandbox.oot) |
+| `3.4` | CPU quotas (#[MaxCycles]) | §3 Safety | [RP-3-4-cpu-quotas-maxcycles.oot](./RP-3-4-cpu-quotas-maxcycles.oot) |
+| `3.5` | Static taint tracking (#[Secret]) | §3 Safety | [RP-3-5-static-taint-secret.oot](./RP-3-5-static-taint-secret.oot) |
+| `3.6` | Automated contract fuzzer | §3 Safety | [RP-3-6-automated-contract-fuzzer.oot](./RP-3-6-automated-contract-fuzzer.oot) |
+| `3.7` | 0ms GC & memory safety (ARC/RAII) | §3 Safety | [RP-3-7-zero-ms-gc-arc-raii.oot](./RP-3-7-zero-ms-gc-arc-raii.oot) |
+| `3.8` | Temporal memory (state rollback) | §3 Safety | [RP-3-8-temporal-memory-rollback.oot](./RP-3-8-temporal-memory-rollback.oot) |
+| `3.9` | Cryptographic call-graph integrity | §3 Safety | [RP-3-9-cryptographic-call-graph-integrity.oot](./RP-3-9-cryptographic-call-graph-integrity.oot) |
+| `3.10` | Shadow-state semantic reversion | §3 Safety | [RP-3-10-shadow-state-semantic-reversion.oot](./RP-3-10-shadow-state-semantic-reversion.oot) |
+| `3.11` | Polymorphic metamorphic binaries | §3 Safety | [RP-3-11-polymorphic-metamorphic-binaries.oot](./RP-3-11-polymorphic-metamorphic-binaries.oot) |
+| `4.1.1` | Development bytecode VM | §4 Targets | [RP-4-1-1-development-bytecode-vm.oot](./RP-4-1-1-development-bytecode-vm.oot) |
+| `4.1.2` | Production LLVM backend | §4 Targets | [RP-4-1-2-production-llvm.oot](./RP-4-1-2-production-llvm.oot) |
+| `4.1.3` | Universal GPU/NPU acceleration | §4 Targets | [RP-4-1-3-gpu-npu-acceleration.oot](./RP-4-1-3-gpu-npu-acceleration.oot) |
+| `4.1.4` | Direct WebAssembly | §4 Targets | [RP-4-1-4-direct-webassembly.oot](./RP-4-1-4-direct-webassembly.oot) |
+| `4.1.5` | Bare-metal embedded (no_std) | §4 Targets | [RP-4-1-5-bare-metal-embedded.oot](./RP-4-1-5-bare-metal-embedded.oot) |
+| `4.2` | Native hot-code reloading | §4 Targets | [RP-4-2-native-hot-code-reloading.oot](./RP-4-2-native-hot-code-reloading.oot) |
+| `4.3.1` | Cross-language LTO | §4 Targets | [RP-4-3-1-cross-language-lto.oot](./RP-4-3-1-cross-language-lto.oot) |
+| `4.3.2` | Deterministic reproducible builds | §4 Targets | [RP-4-3-2-deterministic-reproducible-builds.oot](./RP-4-3-2-deterministic-reproducible-builds.oot) |
+| `4.3.3` | Compile-time FFI generation | §4 Targets | [RP-4-3-3-compile-time-ffi-generation.oot](./RP-4-3-3-compile-time-ffi-generation.oot) |
+| `4.4` | Holographic data persistence | §4 Targets | [RP-4-4-holographic-data-persistence.oot](./RP-4-4-holographic-data-persistence.oot) |
+| `4.x` | Backend-C product floor | §4 Targets (product reality) | [RP-4-x-backend-c-product-floor.oot](./RP-4-x-backend-c-product-floor.oot) |
+| `5.1` | 100% self-hosted ecosystem | §5 Ecosystem | [RP-5-1-self-hosted-ecosystem.oot](./RP-5-1-self-hosted-ecosystem.oot) |
+| `5.1a` | Pure product compiler + CLI | §5 Ecosystem | [RP-5-1a-pure-product-compiler-cli.oot](./RP-5-1a-pure-product-compiler-cli.oot) |
+| `5.2` | Verifiable web of code (zero-trust packages) | §5 Ecosystem | [RP-5-2-verifiable-web-of-code.oot](./RP-5-2-verifiable-web-of-code.oot) |
+| `5.3` | Fearless concurrency | §5 Ecosystem | [RP-5-3-fearless-concurrency.oot](./RP-5-3-fearless-concurrency.oot) |
+| `5.4` | Standard library philosophy (core vs os) | §5 Ecosystem | [RP-5-4-stdlib-core-vs-os.oot](./RP-5-4-stdlib-core-vs-os.oot) |
+| `5.5` | Narrative diagnostics | §5 Ecosystem | [RP-5-5-narrative-diagnostics.oot](./RP-5-5-narrative-diagnostics.oot) |
+| `5.6` | Human-in-the-loop (hitl) testing | §5 Ecosystem | [RP-5-6-hitl-testing.oot](./RP-5-6-hitl-testing.oot) |
+| `5.7` | Universal native LSP | §5 Ecosystem | [RP-5-7-universal-native-lsp.oot](./RP-5-7-universal-native-lsp.oot) |
+| `6.1` | Tension: metamorphic vs deterministic builds | §6 Tensions | [RP-6-1-tension-metamorphic-vs-deterministic.oot](./RP-6-1-tension-metamorphic-vs-deterministic.oot) |
+| `6.2` | Tension: ARC vs temporal memory | §6 Tensions | [RP-6-2-tension-arc-vs-temporal-memory.oot](./RP-6-2-tension-arc-vs-temporal-memory.oot) |
+| `6.3` | Tension: capability sandbox vs C/C++ FFI | §6 Tensions | [RP-6-3-tension-caps-vs-ffi.oot](./RP-6-3-tension-caps-vs-ffi.oot) |
+
+## How to fill a paper
+
+1. Open the stub for the DESIGN leaf.
+2. Write §1–6 and §10 (justification + research).
+3. Keep §7 honest against **PM.oot** (product reality).
+4. Set acceptance criteria in §9 for PM status promotion.
+5. Mark paper status `draft`/`review`/`accepted` in the header table.
+
+## Naming
+
+`RP-<id>-<slug>.oot` where `<id>` matches PM.oot row IDs (e.g. `3.6`, `4.1.1`).
+

@@ -1,0 +1,36 @@
+# RP-X.Y: Title
+
+| Field | Value |
+|-------|--------|
+| **Paper ID** | `RP-X.Y` |
+| **DESIGN.oot** | §… |
+| **Status** | `planned` \| `draft` \| `review` \| `accepted` |
+| **PM.oot row** | `X.Y` |
+
+## 1. Why this is in DESIGN.oot
+
+_Justify the design item. Quote or paraphrase DESIGN.oot; expand with problem context._
+
+## 2. Problem statement
+
+## 3. Related work
+
+## 4. Design rationale for openOODA
+
+## 5. Threat / failure model
+
+## 6. Alternatives considered
+
+## 7. Product reality (alpha honesty)
+
+Link **PM.oot** status. Never claim DESIGN goals as shipped without product proof.
+
+## 8. Open research questions
+
+## 9. Acceptance criteria (for PM status promotion)
+
+## 10. References
+
+---
+
+*Series index: [README.oot](./README.oot).*

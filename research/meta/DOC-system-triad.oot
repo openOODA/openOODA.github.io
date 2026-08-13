@@ -1,0 +1,70 @@
+# DOC-system-triad: Documentation triad (DESIGN · PM · SPRINT)
+
+| Field | Value |
+|-------|--------|
+| **Paper ID** | `DOC-system-triad` |
+| **Subject document(s)** | `DESIGN.oot` + monorepo `PM.oot` + monorepo `SPRINT.oot` |
+| **Status** | `draft` |
+| **Series** | Documentation system (`DOC-*`) |
+
+## 1. Why this document exists
+
+openOODA needs three non-overlapping control surfaces: vision (DESIGN), progress vs vision (PM), and cycle execution (SPRINT). One file cannot hold stable architecture, honest progress, and high-churn sprint work without rotting.
+
+## 2. Problem statement
+
+If vision and status share a file, DESIGN becomes a lying checklist or sprint noise rewrites architecture. If status and sprint share a file, tip/residual truth fights mid-cycle WIP. Agents then optimize the wrong document.
+
+## 3. Related work (university + commercial)
+
+- **Architecture Decision Records (ADRs)** — decisions with context/consequences (Nygard; adr org). https://adr.github.io/
+- **AWS ADR best practices.** https://aws.amazon.com/blogs/architecture/master-architecture-decision-records-adrs-best-practices-for-effective-decision-making/
+- **Microsoft — Maintain an ADR.** https://learn.microsoft.com/en-us/azure/well-architected/architect-role/architecture-decision-record
+- **Living documentation** (Martraire) — docs evolve with the system. https://www.infoq.com/articles/book-review-living-documentation/
+- **Scrum product backlog vs sprint backlog.** https://scrumguides.org/scrum-guide.html ; https://www.atlassian.com/agile/scrum/backlogs
+
+## 4. Rationale for openOODA
+
+| Doc | Cadence | Question |
+|-----|---------|----------|
+| DESIGN | Rare | What is OODA for? |
+| PM | After landings | How far vs DESIGN? |
+| SPRINT | Every depth push | What are we doing this cycle? |
+
+Research series justify claims; these three govern work.
+
+## 5. Limits and failure modes
+
+Triad fails if PM is not updated after landings; if SPRINT redefines architecture; if DESIGN claims ship status. Public site may summarize; monorepo remains authoritative for PM/SPRINT.
+
+## 6. Alternatives considered
+
+Wiki-only, issue-tracker-only, single mega-README, or oral tradition — all fail multi-agent continuity or honesty. Prefer git-versioned markdown with clear roles.
+
+## 7. Reality (honesty)
+
+Adopted monorepo + site (2026-08). PROGRESS/PROJECT stubbed into PM. Enforcement is process, not yet CI tip-matching.
+
+## 8. Open questions
+
+1. CI check that PM tip SHA equals ooda/main?
+2. Publish PM on GitHub org root?
+
+## 9. Acceptance criteria
+
+- [ ] Site and monorepo agree on triad roles.
+- [ ] No fourth live status doc without stub merge.
+
+## 10. References
+
+1. https://adr.github.io/
+2. https://www.infoq.com/articles/book-review-living-documentation/
+3. https://scrumguides.org/scrum-guide.html
+
+## Conflicts with other docs / series
+
+**PM tip vs SPRINT tip drift** → re-pin both after merge; SPRINT is “now,” PM follows within one landing.
+**DESIGN marketing vs PM honesty** → never copy DESIGN slogans into PM `done` without product proof.
+
+---
+*Index: [README.oot](./README.oot). DESIGN research: [../README.oot](../README.oot). TOOLS research: [../tools/README.oot](../tools/README.oot).*

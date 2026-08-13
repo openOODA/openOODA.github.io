@@ -1,0 +1,57 @@
+# DOC-sprint: SPRINT.oot as living execution board
+
+| Field | Value |
+|-------|--------|
+| **Paper ID** | `DOC-sprint` |
+| **Subject document(s)** | monorepo `SPRINT.oot` |
+| **Status** | `draft` |
+| **Series** | Documentation system (`DOC-*`) |
+
+## 1. Why this document exists
+
+SPRINT.oot is the high-churn execution board: tip SHA, rebuild defaults, agent safety, M1–M7 gate/depth, residuals, rails. It answers what we are doing this cycle.
+
+## 2. Problem statement
+
+Without a living board, multi-agent work thrashs, tip pins rot, and residual honesty is forgotten mid-feature. PM is too large for one turn (TOOLS power law ≤5).
+
+## 3. Related work (university + commercial)
+
+- Scrum Sprint Backlog — visible plan for the current sprint. https://scrumguides.org/scrum-guide.html
+- Product vs sprint backlog. https://www.atlassian.com/agile/scrum/backlogs
+- Kanban WIP limits — related to Little’s law in TOOLS.
+
+## 4. Rationale for openOODA
+
+Tip SHA for agents; M-table for gate vs depth honesty; residuals for fail-closed memory; machine safety; rails block. Must not redefine DESIGN.
+
+## 5. Limits and failure modes
+
+Stale if not updated each depth push. Not residual deep docs. Monorepo may lack remote.
+
+## 6. Alternatives considered
+
+Wiki-only, issue-tracker-only, single mega-README, or oral tradition — all fail multi-agent continuity or honesty. Prefer git-versioned markdown with clear roles.
+
+## 7. Reality (honesty)
+
+Used heavily in 2026-08 depth work; linked from TOOLS and site.
+
+## 8. Open questions
+
+1. Mirror SPRINT into ooda/bootstrap for GH-only readers?
+2. Auto-close lines when CI green?
+
+## 9. Acceptance criteria
+
+- [ ] Tip SHA on each depth push.
+- [ ] Residuals match residual docs.
+
+## 10. References
+
+1. https://scrumguides.org/scrum-guide.html
+2. https://www.atlassian.com/agile/scrum/backlogs
+3. monorepo SPRINT.oot
+
+---
+*Index: [README.oot](./README.oot). DESIGN research: [../README.oot](../README.oot). TOOLS research: [../tools/README.oot](../tools/README.oot).*

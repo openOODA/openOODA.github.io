@@ -1,0 +1,38 @@
+# RP-ES.3: Self-Testing Language Surface Architecture
+
+## Abstract
+
+This paper presents the design of a self-testing language surface for the openOODA platform. The system connects mathematical contracts directly with executable code. This design solves the specification gap in traditional software development. The architecture uses integrated preconditions, postconditions, and continuous fuzz testing. This allows artificial intelligence agents and human programmers to verify logic continuously. The design provides immediate feedback without external testing frameworks.
+
+## 1. Introduction
+
+The openOODA architecture specifies a self-testing environment. Traditional systems separate code, tests, and specifications. This separation causes incomplete verification. Artificial intelligence programming increases this problem. Agents generate code quickly but require precise rules to ensure correctness.
+
+The self-testing model integrates specifications directly into the language syntax. The keywords `requires` and `ensures` define the boundaries for valid execution. This integration provides three primary functions. First, it places specifications next to the executable logic. Second, it allows the compiler to run checks during debug execution. Third, it provides a deterministic foundation for automated fuzz testing. This design guarantees that verification is a core language feature, not an optional external tool.
+
+## 2. Architecture and Methodology
+
+### 2.1 Colocated Specifications and Executable Checks
+
+The architecture uses mathematical contracts to define behavior. Developers and agents write `requires` and `ensures` clauses on functions. These clauses remain with the code during all modifications. The system uses these contracts as executable assertions during development. If a function violates a contract, the system immediately reports the failure. This mechanism provides immediate feedback during the programming process.
+
+### 2.2 Automated Generative Testing
+
+The self-testing architecture replaces static unit tests with generative fuzz testing. The system analyzes the input types of pure functions. It then generates many random values to test the mathematical contracts. This automated testing identifies edge cases that human programmers often miss. The system uses capability restrictions, such as time caps and entropy caps, to guarantee that pure functions remain deterministic. Determinism ensures that fuzz testing produces reproducible results.
+
+### 2.3 Layered Verification Model
+
+The verification architecture operates in multiple layers. The syntax layer provides the basic contract keywords. The runtime layer enforces these contracts as assertions during execution. The local testing layer uses automated fuzzing to verify all supported data domains. The network layer distributes fuzzing tasks across a global peer-to-peer network. Finally, the formal verification layer uses mathematical solvers to prove correctness without execution. The system processes these layers sequentially to balance speed and assurance.
+
+## 3. Threat and Failure Model
+
+The self-testing architecture mitigates several critical risks. It prevents logic errors when agents modify pure functions. It eliminates the false confidence associated with incomplete unit tests. Generative fuzzing ensures high test coverage across all possible inputs.
+
+However, the architecture does not prevent all errors. Incorrect contracts will cause the fuzzer to validate incorrect logic. Full functional correctness requires complete mathematical proofs, which are computationally expensive. Continuous fuzzing also consumes significant resources and requires strict execution limits. Finally, fuzzing functions with wide capability permissions can cause unintended side effects if the system does not enforce strict sandboxing.
+
+## 4. Conclusion
+
+The self-testing language surface provides a robust mechanism for continuous verification. By integrating contracts directly into the syntax, openOODA ensures that specifications evolve with the code. Automated generative testing leverages these contracts to find complex edge cases. This architecture is essential for safe artificial intelligence programming. It provides the necessary boundaries and immediate feedback required to maintain high software quality at scale.
+
+---
+*Series index: [README.oot](./README.oot).*
