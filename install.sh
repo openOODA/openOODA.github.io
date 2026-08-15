@@ -27,9 +27,9 @@ echo "╔═══════════════════════�
 echo "║  openOODA · Chapter 0 · Bootstrap (shell)                        ║"
 echo "╚══════════════════════════════════════════════════════════════════╝"
 echo ""
-echo "  Shell cannot implement openOODA. It can only fetch a trusted seed"
-echo "  binary so the *real* installer (install/install.oo) can run under"
-echo "  capability security and tell the full story."
+echo "  Shell cannot implement openOODA. It fetches a release tarball"
+echo "  (no checksum here; the ooda repo is private) so install.oo"
+echo "  can run if that download actually exists."
 echo ""
 echo "  Version : ${VERSION}"
 echo "  Asset   : ${ASSET}"
@@ -64,7 +64,7 @@ chmod +x "$OODA_BIN"
 
 INSTALL_OO="$(find "${WORKDIR}/tree" -type f -path '*/install/install.oo' | head -n 1 || true)"
 if [[ -z "${INSTALL_OO}" ]]; then
-  echo "error: install/install.oo missing from release — re-run scripts/release.sh" >&2
+  echo "error: install/install.oo missing from release — re-run scripts/release.oo" >&2
   echo "  (falling back is not allowed; the installer must be OODA source)" >&2
   exit 1
 fi

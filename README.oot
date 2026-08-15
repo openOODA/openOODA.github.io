@@ -1,5 +1,32 @@
-# openOODA
+# openOODA public site
 
-All documentation, status, and information have been consolidated into our central website:
+File: openOODA.github.io/README.oot
+This is the only public repository. It is a splash page, a research viewer, and an install endpoint. It is not the product compiler and it is not a docs site.
 
-👉 **[https://openOODA.github.io](https://openOODA.github.io)**
+## What is on disk
+
+| Path | What it actually is |
+| :--- | :--- |
+| `index.html` | Marketing splash. Not a language tutorial. |
+| `research.html` | Research paper index. Papers are design, not proof. |
+| `install` / `install.sh` | Host bootstrap. Pins `v0.183.0-alpha`. No checksum. `ooda` is private, so this fetch 404s for the public. |
+| `research/` | RP / ES papers. Present-tense moonshots are residual. |
+| `assets/` | Branding. |
+
+There is no playground. There are no API docs on this site. Product truth lives on the private boards: `openOODA/SHIPPED.oot`.
+
+## Install honesty
+
+```
+curl -fsSL https://openOODA.github.io/install | sh
+```
+
+That line is documented. It is not a working public install today. The compiler repo is private. The script does not verify a hash.
+
+## Local preview
+
+Use any static file server. Do not add `.py` helpers.
+
+## Residual
+
+Native compiler, product std, and live proofs are not in this repo.
