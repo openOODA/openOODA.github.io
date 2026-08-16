@@ -1,63 +1,168 @@
-# LIMITS — What is not ready
+# HOW IT WORKS — The product path
 
-File: wiki/Limits.oot
-User wiki. Canonical URL: https://wiki.openooda.org/#Limits.oot
+File: guide/Limits.oot
+User wiki. Canonical URL: https://openooda.org/guide/#Limits.oot
 
-## 1. How to read this page
+[Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Commands](Options.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [Research](Research.oot)
 
-If a thing is listed here, do not say it works as product.
-Wanted and not built is called residual.
+## 1. The model
 
-## 2. Install and public site
+You write `.oo` files. The compiler typechecks them. It then emits C against the `chs_rt` runtime. Host `gcc` turns that C into a native binary. You run the binary.
 
-There is no working public `curl | sh` install.
-The compiler tree is private.
-The public install script pins an old tag and does not check a hash.
-The public fetch 404s.
+That is the everyday path. `ooda run` is that path.
 
-There is no public playground.
+```
+.oo  →  check  →  emit C (chs_rt)  →  gcc  →  run
+```
 
-Research papers are design. They are not a running compiler.
+You can also ask the same frontend for other text: LLVM IR, a WebAssembly module, or standalone x86_64 assembly. Those are extra emits. They are not the everyday path.
 
-## 3. Backends and machines
+## 2. Two binaries
 
-Native product is emit C, then host `gcc`.
+`oodac` is the compiler. It checks source and emits.
 
-LLVM IR emit of the compiler is product. A `clang` link of the full compiler is residual.
+`ooda` is the driver. It calls `oodac`, then `gcc`, then exec.
 
-Standalone x86_64 emit is product. AArch64 emit is residual.
+They are different binaries. Never copy one onto the other. If you overwrite `oodac` with `ooda`, check forks itself.
 
-WebAssembly emit writes a module. It is not a browser playground.
+Put `ooda` on your `PATH` when you want the short command. Keep `oodac` as the compiler you rebuilt.
 
-`GpuCap` on CPU/noop is product. `emit_ptx` writes kernel text. Launching on a real GPU is residual. This is not CUDA.
+## 3. Everyday commands
 
-## 4. Library and proofs
+Typecheck only:
 
-The large org `std/` tree is residual as a certified library.
-Named small proves exist. Thousands of files is volume, not a cert.
+```
+oodac check hello.oo
+```
 
-Const `requires` / `ensures` / `spec` on function headers can fold at check time.
-A general SMT solver is residual.
+Typecheck, emit C, compile with `gcc`, run:
 
-## 5. Security hardware
+```
+ooda run hello.oo
+```
 
-Process-local capability tokens are product.
-Hierarchical HMAC attenuation and measured isolate are product.
+That is `check` + emit C + `gcc` + exec. You do not run those steps by hand unless you want to see the C.
 
-SGX, TDX, and SEV hardware enclaves are residual.
-Measured isolate is not a hardware enclave.
+`ooda build` stops at the binary. `ooda test` runs `verify` blocks and asserts. `ooda run` skips `verify`.
 
-## 6. Other leftovers people ask about
+The checkout has `fixtures/hello.oo` if you want a file that already exists.
 
-HITL (a separate human-in-the-loop product) is not shipped.
-The human loop is `ooda fix`.
+## 4. Official rebuild
 
-`cargo` / Rust is gone. Do not look for it.
+You rebuild the compiler from the seed compiler:
 
-JIT and a 0ms garbage collector are not product.
+```
+cd ooda
+OODAC_BIN=./bootstrap/seed/oodac bash bootstrap/oodac_pure_build oodac/main.oo oodac/oodac
+./oodac/oodac check oodac/main.oo
+```
 
-`ooda test --fuzz` prints a floor line and returns. It is not a fuzzer.
+`bootstrap/oodac_pure_build` is the official rebuild. It starts `gcc` and the seed. That is the one host shell entry. After that you use `ooda` and `oodac`.
 
-This page is the public limit list.
-This wiki: https://wiki.openooda.org
+The seed is a trusted `oodac`. The rebuild emits each `.oo` module to C, links once with `chs_rt`, and writes a new compiler binary.
+
+## 5. Other emits
+
+Same frontend. Different text.
+
+```
+oodac emit-c hello.oo
+oodac emit-llvm hello.oo
+oodac emit-wasm hello.oo
+oodac emit-x86 hello.oo
+```
+
+`emit-c` is the everyday emit. It writes C that `chs_rt` understands.
+
+`emit-llvm` writes LLVM IR.
+
+`emit-wasm` writes a WebAssembly module.
+
+`emit-x86` writes standalone x86_64 assembly.
+
+You pick an emit when you need that artifact. The check is the same check.
+
+Design notes: [C backend](/research/#RP-4-x-backend-c-product-floor.oot), [LLVM](/research/#RP-4-1-2-production-llvm.oot), [WebAssembly](/research/#RP-4-1-4-direct-webassembly.oot), [bytecode VM](/research/#RP-4-1-1-development-bytecode-vm.oot), [bare metal](/research/#RP-4-1-5-bare-metal-embedded.oot).
+
+## 6. Memory
+
+Values drop when the last reference goes away. There is no tracing pause. The last handle frees the object.
+
+Bump arenas live under `&AllocCap`. You create an arena, allocate from it, and reset the whole region at once. Use an arena when many short-lived values share one lifetime.
+
+Scope locals drop when the block ends. Shared values use last-reference drop. Arenas reclaim a generation in one reset.
+
+Design note: [ARC / memory](/research/#RP-3-7-zero-ms-gc-arc-raii.oot).
+
+## 7. Capabilities
+
+A capability is a process-local token. A function that does an effect takes the token as an argument. No token, no effect.
+
+Prefer the small token. Take `&FsReadCap` to read a file. Take `&AllocCap` to heap-allocate. Take `&SysCap` only when you mean the broad OS.
+
+Under `&SysCap` the runtime can apply a Linux Landlock jail and POSIX `setrlimit`. Empty allowlists and zero quotas fail closed.
+
+HMAC attenuation derives a narrower token from a parent. The child seal is not the parent seal. A forged parent does not verify.
+
+Measured isolate hashes the payload, the token, and the domain. You measure what you isolated. You do not get a token by guessing a string.
+
+Caps are language tokens. The OS jail is extra confinement on Linux. Use both.
+
+See [Capabilities](Safety.oot).
+
+## 8. Contracts and types
+
+Functions may declare `requires`, `ensures`, and `spec` on the header.
+
+When those expressions are const, `oodac check` folds them at check time. A false const `requires` fails the check. You do not wait for run.
+
+`TraitDecl` names a trait. The compiler monomorphizes: it specializes a generic body per type you actually use. You write the trait once. Check and emit see concrete types.
+
+```
+pub fn add(a: Int, b: Int) -> Int
+    requires b >= 0
+    ensures result >= a
+{
+    return a + b;
+}
+```
+
+If `b` is a const that fails `requires`, check stops you.
+
+## 9. Product std
+
+Product std is the tree that ships with the compiler: `ooda/std`.
+
+Import from there. That is the library the compiler knows.
+
+A function in std that does an effect still takes a token. Std does not grant ambient authority.
+
+## 10. Same emit, same bytes
+
+Two `emit-c` of `fixtures/hello.oo` are byte-identical.
+
+The compiler is a function from source to text. Same tree, same C. That is the reproducibility you hold in your hand.
+
+Host `gcc` still applies host flags. The claim is the emit, not every downstream object file.
+
+Official rebuild from the same seed, same sources, same emit. Design note: [reproducible builds](/research/#RP-4-3-2-deterministic-reproducible-builds.oot).
+
+## 11. Self-hosted shape
+
+The compiler, the driver, the package tools, and the tests are `.oo`. The C you see is emit plus the small `chs_rt` runtime.
+
+You rebuild `oodac` from `.oo` with the seed. You then use that `oodac` on your own files. That is the self-hosted loop.
+
+Design note: [self-hosted](/research/#RP-5-1-self-hosted-ecosystem.oot).
+
+## 12. How to hold it
+
+1. Check with `oodac` or `ooda check`.
+2. Run on the C path with `ooda run`.
+3. Rebuild the compiler with `bootstrap/oodac_pure_build` from the seed.
+4. Import `ooda/std`.
+5. Pass the smallest token the effect needs.
+6. Keep `ooda` and `oodac` as two binaries.
+
+This wiki: https://openooda.org/guide
 Site: https://openooda.org

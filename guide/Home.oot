@@ -1,15 +1,15 @@
-# HOME — What openOODA does
+# HOME — What openOODA is
 
-File: wiki/Home.oot
-User wiki. Canonical URL: https://wiki.openooda.org
+File: guide/Home.oot
+User wiki. Canonical URL: https://openooda.org/guide/#Home.oot
 
 ## 1. In one minute
 
 openOODA is a systems language. You write `.oo` files.
-A systems language talks to the machine: files, processes, and the network.
+A systems language talks to the machine.
 
 Effects need a capability token.
-A capability token is a permission the function must hold before it can do that effect.
+A capability token is a permission the function holds.
 No token, no effect.
 
 The product path is:
@@ -20,25 +20,29 @@ The product path is:
 4. Run the binary.
 
 That path is `ooda run`.
+The same loop is the [C backend](/research/#RP-4-x-backend-c-product-floor.oot).
+More on the path: [How it works](Limits.oot).
 
-This wiki: https://wiki.openooda.org
-Site: https://openooda.org
-Source of the pages: https://github.com/openOODA/wiki
+This page is the start of the user wiki.
+Site: https://openooda.org/
+Guide: https://openooda.org/guide/
+Registry: https://registry.openooda.org
+Research library: https://openooda.org/research/
 
-## 2. What you can do with it
+## 2. Install
 
-- Write a program in `.oo` and typecheck it (`ooda check`).
-- Build and run it on the native C path (`ooda build`, `ooda run`).
-- Run `verify` blocks and asserts (`ooda test`). `ooda run` does not run those blocks.
-- Ask the compiler to patch common errors (`ooda fix`).
-- Replace one function body from a file (`ooda patch`).
-- Talk to an editor through `ooda lsp`.
-- Emit other backends when you ask: LLVM IR, WebAssembly, standalone x86_64.
+The public install line:
 
-The compiler and the `ooda` command live in the `ooda` tree.
-The small standard library that ships with the compiler is `ooda/std`.
+```
+curl -fsSL https://openooda.org/install | sh
+```
 
-## 3. What a program looks like
+Then do the first run on [Start](Use.oot).
+That page is how you check, run, and test a file.
+
+## 3. Hello
+
+Save this as `hello.oo`:
 
 ```
 pub fn greet(name: String) -> String {
@@ -56,12 +60,105 @@ pub fn main() {
 
 `pub fn` is a public function.
 `verify` is a test block next to the function.
-`ooda test` runs `verify`. `ooda run` prints the greeting and skips `verify`.
 
-## 4. Read next
+```
+ooda check hello.oo
+ooda run hello.oo
+ooda test hello.oo
+```
 
-- [How to use it](Use.oot) — install from a checkout, first run, first test.
-- [Options](Options.oot) — commands, flags, backends, permissions.
-- [Limits](Limits.oot) — what is not ready. Do not sell those as product.
+`ooda run` typechecks, emits C, calls host `gcc`, and runs the binary.
+It prints the greeting. It does not run `verify`.
+`ooda test` runs `verify` / `assert_eq!` / `assert!`.
 
-Papers on the public site are design. They are not this wiki and they are not proof.
+First run steps: [Start](Use.oot).
+Syntax and types: [Language](Language.oot).
+
+## 4. Commands
+
+You drive the language with `ooda`.
+The full flag list lives on [Commands](Options.oot).
+
+| Command | What you use it for |
+| :--- | :--- |
+| `check` | Typecheck a `.oo` file. |
+| `build` | Emit C and compile with host `gcc`. |
+| `run` | Typecheck, emit C, `gcc`, run. |
+| `test` | Run `verify` / `assert_eq!` / `assert!`. |
+| `dump` | Print tokens, ast, or check. |
+| `outline` | Names and shapes in a file. |
+| `reflect` | Look up one symbol. |
+| `fix` | Apply compiler patches. |
+| `patch` | Replace one function body. |
+| `lsp` | Talk to your editor. |
+| `context` | List `.oo` files. |
+| `digest` | Hash a file. |
+| `health` | Check the toolchain. |
+| `pkg` | List locked packages. |
+| `add` | Add a package. |
+| `pm` | Package manager. |
+
+`outline`, `reflect`, `fix`, and `patch` keep the edit loop small.
+That is the [AI-native language](/research/#RP-ES-1-es-ai-native-systems-language.oot) surface.
+The name of the loop is [OODA loop speed](/research/#RP-1-1-philosophy-ooda-loop-speed.oot).
+
+## 5. Capabilities
+
+A function that does an effect takes a token, for example `&FsReadCap`.
+The token is a permission that function holds.
+You pass the token in. You do not hide the effect.
+
+Common tokens: files, process, net, env, alloc, threads.
+Prefer the small token.
+Details: [Capabilities](Safety.oot).
+Flags and env that go with them: [Commands](Options.oot).
+
+The model is [capability sandboxing](/research/#RP-3-1-unified-capability-sandboxing.oot).
+The language is [capability-secure](/research/#RP-ES-2-es-capability-secure.oot).
+
+## 6. Packages and std
+
+Product std ships as `ooda/std`.
+Import from that tree.
+
+Add a package with `ooda add` or `ooda pm`.
+`ooda add --registry` fetches the catalog and checks minisign.
+The public catalog is https://registry.openooda.org
+How packages work: [Packages](Packages.oot).
+
+The compiler, CLI, tests, and package tools are one language.
+That is the [self-hosted ecosystem](/research/#RP-5-1-self-hosted-ecosystem.oot).
+
+## 7. This wiki
+
+Start here. Then pick a page.
+
+- [Start](Use.oot) — first run, first test.
+- [Language](Language.oot) — `.oo` syntax.
+- [Commands](Options.oot) — `ooda` commands and flags.
+- [Packages](Packages.oot) — `ooda/std`, `add`, `pm`.
+- [Capabilities](Safety.oot) — tokens and effects.
+- [How it works](Limits.oot) — typecheck, emit C, host `gcc`, run.
+- [Research](Research.oot) — how this wiki points at the library.
+
+The research library is https://openooda.org/research/
+
+## See also
+
+- [Start](Use.oot)
+- [Language](Language.oot)
+- [Commands](Options.oot)
+- [Packages](Packages.oot)
+- [Capabilities](Safety.oot)
+- [How it works](Limits.oot)
+- [Research](Research.oot)
+- [OODA loop speed](/research/#RP-1-1-philosophy-ooda-loop-speed.oot)
+- [capability sandboxing](/research/#RP-3-1-unified-capability-sandboxing.oot)
+- [C backend](/research/#RP-4-x-backend-c-product-floor.oot)
+- [self-hosted ecosystem](/research/#RP-5-1-self-hosted-ecosystem.oot)
+- [AI-native language](/research/#RP-ES-1-es-ai-native-systems-language.oot)
+- [capability-secure](/research/#RP-ES-2-es-capability-secure.oot)
+- Site: https://openooda.org/
+- Guide: https://openooda.org/guide/#Home.oot
+- Registry: https://registry.openooda.org
+- Research: https://openooda.org/research/

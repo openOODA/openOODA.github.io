@@ -1,0 +1,227 @@
+# LANGUAGE — .oo programs
+
+File: guide/Language.oot
+User wiki. Canonical URL: https://openooda.org/guide/#Language.oot
+
+[Home](Home.oot) [Start](Use.oot) [Commands](Options.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [How it works](Limits.oot) [Research](Research.oot)
+
+You write `.oo` programs on this page.
+[Home](Home.oot) is the one-minute picture.
+[Start](Use.oot) is the first check and run.
+[Commands](Options.oot) is the `ooda` list.
+[Packages](Packages.oot) is how you add a library.
+[Capabilities](Safety.oot) is how an effect gets a token.
+[How it works](Limits.oot) is the product path.
+[Research](Research.oot) is the design library.
+
+## 1. Files
+
+A program file ends in `.oo`.
+A process doc ends in `.oot`.
+This wiki is `.oot`. The code you compile is `.oo`.
+
+```
+hello.oo                 program
+guide/Language.oot       this page
+```
+
+## 2. A small program
+
+Save this as `hello.oo`:
+
+```
+pub fn greet(name: String) -> String {
+    return "Hello, " + name + "!";
+}
+
+verify greet {
+    assert_eq!(greet("World"), "Hello, World!");
+}
+
+pub fn main() {
+    println(greet("openOODA"));
+}
+```
+
+`pub fn` is a public function.
+`verify` is a test block next to the function it names.
+`assert_eq!` and `assert!` live in `verify`.
+
+```
+ooda check hello.oo
+ooda run hello.oo
+ooda test hello.oo
+```
+
+`ooda check` typechecks. It does not run.
+`ooda run` prints the greeting and skips `verify`.
+`ooda test` runs `verify` / `assert_eq!` / `assert!`.
+
+First run: [Start](Use.oot).
+The product path: [How it works](Limits.oot).
+Tests next to the function: [self-testing](/research/#RP-ES-3-es-self-testing.oot).
+
+## 3. Option and Result
+
+`Int`, `String`, `Bool`, `Float`, and `Void` are the primitives.
+`Option` and `Result` are sum types check tracks.
+`type Name = struct { ... }` names a record.
+
+Unused `Ok`, `Err`, or `Some` fail `ooda check`.
+A discarded `Result` fails `ooda check`.
+
+```
+pub fn boom() -> Result[String, String] {
+    return Ok("yes");
+}
+
+pub fn main() {
+    boom();
+}
+```
+
+That `boom();` fails check. Bind the value, `match` it, or use `?`.
+
+`ooda fix` can wrap a discarded `Result`. See [Commands](Options.oot).
+A refused program should name the cause. See [narrative diagnostics](/research/#RP-5-5-narrative-diagnostics.oot).
+
+## 4. match and ?
+
+`match` must be exhaustive.
+Every constructor the type names must appear.
+An annotated `Option` or `Result` match whose only arm is `_` is refused.
+
+```
+pub fn label(r: Result[String, String]) -> String {
+    return match r {
+        Ok(v) => v,
+        Err(e) => e,
+    };
+}
+```
+
+This fails check:
+
+```
+let x: Option = Some(1);
+let y = match x {
+    _ => 0,
+};
+```
+
+`?` is the try postfix. It sits after a call.
+
+```
+pub fn boom() -> Result[String, String] {
+    return Ok("yes");
+}
+
+pub fn main() {
+    let y = boom()?;
+    println(y);
+}
+```
+
+## 5. Contracts
+
+A function header may carry `requires`, `ensures`, and `spec`.
+Those clauses can fold at check time.
+
+```
+pub fn held(x: Int) -> Int
+    requires 1 == 1
+    ensures 2 == 2
+    spec 1 != 0
+{
+    return x;
+}
+```
+
+A false const clause fails the check. You do not wait for run.
+The same story on [How it works](Limits.oot).
+
+Design notes: [mathematical contracts](/research/#RP-1-2-mathematical-contracts.oot), [type-state](/research/#RP-1-5-compile-time-type-state.oot), [first-class AST macros](/research/#RP-1-4-first-class-ast-macros.oot).
+
+## 6. Capability tokens
+
+An effect takes a token argument, for example `&FsReadCap`.
+No token, no effect.
+
+```
+pub fn exists(fs: &FsReadCap, path: String) -> Bool {
+    return path_exists(fs, path);
+}
+```
+
+Prefer the small token.
+`&FsReadCap` covers `read_file`, `path_exists`, and `file_size`.
+
+The token table: [Commands](Options.oot).
+How tokens work: [Capabilities](Safety.oot).
+How tokens sit on the path: [How it works](Limits.oot).
+
+## 7. SECRET taint
+
+Mark a name secret.
+Printing a secret field is refused.
+Printing a sibling field that is not secret is allowed.
+
+```
+type Creds = struct { token: String, name: String };
+// SECRET: token
+
+pub fn main() {
+    let token = "s3cret-payload";
+    let c = Creds { token: token, name: "alice" };
+    println(c.name);
+}
+```
+
+`println(c.token)` fails check.
+`println(c.name)` is allowed.
+
+Design note: [static taint](/research/#RP-3-5-static-taint-secret.oot).
+Caps and taint are different knobs. See [Capabilities](Safety.oot).
+
+## 8. Product std
+
+Product std is `ooda/std`.
+Import from that tree.
+How you add more code: [Packages](Packages.oot).
+
+Names that ship include `path_join`, `sha256`, and regex `nfa_simulate` / `dfa_compile`.
+
+```
+import "std/fs/path.oo";
+
+pub fn main() {
+    println(path_join("ooda", "std"));
+}
+```
+
+A std function that does an effect still takes a token.
+Std does not grant ambient authority.
+
+## 9. See also
+
+- [Home](Home.oot) — what openOODA is.
+- [Start](Use.oot) — first check, first run, first test.
+- [Commands](Options.oot) — `ooda` and `oodac`.
+- [Packages](Packages.oot) — `ooda/std`, `add`, `pm`.
+- [Capabilities](Safety.oot) — tokens and effects.
+- [How it works](Limits.oot) — typecheck, emit C, host `gcc`, run.
+- [Research](Research.oot) — design library.
+
+Papers used on this page:
+
+- [mathematical contracts](/research/#RP-1-2-mathematical-contracts.oot)
+- [type-state](/research/#RP-1-5-compile-time-type-state.oot)
+- [first-class AST macros](/research/#RP-1-4-first-class-ast-macros.oot)
+- [narrative diagnostics](/research/#RP-5-5-narrative-diagnostics.oot)
+- [self-testing](/research/#RP-ES-3-es-self-testing.oot)
+- [static taint](/research/#RP-3-5-static-taint-secret.oot)
+
+[Home](Home.oot) [Start](Use.oot) [Commands](Options.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [How it works](Limits.oot) [Research](Research.oot)
+
+Site: https://openooda.org
+This page: https://openooda.org/guide/#Language.oot

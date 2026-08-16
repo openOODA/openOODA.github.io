@@ -1,0 +1,102 @@
+# RESEARCH — Design library
+
+File: guide/Research.oot
+User wiki. Canonical URL: https://openooda.org/guide/#Research.oot
+
+[Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Commands](Options.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [How it works](Limits.oot)
+
+## 1. The stacks
+
+The research library lives at [https://openooda.org/research/](https://openooda.org/research/). These notes go deeper.
+
+This page is the card catalog. Pick a shelf. Open a paper. Come back for the next one.
+
+## 2. Philosophy
+
+How the language thinks. Speed first. Then contracts, layout, macros, and type-state.
+
+- [Philosophy of speed (OODA loop)](/research/#RP-1-1-philosophy-ooda-loop-speed.oot) — Observe, orient, decide, act. Loop tempo is the rule.
+- [Mathematical contracts](/research/#RP-1-2-mathematical-contracts.oot) — `requires` and `ensures` live on the function.
+- [Data-oriented design and SoA](/research/#RP-1-3-data-oriented-design-soa.oot) — Layout for the machine, not the class tree.
+- [First-class AST macros](/research/#RP-1-4-first-class-ast-macros.oot) — The program can see and rewrite its own tree.
+- [Compile-time type-state](/research/#RP-1-5-compile-time-type-state.oot) — Illegal sequences fail at check time.
+
+## 3. Language tools
+
+How humans and agents edit the tree without rereading the world.
+
+- [Surgical AST patching](/research/#RP-2-1-surgical-ast-patching.oot) — JSON diagnostics and a small, exact edit.
+- [Token-minimized APIs](/research/#RP-2-2-token-minimized-apis.oot) — `outline` and `reflect`, so a reader takes less.
+- [Surgical replace_fn](/research/#RP-2-2b-surgical-patch-replace-fn.oot) — One function body in. One function body out.
+- [Intent-driven compilation](/research/#RP-2-3-intent-driven-compilation.oot) — Compile from the shape of the ask.
+- [Global hive-mind fuzzing](/research/#RP-2-4-global-hive-mind-fuzzing.oot) — Shared findings. Shared replay.
+
+## 4. Capabilities
+
+How effects stay granted, never assumed. No token, no effect.
+
+- [Unified capability sandboxing](/research/#RP-3-1-unified-capability-sandboxing.oot) — One permission model for every effect.
+- [Time and entropy sandboxing](/research/#RP-3-2-time-entropy-sandboxing.oot) — Clocks and randomness as grants.
+- [Memory quotas](/research/#RP-3-3-memory-quotas-heap-sandbox.oot) — A heap that stops at the grant.
+- [CPU quotas](/research/#RP-3-4-cpu-quotas-maxcycles.oot) — `#[MaxCycles]` as a budget.
+- [Static taint and `#[Secret]`](/research/#RP-3-5-static-taint-secret.oot) — Secrets stay in the type, not in the log.
+- [Automated contract fuzzer](/research/#RP-3-6-automated-contract-fuzzer.oot) — Contracts that hunt their own bugs.
+- [Zero-ms GC, ARC, RAII](/research/#RP-3-7-zero-ms-gc-arc-raii.oot) — Memory safety without a pause.
+- [Temporal memory](/research/#RP-3-8-temporal-memory-rollback.oot) — Roll the world back to a known good frame.
+- [Cryptographic call-graph integrity](/research/#RP-3-9-cryptographic-call-graph-integrity.oot) — The call graph as a signed object.
+- [Shadow-state semantic reversion](/research/#RP-3-10-shadow-state-semantic-reversion.oot) — A second state that can undo meaning.
+- [Polymorphic metamorphic binaries](/research/#RP-3-11-polymorphic-metamorphic-binaries.oot) — Shape that changes. Contract that holds.
+
+## 5. Backends
+
+Where a program becomes a machine. Start on C. Branch when you ask.
+
+- [Backend-C product floor](/research/#RP-4-x-backend-c-product-floor.oot) — Emit C. Host `gcc`. That is the floor.
+- [Development bytecode VM](/research/#RP-4-1-1-development-bytecode-vm.oot) — A fast check loop for the edit cycle.
+- [Production LLVM](/research/#RP-4-1-2-production-llvm.oot) — Peak native when you want the long compile.
+- [Direct WebAssembly](/research/#RP-4-1-4-direct-webassembly.oot) — A module from the same source.
+- [Bare-metal embedded](/research/#RP-4-1-5-bare-metal-embedded.oot) — No OS. Still Ooda.
+- [GPU and NPU](/research/#RP-4-1-3-gpu-npu-acceleration.oot) — One shader path for accelerators.
+- [Hot-code reload](/research/#RP-4-2-native-hot-code-reloading.oot) — Swap a running body without a full restart.
+- [Cross-language LTO](/research/#RP-4-3-1-cross-language-lto.oot) — Link Ooda emit with host C.
+- [Reproducible builds](/research/#RP-4-3-2-deterministic-reproducible-builds.oot) — Same tree, same text.
+- [Compile-time FFI](/research/#RP-4-3-3-compile-time-ffi-generation.oot) — Headers become Ooda calls at check time.
+- [Holographic persistence](/research/#RP-4-4-holographic-data-persistence.oot) — State you can reassemble from parts.
+
+## 6. Ecosystem
+
+Compiler, packages, tests, and the editor in one house.
+
+- [Self-hosted ecosystem](/research/#RP-5-1-self-hosted-ecosystem.oot) — Compiler, tools, and tree written in Ooda.
+- [Pure product compiler and CLI](/research/#RP-5-1a-pure-product-compiler-cli.oot) — `ooda` and `oodac` as the product surface.
+- [Verifiable web of code](/research/#RP-5-2-verifiable-web-of-code.oot) — Packages you pin, hash, and check.
+- [Stdlib: core versus os](/research/#RP-5-4-stdlib-core-vs-os.oot) — Small core. OS lives behind a token.
+- [Narrative diagnostics](/research/#RP-5-5-narrative-diagnostics.oot) — Errors that tell the story of the fail.
+- [Human-in-the-loop testing](/research/#RP-5-6-hitl-testing.oot) — A human in the loop when the agent writes.
+- [Universal native LSP](/research/#RP-5-7-universal-native-lsp.oot) — Editors talk to `ooda lsp`.
+- [Fearless concurrency](/research/#RP-5-3-fearless-concurrency.oot) — Tasks and channels. No data race by construction.
+
+## 7. Tensions
+
+Where two good ideas meet. The papers hold the seam.
+
+- [Metamorphic versus deterministic](/research/#RP-6-1-tension-metamorphic-vs-deterministic.oot) — Shape that moves, builds that replay.
+- [ARC versus temporal memory](/research/#RP-6-2-tension-arc-vs-temporal-memory.oot) — Ownership now, rewind later.
+- [Capabilities versus FFI](/research/#RP-6-3-tension-caps-vs-ffi.oot) — The sandbox meets C.
+
+## 8. Executive notes
+
+Six aims. One paper each. A map of the whole.
+
+- [AI-native systems language](/research/#RP-ES-1-es-ai-native-systems-language.oot) — Built for agents that write systems code.
+- [Capability-secure by construction](/research/#RP-ES-2-es-capability-secure.oot) — Effects require a grant in the type.
+- [Self-testing language surface](/research/#RP-ES-3-es-self-testing.oot) — Tests sit next to the function.
+- [Sub-second feedback](/research/#RP-ES-4-es-subsecond-feedback.oot) — The loop stays short enough to think in.
+- [Zero-day defense](/research/#RP-ES-5-es-zero-day-defense.oot) — Defense as architecture, not a later coat.
+- [Embedded to network](/research/#RP-ES-6-es-scale-embedded-to-network.oot) — One language from a chip to a mesh.
+
+## 9. Walk on
+
+Library home: [https://openooda.org/research/](https://openooda.org/research/).
+
+Guide: [Home](Home.oot) · [Start](Use.oot) · [Language](Language.oot) · [Commands](Options.oot) · [Packages](Packages.oot) · [Capabilities](Safety.oot) · [How it works](Limits.oot)

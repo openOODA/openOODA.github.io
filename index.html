@@ -23,51 +23,62 @@
       font-size: 16px;
       line-height: 1.5;
     }
-    main { max-width: 44rem; padding: 2.5rem 1.25rem 5rem; }
-    h1 {
-      margin: 0;
-      font-size: 1rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      background: var(--fg);
-      color: var(--bg);
-      padding: 0.35rem 0.5rem;
+    header {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+      gap: 0.75rem 1.25rem; padding: 0.85rem 1.25rem; border-bottom: 2px solid var(--fg);
     }
+    .brand {
+      font-weight: 700; letter-spacing: 0.08em; color: var(--bg);
+      background: var(--fg); padding: 0.2rem 0.45rem; text-decoration: none; white-space: nowrap;
+    }
+    .cluster { display: flex; align-items: center; gap: 1rem; flex-wrap: nowrap; }
+    nav.top { display: flex; align-items: center; gap: 1rem; flex-wrap: nowrap; }
+    nav.top a { color: var(--muted); white-space: nowrap; }
+    #theme {
+      font: inherit; background: var(--bg); color: var(--fg);
+      border: 2px solid var(--fg); padding: 0.15rem 0.55rem; cursor: pointer; white-space: nowrap;
+    }
+    main { max-width: 44rem; padding: 1.5rem 1.25rem 5rem; }
     p { margin: 1.25rem 0; max-width: 36rem; }
     pre {
-      margin: 0 0 2rem;
-      padding: 0.6rem 0.7rem;
-      border: 1px solid var(--fg);
-      overflow: auto;
+      margin: 0 0 2rem; padding: 0.6rem 0.7rem;
+      border: 1px solid var(--fg); overflow: auto;
     }
-    dl { margin: 0; display: grid; grid-template-columns: 7.5rem 1fr; gap: 0.4rem 1rem; }
+    dl { margin: 0; display: grid; grid-template-columns: 9ch 1fr; gap: 0.4rem 1rem; align-items: baseline; }
     dt { color: var(--muted); }
     dd { margin: 0; overflow-wrap: anywhere; }
     a { color: var(--fg); }
     a:hover { text-decoration-thickness: 2px; }
-    #theme {
-      position: fixed; top: 1rem; right: 1rem; z-index: 20;
-      font: inherit; background: var(--bg); color: var(--fg);
-      border: 2px solid var(--fg); padding: 0.15rem 0.55rem; cursor: pointer;
+    #gh { position: fixed; right: 1rem; bottom: 1rem; z-index: 20; color: var(--fg); background: var(--bg); padding: 0.15rem 0.35rem; }
+    @media (max-width: 800px) {
+      .cluster { flex-basis: 100%; }
     }
-    #gh { position: fixed; right: 1rem; bottom: 1rem; z-index: 20; color: var(--fg); }
   </style>
 </head>
 <body>
-  <button type="button" id="theme">dark</button>
   <a id="gh" href="https://github.com/openOODA">github</a>
+  <header>
+    <a class="brand" href="/">openOODA</a>
+    <div class="cluster">
+      <nav class="top">
+        <a href="https://openooda.org/">site</a>
+        <a href="https://openooda.org/guide/">guide</a>
+        <a href="https://openooda.org/research/">research</a>
+        <a href="https://registry.openooda.org/">registry</a>
+      </nav>
+      <button type="button" id="theme">dark</button>
+    </div>
+  </header>
   <main>
-    <h1>openOODA</h1>
-    <p>Language. Package manager. Field guide. This page is a door, not the product.</p>
+    <p>Language. Package manager. Field guide.</p>
     <pre>curl -fsSL https://openooda.org/install | sh</pre>
-    <p>No checksum. The compiler tree is private. That fetch may 404.</p>
     <dl>
       <dt>guide</dt>
-      <dd><a href="/guide/">https://openooda.org/guide/</a></dd>
-      <dt>registry</dt>
-      <dd><a href="https://registry.openooda.org/">https://registry.openooda.org</a></dd>
+      <dd><a href="https://openooda.org/guide/">https://openooda.org/guide/</a></dd>
       <dt>research</dt>
-      <dd><a href="/research/">https://openooda.org/research/</a></dd>
+      <dd><a href="https://openooda.org/research/">https://openooda.org/research/</a></dd>
+      <dt>registry</dt>
+      <dd><a href="https://registry.openooda.org/">https://registry.openooda.org/</a></dd>
     </dl>
   </main>
   <script>

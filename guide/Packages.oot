@@ -1,0 +1,185 @@
+# PACKAGES — add, lock, registry
+
+File: guide/Packages.oot
+User wiki. Canonical URL: https://openooda.org/guide/#Packages.oot
+
+[Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Commands](Options.oot) [Capabilities](Safety.oot) [How it works](Limits.oot) [Research](Research.oot)
+
+## 1. What you install
+
+You add a package with `ooda add`.
+You read the lock with `ooda pkg`.
+The lock pins a name, a version, a sha256, and a declared cap.
+
+A package is a folder with a `manifest` and a payload.
+The payload is a `.oo` file.
+The vendor also holds an `index`.
+
+Public examples are `hello`, `mid`, and `world`.
+All three declare `FsRead`.
+`hello` depends on `mid`.
+`mid` depends on `world`.
+
+## 2. Add from a file vendor
+
+`ooda add NAME --vendor DIR` reads a file-backed vendor.
+
+The vendor is a directory on disk.
+
+```
+DIR/
+  index
+  hello/manifest
+  hello/hello.oo
+  mid/manifest
+  mid/mid.oo
+  world/manifest
+  world/world.oo
+```
+
+Each `manifest` is `key=value`.
+It names the payload, the sha256, the caps, and the deps.
+
+```
+ooda add hello --vendor ../registry
+ooda pkg
+```
+
+That resolves `hello` → `mid` → `world`.
+It installs each payload into CAS.
+It writes the lock.
+
+Local-vendor trust is HMAC with key `ooda-local-pm`.
+That HMAC covers the vendor `index`.
+
+## 3. Add from the public registry
+
+```
+ooda add hello --registry https://registry.openooda.org
+```
+
+The CLI GETs `/catalog` and `/index.minisig`.
+It verifies the catalog with the pubkey shipped in the CLI.
+That pubkey is `cli/registry.pub`.
+Public trust is minisign of the catalog.
+
+The human page is https://registry.openooda.org/
+You read the HTML there.
+The CLI fetches `/catalog`, not the HTML.
+
+The origin is `https://registry.openooda.org`.
+Host lookalikes refuse.
+
+## 4. The lock
+
+`ooda pkg` shows the lock.
+
+Each package line has this shape:
+
+```
+name@version#sha256#CapName
+```
+
+Example after you add `hello`:
+
+```
+hello@1.0.0#16c3ceb221e5a2818b340a66796a4a9db0c8a65b5c7bf36aeef285ef160608ce#FsRead
+mid@1.0.0#006ee56e6f99f683f3a4398e9f64b2a9eb22356adb0436f711d9444b6abf6c07#FsRead
+world@1.0.0#4b23f1b3227a7d15eb42f7e38d46c57fc26ba8619fe8dea1a4d9649e59182703#FsRead
+```
+
+The sha256 is the payload pin.
+The last field is the declared cap name.
+
+`ooda pkg --json` prints a machine object.
+
+The lock file lives at `.ooda_modules/lock`.
+CAS blobs live under `.ooda_modules/cas/<sha256>/`.
+
+## 5. Named capabilities
+
+Lock lines carry a declared cap name.
+
+| Name | Bit |
+| :--- | :--- |
+| `FsRead` | 1 |
+| `Net` | 2 |
+| `Process` | 4 |
+| `FsWrite` | 8 |
+
+A child package keeps a subset of the parent mask.
+Extra caps refuse.
+
+A foreign ELF does not gain Ooda caps because the lock says `FsRead`.
+See [Capabilities](Safety.oot).
+
+## 6. Ingest and launch
+
+`ooda pm ingest --from DIR` reads a local recipe.
+Ingest pins and wraps.
+The wrapper names the payload and the sha256.
+The blob stays as it was.
+
+Path traversal, extra caps, and yank refuse.
+
+`ooda launch NAME` re-checks the pin against the live CAS bytes.
+`ooda launch NAME --exec` runs after sha, caps, and yank are ok.
+The `--exec` step is an existence check after that gate.
+
+## 7. The `ooda pm` commands
+
+You can call these as `ooda pm <cmd>`.
+Several also work as a top-level `ooda` command.
+
+```
+ooda pm add
+ooda pm ingest
+ooda pm launch
+ooda pm remove
+ooda pm update
+ooda pm outdated
+ooda pm why
+ooda pm tree
+ooda pm vendor
+ooda pm clean
+ooda pm audit
+ooda pm sbom
+ooda pm pack
+```
+
+| Command | What it does |
+| :--- | :--- |
+| `add` | Resolve and install into CAS. Write the lock. |
+| `ingest` | Pin and wrap a local recipe. |
+| `launch` | Re-check sha, caps, and yank. `--exec` after the gate. |
+| `remove` | Drop a name from the lock. |
+| `update` | Re-resolve from the vendor. |
+| `outdated` | Compare lock versions to the catalog. |
+| `why` | Show who depends on a name. |
+| `tree` | Print the dependency tree. |
+| `vendor` | List the file vendor. |
+| `clean` | Drop unused CAS dirs. |
+| `audit` | Report yank, advisory, and pin hits. |
+| `sbom` | Print a CycloneDX-lite object from the lock. |
+| `pack` | Write a file-backed vendor tree from the lock. |
+
+`ooda add` is the same path as `ooda pm add`.
+`ooda pkg` is the inventory command.
+
+## 8. Two trust paths
+
+1. Local vendor. HMAC key `ooda-local-pm` on the vendor `index`.
+2. Public registry. minisign of `/catalog` with `cli/registry.pub`.
+
+The pubkey stays in the CLI tree.
+Fetch does not replace it.
+
+## 9. Research
+
+Design notes next to this product path:
+
+- [verifiable web of code](/research/#RP-5-2-verifiable-web-of-code.oot)
+- [capability sandboxing](/research/#RP-3-1-unified-capability-sandboxing.oot)
+- [capability-secure](/research/#RP-ES-2-es-capability-secure.oot)
+
+[Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Commands](Options.oot) [Capabilities](Safety.oot) [How it works](Limits.oot) [Research](Research.oot)

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>openOODA research</title>
-  <meta name="description" content="Research papers. Design, not product proof.">
+  <meta name="description" content="openOODA research library.">
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script>
     (function () {
@@ -26,15 +26,20 @@
     a { color: var(--fg); }
     a:hover { text-decoration-thickness: 2px; }
     header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 1rem 4.5rem 1rem 1.25rem;
-      border-bottom: 2px solid var(--fg);
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+      gap: 0.75rem 1.25rem; padding: 0.85rem 1.25rem; border-bottom: 2px solid var(--fg);
     }
     .brand {
       font-weight: 700; letter-spacing: 0.08em; color: var(--bg);
-      background: var(--fg); padding: 0.2rem 0.45rem; text-decoration: none;
+      background: var(--fg); padding: 0.2rem 0.45rem; text-decoration: none; white-space: nowrap;
     }
-    nav.top a { color: var(--muted); margin-left: 1rem; }
+    .cluster { display: flex; align-items: center; gap: 1rem; flex-wrap: nowrap; }
+    nav.top { display: flex; align-items: center; gap: 1rem; flex-wrap: nowrap; }
+    nav.top a { color: var(--muted); white-space: nowrap; }
+    #theme {
+      font: inherit; background: var(--bg); color: var(--fg);
+      border: 2px solid var(--fg); padding: 0.15rem 0.55rem; cursor: pointer; white-space: nowrap;
+    }
     .wrap { display: grid; grid-template-columns: 18rem 1fr; }
     aside {
       border-right: 1px solid var(--fg);
@@ -43,7 +48,10 @@
       max-height: calc(100vh - 4rem);
     }
     aside h2 { font-size: 0.8rem; color: var(--muted); font-weight: 400; margin: 1rem 0 0.4rem; }
-    aside a { display: block; color: var(--fg); padding: 0.2rem 0; font-size: 0.85rem; }
+    aside a {
+      display: block; color: var(--fg); padding: 0.2rem 0; font-size: 0.85rem;
+      text-align: left; overflow-wrap: anywhere; white-space: normal;
+    }
     aside a.active { text-decoration: underline; text-decoration-thickness: 2px; }
     main { padding: 1.5rem 1.25rem 5rem; max-width: 46rem; }
     main h1 { font-size: 1.15rem; }
@@ -51,28 +59,27 @@
     pre { border: 1px solid var(--fg); padding: 0.7rem; overflow: auto; background: var(--panel); }
     code { font-family: inherit; background: var(--panel); padding: 0.05rem 0.25rem; }
     pre code { background: none; padding: 0; }
-    #theme {
-      position: fixed; top: 1rem; right: 1rem; z-index: 20;
-      font: inherit; background: var(--bg); color: var(--fg);
-      border: 2px solid var(--fg); padding: 0.15rem 0.55rem; cursor: pointer;
-    }
-    #gh { position: fixed; right: 1rem; bottom: 1rem; z-index: 20; color: var(--fg); }
+    #gh { position: fixed; right: 1rem; bottom: 1rem; z-index: 20; color: var(--fg); background: var(--bg); padding: 0.15rem 0.35rem; }
     @media (max-width: 800px) {
+      .cluster { flex-basis: 100%; }
       .wrap { grid-template-columns: 1fr; }
       aside { max-height: none; border-right: 0; border-bottom: 1px solid var(--fg); }
     }
   </style>
 </head>
 <body>
-  <button type="button" id="theme">dark</button>
   <a id="gh" href="https://github.com/openOODA">github</a>
   <header>
     <a class="brand" href="/research/">openOODA research</a>
-    <nav class="top">
-      <a href="/">site</a>
-      <a href="/guide/">guide</a>
-      <a href="https://registry.openooda.org/">registry</a>
-    </nav>
+    <div class="cluster">
+      <nav class="top">
+        <a href="https://openooda.org/">site</a>
+        <a href="https://openooda.org/guide/">guide</a>
+        <a href="https://openooda.org/research/">research</a>
+        <a href="https://registry.openooda.org/">registry</a>
+      </nav>
+      <button type="button" id="theme">dark</button>
+    </div>
   </header>
   <div class="wrap">
     <aside id="nav-list"></aside>
@@ -93,7 +100,7 @@
         "RP-6": "tensions"
       };
       let currentGroup = "";
-      papers.forEach((p, index) => {
+      papers.forEach((p) => {
         const match = p.file.match(/RP-([A-Z0-9]+)/);
         const groupKey = match ? "RP-" + match[1] : "Other";
         if (groupKey !== currentGroup) {
@@ -103,15 +110,18 @@
           navList.appendChild(header);
         }
         const a = document.createElement("a");
-        a.href = "#" + index;
+        a.href = "#" + p.file;
+        a.dataset.file = p.file;
         a.textContent = p.title || p.file.replace("research/", "");
-        a.onclick = function (e) {
-          document.querySelectorAll("aside a").forEach((link) => link.classList.remove("active"));
-          a.classList.add("active");
-          loadPaper(p.file);
-        };
         navList.appendChild(a);
       });
+    }
+    function currentPaper() {
+      const h = (location.hash || "").replace(/^#/, "");
+      for (var i = 0; i < papers.length; i++) {
+        if (papers[i].file === h) return papers[i];
+      }
+      return papers[0];
     }
     async function loadPaper(filePath) {
       contentArea.innerHTML = "<p>Loading…</p>";
@@ -123,16 +133,17 @@
         contentArea.innerHTML = "<p>Could not load paper.</p>";
       }
     }
+    function show() {
+      const paper = currentPaper();
+      document.querySelectorAll("aside a").forEach((link) => {
+        link.classList.toggle("active", link.dataset.file === paper.file);
+      });
+      loadPaper(paper.file);
+    }
     renderNav();
-    window.addEventListener("DOMContentLoaded", () => {
-      const hash = window.location.hash.substring(1);
-      const index = hash ? parseInt(hash, 10) : 0;
-      const links = document.querySelectorAll("aside a");
-      if (papers[index] && links[index]) {
-        links[index].classList.add("active");
-        loadPaper(papers[index].file);
-      }
-    });
+    window.addEventListener("hashchange", show);
+    if (!location.hash) location.replace("#" + papers[0].file);
+    else show();
     (function () {
       var key = "ooda-theme";
       function apply(t) {

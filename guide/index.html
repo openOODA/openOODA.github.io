@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>openOODA guide</title>
   <link rel="canonical" href="https://openooda.org/guide/">
-  <meta name="description" content="How to use openOODA, options, limits, and safety.">
+  <meta name="description" content="openOODA user wiki — language, commands, packages, and capabilities.">
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script>
     (function () {
@@ -27,19 +27,24 @@
     a { color: var(--fg); }
     a:hover { text-decoration-thickness: 2px; }
     header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 1rem 4.5rem 1rem 1.25rem;
-      border-bottom: 2px solid var(--fg);
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+      gap: 0.75rem 1.25rem; padding: 0.85rem 1.25rem; border-bottom: 2px solid var(--fg);
     }
     .brand {
       font-weight: 700; letter-spacing: 0.08em; color: var(--bg);
-      background: var(--fg); padding: 0.2rem 0.45rem; text-decoration: none;
+      background: var(--fg); padding: 0.2rem 0.45rem; text-decoration: none; white-space: nowrap;
     }
-    nav.top a { color: var(--muted); margin-left: 1rem; }
+    .cluster { display: flex; align-items: center; gap: 1rem; flex-wrap: nowrap; }
+    nav.top { display: flex; align-items: center; gap: 1rem; flex-wrap: nowrap; }
+    nav.top a { color: var(--muted); white-space: nowrap; }
+    #theme {
+      font: inherit; background: var(--bg); color: var(--fg);
+      border: 2px solid var(--fg); padding: 0.15rem 0.55rem; cursor: pointer; white-space: nowrap;
+    }
     .wrap { display: grid; grid-template-columns: 12rem 1fr; max-width: 60rem; }
     aside { border-right: 1px solid var(--fg); padding: 1.25rem 1rem 5rem; }
     aside h2 { font-size: 0.8rem; color: var(--muted); margin: 0 0 0.75rem; font-weight: 400; }
-    aside a { display: block; color: var(--fg); padding: 0.25rem 0; }
+    aside a { display: block; color: var(--fg); padding: 0.25rem 0; text-align: left; }
     aside a.active { text-decoration: underline; text-decoration-thickness: 2px; }
     main#page { padding: 1.5rem 1.25rem 5rem; max-width: 44rem; }
     main#page h1 { font-size: 1.1rem; margin: 0 0 0.75rem; }
@@ -53,39 +58,39 @@
     pre code { background: none; padding: 0; }
     .canon { color: var(--muted); font-size: 0.85rem; }
     .err { color: var(--fg); }
-    #theme {
-      position: fixed; top: 1rem; right: 1rem; z-index: 20;
-      font: inherit; background: var(--bg); color: var(--fg);
-      border: 2px solid var(--fg); padding: 0.15rem 0.55rem; cursor: pointer;
-    }
-    #gh { position: fixed; right: 1rem; bottom: 1rem; z-index: 20; color: var(--fg); }
+    #gh { position: fixed; right: 1rem; bottom: 1rem; z-index: 20; color: var(--fg); background: var(--bg); padding: 0.15rem 0.35rem; }
     @media (max-width: 800px) {
+      .cluster { flex-basis: 100%; }
       .wrap { grid-template-columns: 1fr; }
       aside { border-right: 0; border-bottom: 1px solid var(--fg); padding-bottom: 1rem; }
     }
   </style>
 </head>
 <body>
-  <button type="button" id="theme">dark</button>
   <a id="gh" href="https://github.com/openOODA">github</a>
   <header>
     <a class="brand" href="/guide/">openOODA guide</a>
-    <nav class="top">
-      <a href="/">site</a>
-      <a href="/research/">research</a>
-      <a href="https://registry.openooda.org/">registry</a>
-    </nav>
+    <div class="cluster">
+      <nav class="top">
+        <a href="https://openooda.org/">site</a>
+        <a href="https://openooda.org/guide/">guide</a>
+        <a href="https://openooda.org/research/">research</a>
+        <a href="https://registry.openooda.org/">registry</a>
+      </nav>
+      <button type="button" id="theme">dark</button>
+    </div>
   </header>
   <div class="wrap">
     <aside>
       <h2>guide</h2>
-      <a href="#Home.oot" data-page="Home.oot">what it does</a>
-      <a href="#Use.oot" data-page="Use.oot">how to use it</a>
-      <a href="#Options.oot" data-page="Options.oot">options</a>
-      <a href="#Limits.oot" data-page="Limits.oot">limits</a>
-      <a href="#Safety.oot" data-page="Safety.oot">safety</a>
-      <h2>library</h2>
-      <a href="/research/">research</a>
+      <a href="#Home.oot" data-page="Home.oot">home</a>
+      <a href="#Use.oot" data-page="Use.oot">start</a>
+      <a href="#Language.oot" data-page="Language.oot">language</a>
+      <a href="#Options.oot" data-page="Options.oot">commands</a>
+      <a href="#Packages.oot" data-page="Packages.oot">packages</a>
+      <a href="#Safety.oot" data-page="Safety.oot">capabilities</a>
+      <a href="#Limits.oot" data-page="Limits.oot">how it works</a>
+      <a href="#Research.oot" data-page="Research.oot">research</a>
     </aside>
     <main id="page">
       <p class="canon">https://openooda.org/guide/</p>
@@ -93,14 +98,17 @@
     </main>
   </div>
   <script>
-    const PAGES = ["Home.oot", "Use.oot", "Options.oot", "Limits.oot", "Safety.oot"];
+    const PAGES = ["Home.oot", "Use.oot", "Language.oot", "Options.oot", "Packages.oot", "Safety.oot", "Limits.oot", "Research.oot"];
     const root = document.getElementById("page");
     function currentPage() {
       const h = (location.hash || "#Home.oot").replace(/^#/, "");
       return PAGES.includes(h) ? h : "Home.oot";
     }
     function wikiLinks(md) {
-      return md.replace(/\]\(([A-Za-z]+\.oot)\)/g, "](#$1)");
+      const kept = md.split("\n").filter((line) => {
+        return !/^File:\s/.test(line) && !/^User wiki\./.test(line);
+      });
+      return kept.join("\n").replace(/\]\(([A-Za-z]+\.oot)\)/g, "](#$1)");
     }
     async function show() {
       const name = currentPage();

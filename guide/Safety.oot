@@ -1,32 +1,235 @@
-# SAFETY — What you can believe today
+# CAPABILITIES — Tokens and trust
 
 File: guide/Safety.oot
-User guide. Canonical URL: https://openooda.org/guide/#Safety.oot
+User wiki. Canonical URL: https://openooda.org/guide/#Safety.oot
 
-## 1. How to read this page
+[Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Commands](Options.oot) [Packages](Packages.oot) [How it works](Limits.oot) [Research](Research.oot)
 
-If a belief would make you less careful, it does not belong here.
-Design papers are not guarantees. Those live under /research.
+## 1. What a token is
 
-## 2. Packages
+A capability token is a permission you hold as an argument.
+Effects need that argument.
+You write it as a type: `&FsReadCap`, `&ProcessCap`, `&SysCap`.
+The function that does the effect takes the token.
+You pass the token in. You do not hide the effect.
 
-Lock lines carry a sha256 and a *declared* cap name.
-A foreign ELF does not gain Ooda caps because the lock says `FsRead`.
-Ingest pins and wraps. It does not rewrite binaries.
+Missing, forged, or zero tokens fail closed.
+The call does not run.
 
-`ooda add --registry` fetches `catalog` and checks minisign
-against the pubkey shipped in the CLI. HMAC `index.sig` is not
-the public trust path.
+`main` lists the tokens this program holds.
+Helpers take the tokens they need as parameters.
+You pass the token down.
+You do not build one from bytes.
 
-Path traversal, extra caps, and yank refuse. Host lookalikes refuse.
-`ooda launch --exec` runs only after sha, caps, and yank are ok.
+The model is [capability sandboxing](/research/#RP-3-1-unified-capability-sandboxing.oot).
+The language is [capability-secure](/research/#RP-ES-2-es-capability-secure.oot).
 
-## 3. Install
+## 2. How you pass one
 
-There is no checksum on the public bootstrap script.
-The compiler tree is private. The fetch may 404.
+```
+pub fn load_notes(fs: &FsReadCap, path: String) -> Result[String, String] {
+    return read_file(fs, path);
+}
 
-## 4. Research
+pub fn main(fs: &FsReadCap) {
+    let text = load_notes(fs, "notes.txt");
+}
+```
 
-Security papers under /research are design notes.
-Do not quote them as “openOODA does this.”
+`read_file` takes `fs`.
+`load_notes` takes `fs`.
+`main` takes `fs`.
+Every call site shows the permission.
+
+A function that only computes takes no token.
+
+## 3. Prefer the small token
+
+Take the smallest token that covers the effect.
+Do not take `&SysCap` when `&FsReadCap` is enough.
+
+| Token | What you use it for |
+| :--- | :--- |
+| `&FsReadCap` | `read_file` |
+| `&FsWriteCap` | `write_file` (needs `OODA_FS_WRITEDIR`) |
+| `&ProcessCap` | `spawn`, `wait`, `kill`, `process_exec` |
+| `&NetCap` / `&HttpCap` / `&TcpCap` / `&UdpCap` | network ops |
+| `&EnvCap` | `env_get` for `OODA_*` / `OO_*` keys |
+| `&AllocCap` | heap and bump arenas |
+| `&ThreadCap` | threads, channels, actor restart |
+| `&SysCap` | Landlock jail and `setrlimit` |
+
+Flags and env that go with these tokens live on [Commands](Options.oot).
+
+## 4. Files
+
+Read a file with `&FsReadCap`.
+
+```
+pub fn main(fs: &FsReadCap) {
+    let body = read_file(fs, "notes.txt");
+}
+```
+
+Write a file with `&FsWriteCap`.
+`write_file` also needs `OODA_FS_WRITEDIR`.
+That env is the directory the write may touch.
+Unset denies the write.
+
+```
+export OODA_FS_WRITEDIR="$PWD"
+```
+
+```
+pub fn save_notes(fw: &FsWriteCap, path: String, body: String) -> Result[Void, String] {
+    return write_file(fw, path, body);
+}
+```
+
+`ooda fix` writes the same way. See [Start](Use.oot).
+
+## 5. Process, net, and env
+
+`&ProcessCap` is the token for child processes: `spawn`, `wait`, `kill`, `process_exec`.
+
+```
+pub fn main(p: &ProcessCap) {
+    let out = process_exec(p, "ooda version");
+}
+```
+
+Network ops take `&HttpCap`, `&TcpCap`, `&UdpCap`, or the broader `&NetCap`.
+Prefer the small one that matches the call.
+
+`&EnvCap` lets `env_get` read `OODA_*` and `OO_*` keys.
+Host keys stay out.
+
+```
+pub fn main(env: &EnvCap) {
+    let dir = env_get(env, "OODA_FS_WRITEDIR");
+}
+```
+
+## 6. Heap and threads
+
+`&AllocCap` is the token for heap and bump arenas.
+Take it when you allocate a region.
+You do not take it for ordinary locals.
+
+`&ThreadCap` is the token for threads, channels, and actor restart.
+Take it when you start work on another thread.
+A single-thread program does not need it.
+
+Quotas around the heap and the CPU: [memory quotas](/research/#RP-3-3-memory-quotas-heap-sandbox.oot), [CPU quotas](/research/#RP-3-4-cpu-quotas-maxcycles.oot).
+
+## 7. Sys, Landlock, and quotas
+
+`&SysCap` is the broad OS token.
+Use it when you mean the jail or the resource limit.
+Do not use it as a shortcut for a file read.
+
+Landlock is a real Linux jail under `&SysCap`.
+You pass the directories the process may read and write.
+
+```
+import "std/sec/landlock.oo";
+
+pub fn main(sys: &SysCap) {
+    let _ = landlock_restrict(sys, "/home/you/work", "/home/you/work");
+}
+```
+
+Empty allowlists fail closed.
+A call with no directories does not open the world.
+
+`setrlimit` also sits under `&SysCap`.
+Zero quotas fail closed.
+A memory, file, or CPU quota of zero is not a grant.
+
+Time and entropy follow the same grant rule: [Landlock-related time/entropy](/research/#RP-3-2-time-entropy-sandboxing.oot).
+
+## 8. Secrets
+
+Mark a secret field. The compiler tracks it.
+
+```
+type Creds = struct { token: String, name: String };
+type User = struct { creds: Creds };
+// SECRET: token
+
+pub fn show(user: User) {
+    println(user.creds.name);
+}
+```
+
+`println` of a secret field is refused.
+The sibling non-secret field is allowed.
+`println(user.creds.token)` fails.
+`println(user.creds.name)` runs.
+
+`process_exec` is a secret sink.
+Do not pass a secret field into it.
+
+Design note: [static taint](/research/#RP-3-5-static-taint-secret.oot).
+
+## 9. Packages
+
+A lock line carries a sha256 and a declared cap name.
+
+```
+name@version#sha256#CapName
+```
+
+The hash is the bytes.
+The cap name is the token that package may use.
+
+Ingest pins and wraps.
+The pin is the sha256.
+The wrap is how the blob is stored.
+
+`ooda add --registry` verifies the catalog with minisign.
+
+Path traversal, extra caps, and yank refuse.
+
+`ooda launch --exec` checks that the CAS path exists after sha, caps, and yank are ok.
+
+How to add a library: [Packages](Packages.oot).
+
+The same pin-and-grant idea is [zero-day defense](/research/#RP-ES-5-es-zero-day-defense.oot).
+Where the sandbox meets C: [caps vs FFI](/research/#RP-6-3-tension-caps-vs-ffi.oot).
+
+## 10. How to use caps well
+
+1. Declare the tokens the function actually uses.
+2. Pass them down. Every effect call takes its token.
+3. Prefer the small token.
+4. Set `OODA_FS_WRITEDIR` before you write.
+5. Mark secret fields. Keep them out of `println` and `process_exec`.
+6. Read the declared cap on the lock line before you launch.
+
+The product path still typechecks, emits C, compiles with host `gcc`, and runs.
+See [How it works](Limits.oot).
+
+## 11. Further reading
+
+- [unified capability sandboxing](/research/#RP-3-1-unified-capability-sandboxing.oot)
+- [memory quotas](/research/#RP-3-3-memory-quotas-heap-sandbox.oot)
+- [CPU quotas](/research/#RP-3-4-cpu-quotas-maxcycles.oot)
+- [static taint](/research/#RP-3-5-static-taint-secret.oot)
+- [Landlock-related time/entropy](/research/#RP-3-2-time-entropy-sandboxing.oot)
+- [capability-secure](/research/#RP-ES-2-es-capability-secure.oot)
+- [caps vs FFI](/research/#RP-6-3-tension-caps-vs-ffi.oot)
+- [zero-day defense](/research/#RP-ES-5-es-zero-day-defense.oot)
+
+## See also
+
+- [Home](Home.oot)
+- [Start](Use.oot)
+- [Language](Language.oot)
+- [Commands](Options.oot)
+- [Packages](Packages.oot)
+- [How it works](Limits.oot)
+- [Research](Research.oot)
+
+This page: https://openooda.org/guide/#Safety.oot
+Site: https://openooda.org

@@ -1,9 +1,25 @@
-# OPTIONS — Commands, backends, and permissions
+# COMMANDS — ooda and oodac
 
-File: wiki/Options.oot
-User wiki. Canonical URL: https://wiki.openooda.org/#Options.oot
+File: guide/Options.oot
+User wiki. Canonical URL: https://openooda.org/guide/#Options.oot
 
-## 1. `ooda` commands
+[Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [How it works](Limits.oot) [Research](Research.oot)
+
+## 1. Everyday path
+
+You write `.oo` files. `ooda` is the product CLI. It finds `oodac` and runs it for you.
+
+```
+ooda check hello.oo
+ooda run hello.oo
+ooda test hello.oo
+```
+
+`check` typechecks. `run` is check + emit C + `gcc` + exec. `test` runs `verify` / `assert_eq!` / `assert!` and sets `OODA_TEST=1`.
+
+`emit-c` is the everyday emit. See [C backend](/research/#RP-4-x-backend-c-product-floor.oot).
+
+## 2. `ooda`
 
 ```
 ooda check <file.oo> [--json-errors]
@@ -20,25 +36,73 @@ ooda context [path]
 ooda digest <file>
 ooda health
 ooda pkg [--json]
-ooda add <name> --vendor <dir>
+ooda add <name> [--vendor path|--registry]
+ooda pm add|ingest|launch|remove|update|outdated|why|tree|vendor|clean|audit|sbom|pack
 ```
 
-`check` typechecks. It does not run the program.
-`build` emits and compiles. Default target is `native` (C + `gcc`).
-`run` is check + emit C + `gcc` + exec.
-`test` runs `verify` / `assert_eq!` / `assert!`.
-`lsp` is a multi-message stdio language server.
-`fix` writes only with `OODA_FS_WRITEDIR` and a yes (or `--yes`).
-`patch` replaces one function body. Absolute paths, `..`, and symlinks are refused.
+`check --json-errors` prints machine diagnostics for an editor or a script.
 
-Also on the CLI: `pm` (package manager), `em`, `migrate`, `pack`, `install`, `context-pack`.
-Those are product commands. Treat `pm` as the local vendor path unless you pass a host you trust.
+`build` emits and compiles. Default target is `native` (C + `gcc`). `-o` sets the output path. `--target llvm` and `--emit-llvm` select LLVM. `--release` is valid with LLVM.
 
-`ooda add` with `--vendor` reads a file tree on disk.
-The public vendor files may be served at https://registry.openooda.org.
-The CLI does not fetch that host as the default path.
+`lsp` is a multi-message stdio language server. Point your editor at `ooda lsp`. See [native LSP](/research/#RP-5-7-universal-native-lsp.oot).
 
-## 2. `oodac` emit options
+`dump` prints the compiler view: tokens, AST, or check.
+
+`outline` prints public signatures. `reflect` prints caps and the signature. Pass a symbol to focus one name. `--json` is the machine form. See [token-minimized APIs](/research/#RP-2-2-token-minimized-apis.oot).
+
+`fix` applies common compiler patches. It asks yes or no unless you pass `--yes`. Set `OODA_FS_WRITEDIR` so it can write.
+
+`patch` replaces one function body. Give a relative path and a body file.
+
+```
+export OODA_FS_WRITEDIR="$PWD"
+ooda fix hello.oo --yes
+ooda patch hello.oo --replace-fn greet --with greet_body.oo
+```
+
+See [surgical replace-fn](/research/#RP-2-2b-surgical-patch-replace-fn.oot).
+
+`context` counts and names `.oo` files in a path. Omit the path to use the current directory.
+
+`digest` prints the sha256 of a file.
+
+`health` prints liveness and whether `oodac/oodac` is present.
+
+`pkg` prints the CAS lock inventory. `--json` is the machine form.
+
+## 3. Packages
+
+`ooda add --vendor` reads a file tree on disk.
+
+`ooda add --registry` fetches the catalog at https://registry.openooda.org and checks minisign with the pubkey shipped in the CLI.
+
+```
+ooda add hello --vendor ../registry
+ooda add hello --registry
+ooda pkg
+```
+
+`ooda pm` is the same manager with extra verbs.
+
+| Verb | What you get |
+| :--- | :--- |
+| `add` | Install a name into CAS and the lock. |
+| `ingest` | Lock a local recipe directory. |
+| `launch` | Re-hash a pinned payload. `--exec` runs it after sha, caps, and yank checks. |
+| `remove` | Drop a name from the lock. |
+| `update` | Re-resolve from the vendor. |
+| `outdated` | Compare the lock to the catalog. |
+| `why` | Show who depends on a name. |
+| `tree` | Print the dependency tree. |
+| `vendor` | List names in the file vendor. |
+| `clean` | Drop unused CAS dirs. |
+| `audit` | Report yank, advisory, and pin hits. |
+| `sbom` | Print a CycloneDX-lite object from the lock. |
+| `pack` | Write an air-gap vendor tree. |
+
+Many of these verbs take `--json`. See [Packages](Packages.oot) and [Capabilities](Safety.oot).
+
+## 4. `oodac`
 
 `oodac` is the compiler. `ooda` calls it.
 
@@ -52,56 +116,52 @@ oodac emit-x86 <file.oo>
 oodac --backend llvm emit-llvm <file.oo>
 ```
 
-`emit-c` is the product emit.
-`emit-llvm` writes LLVM IR. Hello and Result `match` have been run through `clang`.
-A full `clang` link of the compiler itself is not product. See [Limits](Limits.oot).
-`emit-wasm` writes a `\0asm` module with one body per source `fn`.
-`emit-x86` writes standalone x86_64 assembly with `_start`. Assemble with `as` and `ld`. AArch64 is not product.
+`emit-c` is the everyday emit. `ooda run` is check + emit C + `gcc` + exec.
 
-`ooda build --target llvm` and `--emit-llvm` select the LLVM target.
-`ooda build --target wasm` is accepted.
-`--fuzz` on `build` is refused.
-`--release` is only valid with the LLVM target.
+`emit-llvm` writes LLVM IR. You can also pass `ooda build --target llvm` or `ooda build --emit-llvm`. `--release` is valid with LLVM. See [LLVM backend](/research/#RP-4-1-2-production-llvm.oot).
 
-## 3. Environment
+`emit-wasm` writes a wasm module. See [WebAssembly](/research/#RP-4-1-4-direct-webassembly.oot).
+
+`emit-x86` writes standalone x86_64 assembly with `_start`. Assemble with `as` and `ld`.
+
+## 5. Environment
 
 | Name | What it does |
 | :--- | :--- |
-| `OODA_FS_WRITEDIR` | Directory `write_file` may write. Unset denies writes. |
-| `OODA_FS_READDIR` | Directory confinement for reads. |
-| `OODA_TEST` | Set by `ooda test`. You do not set this for `ooda run`. |
+| `OODA_FS_WRITEDIR` | Directory `write_file` may write. |
+| `OODA_TEST` | Set by `ooda test`. |
 
-`env_get` in a program only sees `OODA_*` and `OO_*` keys. Host secrets stay out.
+`env_get` sees `OODA_*` and `OO_*` keys. You pass `&EnvCap` to read them.
 
-## 4. Permission tokens
+`ooda test` sets `OODA_TEST` for you. You set `OODA_FS_WRITEDIR` when a command writes a file.
 
-A function that does an effect takes a token argument, for example `&FsReadCap`.
-Missing, forged, or zero tokens fail closed.
+## 6. Permission tokens
 
-Common tokens:
+A function that does an effect takes a token argument, for example `&FsReadCap`. Prefer the small token.
 
 | Token | Lets the function |
 | :--- | :--- |
 | `&FsReadCap` | `read_file`, `path_exists`, `file_size` |
-| `&FsWriteCap` | `write_file` (needs `OODA_FS_WRITEDIR`) |
+| `&FsWriteCap` | `write_file` (set `OODA_FS_WRITEDIR`) |
 | `&ProcessCap` | `process_exec`, `spawn`, `wait`, `kill` |
 | `&NetCap` / `&HttpCap` / `&TcpCap` / `&UdpCap` | network ops |
 | `&EnvCap` | `env_get` for `OODA_*` / `OO_*` |
 | `&AllocCap` | heap and bump arenas |
 | `&ThreadCap` | threads, channels, actor restart |
-| `&SysCap` | broad OS (Landlock jail, `setrlimit`, …) |
-| `&GpuCap` | CPU/noop launch. Not a device GPU dispatch. |
+| `&SysCap` | Landlock jail, `setrlimit` |
+| `&GpuCap` | `gpu_launch_shader` |
 
-Prefer the small token. Do not take `&SysCap` when `&FsReadCap` is enough.
+Take `&FsReadCap` when you only read. Take `&HttpCap` when you only fetch. Take `&SysCap` when you need Landlock or `setrlimit`.
 
-On Linux, `&SysCap` can apply a Landlock jail and POSIX `setrlimit`. Empty allowlists and zero quotas fail closed.
+On Linux, `&SysCap` can apply a Landlock jail and POSIX `setrlimit`. See [Capabilities](Safety.oot).
 
-## 5. Standard library
+## 7. Research
 
-Use the small tree that ships with the compiler: `ooda/std`.
-That is the product library.
+- [token-minimized APIs](/research/#RP-2-2-token-minimized-apis.oot)
+- [surgical replace-fn](/research/#RP-2-2b-surgical-patch-replace-fn.oot)
+- [native LSP](/research/#RP-5-7-universal-native-lsp.oot)
+- [LLVM backend](/research/#RP-4-1-2-production-llvm.oot)
+- [WebAssembly](/research/#RP-4-1-4-direct-webassembly.oot)
+- [C backend](/research/#RP-4-x-backend-c-product-floor.oot)
 
-There is a large extra `std/` tree in the org. File count is not a certificate.
-Do not import that volume and call it product.
-
-This wiki: https://wiki.openooda.org
+[Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [How it works](Limits.oot) [Research](Research.oot)
