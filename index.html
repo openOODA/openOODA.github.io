@@ -61,6 +61,10 @@
     .drop-body p { margin: 0 0 0.85rem; }
     .drop-body p:last-child { margin-bottom: 0; }
     .drop-body strong { font-weight: 700; }
+    .drop-body pre {
+      width: auto; max-width: 100%; white-space: pre;
+      margin: 0; overflow: auto;
+    }
     a { color: var(--fg); }
     a:hover { text-decoration-thickness: 2px; }
     #gh { position: fixed; right: 1rem; bottom: 1rem; z-index: 20; color: var(--fg); background: var(--bg); padding: 0.15rem 0.35rem; }
@@ -89,6 +93,22 @@
       <p>Build fast. Stay secure. Save tokens.</p>
       <pre>curl -fsSL https://openooda.org/install | oo</pre>
       <p>Install waits on the compiler and the library. The guide is the way in.</p>
+      <details class="drop">
+        <summary>What gets installed</summary>
+        <div class="drop-body">
+          <pre>~/.local/bin/ooda
+~/.local/bin/oodac
+
+~/.local/share/ooda/std/
+~/.local/share/ooda/runtime/
+~/.local/share/ooda/share/fixtures/hello.oo
+
+~/.config/ooda/env
+
+. ~/.config/ooda/env
+ooda run hello.oo</pre>
+        </div>
+      </details>
       <details class="drop">
         <summary>Why openOODA</summary>
         <div class="drop-body">
