@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tactical Systems Architecture</title>
-    <meta name="description" content="Observe, Orient, Decide, Act. The definitive open-source standard for autonomous decision loops.">
+    <title>openOODA</title>
+    <meta name="description" content="openOODA — a language, a local package manager, and a public field guide.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -135,6 +135,20 @@
             box-shadow: 0 10px 20px rgba(92,225,230,0.3);
         }
 
+        .links {
+            margin-top: 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.25rem 1.75rem;
+            justify-content: center;
+        }
+        .links a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .links a:hover { text-decoration: underline; }
+
         @keyframes fadeUp {
             to { opacity: 1; transform: translateY(0); }
         }
@@ -144,13 +158,17 @@
     <div class="bg-container"><div class="bg-overlay"></div></div>
     <nav>
         <div class="logo">openOODA</div>
-        <a href="https://UberMetroid.github.io" class="back-link">← Ecosystem</a>
+        <a href="https://github.com/openOODA" class="back-link">GitHub</a>
     </nav>
     <main>
         <div class="glass-panel">
-            <h1>Tactical Systems Architecture</h1>
-            <p class="subtitle">Observe, Orient, Decide, Act. The definitive open-source standard for autonomous decision loops.</p>
-            <a href="research.html" class="cta-btn">Research papers</a>
+            <h1>openOODA</h1>
+            <p class="subtitle">A programming language and a local package manager. This page is a door, not the product.</p>
+            <a href="https://registry.openooda.org/" class="cta-btn">Registry</a>
+            <div class="links">
+                <a href="https://github.com/openOODA/wiki">Wiki</a>
+                <a href="research.html">Research</a>
+            </div>
         </div>
     </main>
 </body>
