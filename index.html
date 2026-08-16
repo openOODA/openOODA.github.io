@@ -46,20 +46,25 @@
     main { padding: 1.5rem 1.25rem 5rem; max-width: 44rem; min-width: 0; }
     p { margin: 0 0 1.25rem; max-width: 36rem; }
     .install {
-      display: flex; align-items: stretch;
-      width: max-content; max-width: 100%;
-      border: 1px solid var(--fg); box-sizing: border-box;
+      display: flex; align-items: center; gap: 0.65rem;
+      max-width: 100%; min-width: 0;
     }
     .install pre {
-      margin: 0; padding: 0.55rem 0.7rem; border: 0;
-      overflow: auto; white-space: nowrap; min-width: 0; flex: 1 1 auto;
+      margin: 0; padding: 0.55rem 0.7rem;
+      border: 1px solid var(--fg);
+      overflow: auto; white-space: nowrap;
+      min-width: 0; flex: 0 1 auto;
     }
     #copy {
       font: inherit; background: var(--bg); color: var(--fg);
-      border: 0; border-left: 1px solid var(--fg);
-      padding: 0.15rem 0.55rem; cursor: pointer; white-space: nowrap;
-      flex: 0 0 auto;
+      border: 2px solid var(--fg); padding: 0.15rem 0.55rem;
+      cursor: pointer; flex: 0 0 auto;
+      display: grid; place-items: center;
     }
+    #copy span { grid-area: 1 / 1; }
+    #copy .on { visibility: hidden; }
+    #copy.is-copied .off { visibility: hidden; }
+    #copy.is-copied .on { visibility: visible; }
     a { color: var(--fg); }
     a:hover { text-decoration-thickness: 2px; }
     #gh { position: fixed; right: 1rem; bottom: 1rem; z-index: 20; color: var(--fg); background: var(--bg); padding: 0.15rem 0.35rem; }
@@ -88,7 +93,10 @@
       <p>Build fast. Stay secure. Save tokens.</p>
       <div class="install">
         <pre id="cmd">curl -fsSL https://openooda.org/install | sh</pre>
-        <button type="button" id="copy">copy</button>
+        <button type="button" id="copy">
+          <span class="off">copy</span>
+          <span class="on">copied</span>
+        </button>
       </div>
     </main>
   </div>
@@ -113,8 +121,8 @@
       if (copy && cmd && navigator.clipboard) {
         copy.onclick = function () {
           navigator.clipboard.writeText(cmd.textContent).then(function () {
-            copy.textContent = "copied";
-            setTimeout(function () { copy.textContent = "copy"; }, 1500);
+            copy.classList.add("is-copied");
+            setTimeout(function () { copy.classList.remove("is-copied"); }, 1500);
           });
         };
       }
