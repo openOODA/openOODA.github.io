@@ -50,6 +50,17 @@
       border: 1px solid var(--fg); width: max-content; max-width: 100%;
       overflow: auto; white-space: nowrap; box-sizing: border-box;
     }
+    .drop { margin: 0 0 0.75rem; max-width: 40rem; }
+    .drop summary {
+      cursor: pointer; list-style: none; width: max-content;
+    }
+    .drop summary::-webkit-details-marker { display: none; }
+    .drop summary::before { content: "+ "; }
+    .drop[open] summary::before { content: "− "; }
+    .drop-body { margin-top: 0.75rem; }
+    .drop-body p { margin: 0 0 0.85rem; }
+    .drop-body p:last-child { margin-bottom: 0; }
+    .drop-body strong { font-weight: 700; }
     a { color: var(--fg); }
     a:hover { text-decoration-thickness: 2px; }
     #gh { position: fixed; right: 1rem; bottom: 1rem; z-index: 20; color: var(--fg); background: var(--bg); padding: 0.15rem 0.35rem; }
@@ -78,6 +89,16 @@
       <p>Build fast. Stay secure. Save tokens.</p>
       <pre>curl -fsSL https://openooda.org/install | oo</pre>
       <p>Install waits on the compiler and the library. The guide is the way in.</p>
+      <details class="drop">
+        <summary>Why openOODA</summary>
+        <div class="drop-body">
+          <p><strong>Effects.</strong> In Rust, Go, Zig, and C the process can open a file or a socket, so the function can too. In openOODA the function holds a token (<code>&amp;FsReadCap</code>, <code>&amp;NetCap</code>, …) or the call does not run. No token, no effect.</p>
+          <p><strong>Agents.</strong> Those languages assume a human will reread the tree. openOODA is built for a short loop: <code>outline</code>, <code>reflect</code>, <code>fix</code>, <code>patch</code> one function. You do not dump the repo into the context.</p>
+          <p><strong>Secrets.</strong> A slipped <code>println</code> ships a key. openOODA marks <code>SECRET</code> fields. Check refuses the sink.</p>
+          <p><strong>Packages.</strong> <code>cargo add</code> and <code>go get</code> fetch with the process’s authority. An openOODA lock is <code>name@version#sha256#CapName</code>. Extra caps refuse.</p>
+          <p><strong>The path.</strong> One everyday path: typecheck, emit C, run. Same source for LLVM, wasm, and x86 when you ask. See the <a href="/guide/">guide</a>.</p>
+        </div>
+      </details>
     </main>
   </div>
   <script>
