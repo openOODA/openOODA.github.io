@@ -1,175 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>openOODA</title>
-    <meta name="description" content="openOODA — a language, a local package manager, and a public field guide.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #030305;
-            --text: #f0f0f5;
-            --glass-bg: rgba(20, 20, 25, 0.4);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --primary: #5ce1e6;
-            --secondary: #38b6ff;
-        }
-        
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: 'Outfit', sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            overflow-x: hidden;
-            line-height: 1.6;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .bg-container {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1;
-            background-image: url('assets/bg.jpg');
-            background-size: cover;
-            background-position: center;
-            transform: scale(1.05);
-        }
-        
-        .bg-overlay {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, rgba(3,3,5,0.9) 0%, rgba(3,3,5,0.4) 50%, rgba(3,3,5,0.9) 100%);
-        }
-
-        nav {
-            padding: 2.5rem 5vw;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: relative;
-            z-index: 10;
-        }
-        
-        .logo {
-            font-weight: 800;
-            font-size: 1.5rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .back-link {
-            color: var(--text);
-            text-decoration: none;
-            font-size: 1rem;
-            font-weight: 600;
-            opacity: 0.7;
-            transition: opacity 0.3s;
-        }
-        .back-link:hover { opacity: 1; }
-
-        main {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 4rem 5vw;
-            z-index: 10;
-        }
-
-        .glass-panel {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 4rem 3rem;
-            max-width: 800px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
-            opacity: 0;
-            transform: translateY(40px);
-            animation: fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        h1 {
-            font-size: clamp(3rem, 5vw, 5rem);
-            font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 1.5rem;
-            letter-spacing: -1px;
-        }
-        
-        .subtitle {
-            font-size: clamp(1.1rem, 2vw, 1.35rem);
-            font-weight: 300;
-            color: #b4b4c4;
-            max-width: 600px;
-            margin: 0 auto 2.5rem auto;
-        }
-        
-        .cta-btn {
-            display: inline-block;
-            padding: 1rem 2.5rem;
-            border-radius: 50px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            color: #000;
-            font-weight: 800;
-            text-decoration: none;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        
-        .cta-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(92,225,230,0.3);
-        }
-
-        .links {
-            margin-top: 2rem;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1.25rem 1.75rem;
-            justify-content: center;
-        }
-        .links a {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 600;
-        }
-        .links a:hover { text-decoration: underline; }
-
-        @keyframes fadeUp {
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>openOODA</title>
+  <meta name="description" content="openOODA — a language, a local package manager, and a public field guide.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <style>
+    html { background: #000; color: #e8e8e8; }
+    body {
+      margin: 0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    main {
+      max-width: 44rem;
+      padding: 2.5rem 1.25rem 4rem;
+    }
+    h1 {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+    }
+    h1 span { display: block; border-bottom: 1px solid #e8e8e8; padding-bottom: 0.4rem; }
+    p { margin: 1.25rem 0 2rem; max-width: 36rem; }
+    dl {
+      margin: 0;
+      display: grid;
+      grid-template-columns: 7.5rem 1fr;
+      gap: 0.4rem 1rem;
+    }
+    dt { color: #9a9a9a; }
+    dd { margin: 0; overflow-wrap: anywhere; }
+    a { color: #e8e8e8; }
+    a:hover { text-decoration-thickness: 2px; }
+  </style>
 </head>
 <body>
-    <div class="bg-container"><div class="bg-overlay"></div></div>
-    <nav>
-        <div class="logo">openOODA</div>
-        <a href="https://github.com/openOODA" class="back-link">GitHub</a>
-    </nav>
-    <main>
-        <div class="glass-panel">
-            <h1>openOODA</h1>
-            <p class="subtitle">A programming language and a local package manager. This page is a door, not the product.</p>
-            <a href="https://registry.openooda.org/" class="cta-btn">Registry</a>
-            <div class="links">
-                <a href="https://github.com/openOODA/wiki">Wiki</a>
-                <a href="research.html">Research</a>
-            </div>
-        </div>
-    </main>
+  <main>
+    <h1><span>openOODA</span></h1>
+    <p>Language. Package manager. Field guide. This page is a door, not the product.</p>
+    <dl>
+      <dt>registry</dt>
+      <dd><a href="https://registry.openooda.org/">https://registry.openooda.org</a></dd>
+      <dt>wiki</dt>
+      <dd><a href="https://github.com/openOODA/wiki">https://github.com/openOODA/wiki</a></dd>
+      <dt>research</dt>
+      <dd><a href="research.html">research.html</a></dd>
+      <dt>github</dt>
+      <dd><a href="https://github.com/openOODA">https://github.com/openOODA</a></dd>
+    </dl>
+  </main>
 </body>
 </html>
