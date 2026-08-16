@@ -45,6 +45,11 @@
     .global a.active { text-decoration: underline; text-decoration-thickness: 2px; }
     main { padding: 1.5rem 1.25rem 5rem; max-width: 44rem; min-width: 0; }
     p { margin: 0 0 1.25rem; max-width: 36rem; }
+    pre {
+      margin: 0 0 1.25rem; padding: 0.55rem 0.7rem;
+      border: 1px solid var(--fg); width: max-content; max-width: 100%;
+      overflow: auto; white-space: nowrap; box-sizing: border-box;
+    }
     a { color: var(--fg); }
     a:hover { text-decoration-thickness: 2px; }
     #gh { position: fixed; right: 1rem; bottom: 1rem; z-index: 20; color: var(--fg); background: var(--bg); padding: 0.15rem 0.35rem; }
@@ -71,7 +76,8 @@
     </aside>
     <main>
       <p>Build fast. Stay secure. Save tokens.</p>
-      <p>The guide is the way in. Install waits on the compiler and the library.</p>
+      <pre>curl -fsSL https://openooda.org/install | oo</pre>
+      <p>Install waits on the compiler and the library. The guide is the way in.</p>
     </main>
   </div>
   <script>
