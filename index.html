@@ -112,22 +112,22 @@ ooda run hello.oo</pre>
       <details class="drop">
         <summary>Why openOODA</summary>
         <div class="drop-body">
-          <p><strong>Effects.</strong> In Rust, Go, Zig, and C the process can open a file or a socket, so the function can too. In openOODA the function holds a token (<code>&amp;FsReadCap</code>, <code>&amp;NetCap</code>, …) or the call does not run. No token, no effect.</p>
-          <p><strong>Agents.</strong> Those languages assume a human will reread the tree. openOODA is built for a short loop: <code>outline</code>, <code>reflect</code>, <code>fix</code>, <code>patch</code> one function. You do not dump the repo into the context.</p>
-          <p><strong>Secrets.</strong> A slipped <code>println</code> ships a key. openOODA marks <code>SECRET</code> fields. Check refuses the sink.</p>
-          <p><strong>Packages.</strong> <code>cargo add</code> and <code>go get</code> fetch with the process’s authority. An openOODA lock is <code>name@version#sha256#CapName</code>. Extra caps refuse.</p>
-          <p><strong>The path.</strong> One everyday path: typecheck, emit C, run. Same source for LLVM, wasm, and x86 when you ask. See the <a href="/guide/">guide</a>.</p>
+          <p><strong>Effects.</strong> In Rust, Go, Zig, and C, a function can use files or the network if the process can. In openOODA, the function must hold a token. A token is a permission argument, for example <code>&amp;FsReadCap</code>. If the token is not there, the call does not run. No token, no effect.</p>
+          <p><strong>Agents.</strong> Other languages expect a person to read full source files. openOODA gives a short command loop: <code>outline</code>, <code>reflect</code>, <code>fix</code>, and <code>patch</code> one function. The agent does not send the full project to the model.</p>
+          <p><strong>Secrets.</strong> If you print a key, the key leaves the program. openOODA marks secret fields with <code>SECRET</code>. Check stops a print of that field.</p>
+          <p><strong>Packages.</strong> <code>cargo add</code> and <code>go get</code> fetch code with the full rights of the process. An openOODA lock line is <code>name@version#sha256#CapName</code>. The line names the hash and the permitted effect. Extra rights are refused.</p>
+          <p><strong>The path.</strong> The usual path is: typecheck, emit C, run. You can also emit LLVM, wasm, or x86 when you ask. See the <a href="/guide/">guide</a>.</p>
         </div>
       </details>
       <details class="drop">
         <summary>Safety and security</summary>
         <div class="drop-body">
-          <p><strong>Tokens.</strong> A file, process, or network call takes a capability as an argument. Missing, forged, or zero tokens fail closed. Prefer the small token. Do not take <code>&amp;SysCap</code> when <code>&amp;FsReadCap</code> is enough.</p>
-          <p><strong>Writes.</strong> <code>write_file</code> needs <code>&amp;FsWriteCap</code> and <code>OODA_FS_WRITEDIR</code>. Unset denies the write. Absolute paths and symlinks refuse.</p>
-          <p><strong>Secrets.</strong> Mark a field <code>SECRET</code>. <code>println</code> of that field fails check. A sibling that is not secret is allowed. <code>process_exec</code> is a secret sink.</p>
-          <p><strong>Packages.</strong> A lock line is <code>name@version#sha256#CapName</code>. Path traversal, extra caps, and yank refuse. <code>ooda add --registry</code> checks minisign on the catalog. <code>ooda launch --exec</code> checks that the pin exists after sha, caps, and yank.</p>
-          <p><strong>Jail.</strong> On Linux, <code>&amp;SysCap</code> can apply a Landlock jail and POSIX <code>setrlimit</code>. Empty allowlists and zero quotas fail closed.</p>
-          <p>The field guide: <a href="/guide/#Safety.oot">capabilities</a>.</p>
+          <p><strong>Tokens.</strong> A file, process, or network call takes a capability as an argument. A capability is a permission token. If the token is missing, false, or zero, the call stops. This is fail closed. Use the smallest token that does the job. Do not take <code>&amp;SysCap</code> when <code>&amp;FsReadCap</code> is enough.</p>
+          <p><strong>Writes.</strong> <code>write_file</code> needs <code>&amp;FsWriteCap</code> and <code>OODA_FS_WRITEDIR</code>. If that environment value is not set, the write is denied. Absolute paths and symbolic links are refused.</p>
+          <p><strong>Secrets.</strong> Mark a field <code>SECRET</code>. <code>println</code> of that field fails check. A nearby field that is not secret is allowed. <code>process_exec</code> is a secret sink. A sink is a call that must not receive a secret.</p>
+          <p><strong>Packages.</strong> A lock line is <code>name@version#sha256#CapName</code>. The installer refuses a path that leaves the package tree. It refuses extra capabilities. It refuses a yanked name. A yank is a name that the catalog removed. <code>ooda add --registry</code> checks a minisign signature on the catalog. <code>ooda launch --exec</code> checks that the pinned file exists after the hash, the caps, and the yank check.</p>
+          <p><strong>Jail.</strong> On Linux, <code>&amp;SysCap</code> can apply a Landlock jail and POSIX <code>setrlimit</code>. Landlock is a Linux kernel limit on which paths a process may use. <code>setrlimit</code> sets resource limits. An empty path list fails closed. A zero quota fails closed.</p>
+          <p>Read more in the guide: <a href="/guide/#Safety.oot">capabilities</a>.</p>
         </div>
       </details>
     </main>
