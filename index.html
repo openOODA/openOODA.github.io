@@ -65,6 +65,19 @@
     #copy .on { visibility: hidden; }
     #copy.is-copied .off { visibility: hidden; }
     #copy.is-copied .on { visibility: visible; }
+    .what { margin-top: 1rem; max-width: 36rem; }
+    .what summary {
+      cursor: pointer; list-style: none;
+      width: max-content;
+    }
+    .what summary::-webkit-details-marker { display: none; }
+    .what summary::before { content: "+ "; }
+    .what[open] summary::before { content: "− "; }
+    .what pre {
+      margin: 0.75rem 0 0; padding: 0.55rem 0.7rem;
+      border: 1px solid var(--fg); overflow: auto;
+      font-size: 0.9rem; line-height: 1.4;
+    }
     a { color: var(--fg); }
     a:hover { text-decoration-thickness: 2px; }
     #gh { position: fixed; right: 1rem; bottom: 1rem; z-index: 20; color: var(--fg); background: var(--bg); padding: 0.15rem 0.35rem; }
@@ -98,6 +111,39 @@
           <span class="on">copied</span>
         </button>
       </div>
+      <details class="what">
+        <summary>What gets installed</summary>
+        <pre>~/.local/bin/
+  ooda
+  oodac
+
+~/.local/share/ooda/
+  oodac/oodac
+  std/                 product library
+    actor/  archive/  collections/  core/
+    diag/   encoding/ fs/           hash/
+    io/     markup/   math/         net/
+    os/     sec/      simd/         sync/
+    test/   text/     time/
+  runtime/             C runtime for emit + gcc
+    chs_rt.c   chs_rt.h
+    chs_rt_*.c chs_rt_*.h
+    oo_hide.c  oo_holo.c  oo_sha256.c
+  share/
+    fixtures/hello.oo
+    INSTALL_RECEIPT.txt
+  install/
+
+~/.config/ooda/
+  env                  PATH and OODA_* for your shell
+
+~/.cache/ooda/
+  downloads/
+  bootstrap/           curl | sh work tree
+    &lt;version&gt;/
+      ooda-&lt;version&gt;-linux-x86_64.tar.gz
+      tree/</pre>
+      </details>
     </main>
   </div>
   <script>
