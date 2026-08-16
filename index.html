@@ -32,10 +32,6 @@
       font-weight: 700; letter-spacing: 0.08em; color: var(--bg);
       background: var(--fg); padding: 0.2rem 0.45rem; text-decoration: none; white-space: nowrap;
     }
-    .cluster { display: flex; align-items: center; gap: 1rem; flex-wrap: nowrap; }
-    nav.top { display: flex; align-items: center; gap: 1rem; flex-wrap: nowrap; }
-    nav.top a { color: var(--muted); white-space: nowrap; }
-    nav.top a.active { color: var(--fg); text-decoration: underline; text-decoration-thickness: 2px; }
     #theme {
       font: inherit; background: var(--bg); color: var(--fg);
       border: 2px solid var(--fg); padding: 0.15rem 0.55rem; cursor: pointer; white-space: nowrap;
@@ -57,7 +53,6 @@
     a:hover { text-decoration-thickness: 2px; }
     #gh { position: fixed; right: 1rem; bottom: 1rem; z-index: 20; color: var(--fg); background: var(--bg); padding: 0.15rem 0.35rem; }
     @media (max-width: 800px) {
-      .cluster { flex-basis: 100%; }
       .wrap { grid-template-columns: 1fr; }
       aside { position: static; border-right: 0; border-bottom: 1px solid var(--fg); padding-bottom: 1rem; }
     }
@@ -67,15 +62,7 @@
   <a id="gh" href="https://github.com/openOODA">github</a>
   <header>
     <a class="brand" href="/">openOODA</a>
-    <div class="cluster">
-      <nav class="top">
-        <a class="active" href="/">home</a>
-        <a href="/guide/">guide</a>
-        <a href="/research/">research</a>
-        <a href="https://registry.openooda.org/">registry</a>
-      </nav>
-      <button type="button" id="theme">dark</button>
-    </div>
+    <button type="button" id="theme">dark</button>
   </header>
   <div class="wrap">
     <aside>
