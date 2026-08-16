@@ -1,0 +1,67 @@
+# HOME — What openOODA does
+
+File: wiki/Home.oot
+User wiki. Canonical URL: https://wiki.openooda.org
+
+## 1. In one minute
+
+openOODA is a systems language. You write `.oo` files.
+A systems language talks to the machine: files, processes, and the network.
+
+Effects need a capability token.
+A capability token is a permission the function must hold before it can do that effect.
+No token, no effect.
+
+The product path is:
+
+1. Typecheck the program.
+2. Emit C.
+3. Compile that C with host `gcc`.
+4. Run the binary.
+
+That path is `ooda run`.
+
+This wiki: https://wiki.openooda.org
+Site: https://openooda.org
+Source of the pages: https://github.com/openOODA/wiki
+
+## 2. What you can do with it
+
+- Write a program in `.oo` and typecheck it (`ooda check`).
+- Build and run it on the native C path (`ooda build`, `ooda run`).
+- Run `verify` blocks and asserts (`ooda test`). `ooda run` does not run those blocks.
+- Ask the compiler to patch common errors (`ooda fix`).
+- Replace one function body from a file (`ooda patch`).
+- Talk to an editor through `ooda lsp`.
+- Emit other backends when you ask: LLVM IR, WebAssembly, standalone x86_64.
+
+The compiler and the `ooda` command live in the `ooda` tree.
+The small standard library that ships with the compiler is `ooda/std`.
+
+## 3. What a program looks like
+
+```
+pub fn greet(name: String) -> String {
+    return "Hello, " + name + "!";
+}
+
+verify greet {
+    assert_eq!(greet("World"), "Hello, World!");
+}
+
+pub fn main() {
+    println(greet("openOODA"));
+}
+```
+
+`pub fn` is a public function.
+`verify` is a test block next to the function.
+`ooda test` runs `verify`. `ooda run` prints the greeting and skips `verify`.
+
+## 4. Read next
+
+- [How to use it](Use.oot) — install from a checkout, first run, first test.
+- [Options](Options.oot) — commands, flags, backends, permissions.
+- [Limits](Limits.oot) — what is not ready. Do not sell those as product.
+
+Papers on the public site are design. They are not this wiki and they are not proof.

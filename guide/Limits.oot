@@ -1,0 +1,63 @@
+# LIMITS — What is not ready
+
+File: wiki/Limits.oot
+User wiki. Canonical URL: https://wiki.openooda.org/#Limits.oot
+
+## 1. How to read this page
+
+If a thing is listed here, do not say it works as product.
+Wanted and not built is called residual.
+
+## 2. Install and public site
+
+There is no working public `curl | sh` install.
+The compiler tree is private.
+The public install script pins an old tag and does not check a hash.
+The public fetch 404s.
+
+There is no public playground.
+
+Research papers are design. They are not a running compiler.
+
+## 3. Backends and machines
+
+Native product is emit C, then host `gcc`.
+
+LLVM IR emit of the compiler is product. A `clang` link of the full compiler is residual.
+
+Standalone x86_64 emit is product. AArch64 emit is residual.
+
+WebAssembly emit writes a module. It is not a browser playground.
+
+`GpuCap` on CPU/noop is product. `emit_ptx` writes kernel text. Launching on a real GPU is residual. This is not CUDA.
+
+## 4. Library and proofs
+
+The large org `std/` tree is residual as a certified library.
+Named small proves exist. Thousands of files is volume, not a cert.
+
+Const `requires` / `ensures` / `spec` on function headers can fold at check time.
+A general SMT solver is residual.
+
+## 5. Security hardware
+
+Process-local capability tokens are product.
+Hierarchical HMAC attenuation and measured isolate are product.
+
+SGX, TDX, and SEV hardware enclaves are residual.
+Measured isolate is not a hardware enclave.
+
+## 6. Other leftovers people ask about
+
+HITL (a separate human-in-the-loop product) is not shipped.
+The human loop is `ooda fix`.
+
+`cargo` / Rust is gone. Do not look for it.
+
+JIT and a 0ms garbage collector are not product.
+
+`ooda test --fuzz` prints a floor line and returns. It is not a fuzzer.
+
+This page is the public limit list.
+This wiki: https://wiki.openooda.org
+Site: https://openooda.org

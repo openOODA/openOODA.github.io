@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>openOODA guide</title>
+  <link rel="canonical" href="https://openooda.org/guide/">
+  <meta name="description" content="How to use openOODA, options, limits, and safety.">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script>
+    (function () {
+      var m = document.cookie.match(/(?:^|; )ooda-theme=([^;]*)/);
+      var t = (m && m[1] === "dark") || (typeof localStorage !== "undefined" && localStorage.getItem("ooda-theme") === "dark") ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", t);
+    })();
+  </script>
+  <style>
+    :root { --bg: #fff; --fg: #000; --muted: #444; --panel: #f2f2f2; }
+    html[data-theme="dark"] { --bg: #000; --fg: #e8e8e8; --muted: #9a9a9a; --panel: #141414; }
+    html { background: var(--bg); color: var(--fg); }
+    body {
+      margin: 0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    a { color: var(--fg); }
+    a:hover { text-decoration-thickness: 2px; }
+    header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 4.5rem 1rem 1.25rem;
+      border-bottom: 2px solid var(--fg);
+    }
+    .brand {
+      font-weight: 700; letter-spacing: 0.08em; color: var(--bg);
+      background: var(--fg); padding: 0.2rem 0.45rem; text-decoration: none;
+    }
+    nav.top a { color: var(--muted); margin-left: 1rem; }
+    .wrap { display: grid; grid-template-columns: 12rem 1fr; max-width: 60rem; }
+    aside { border-right: 1px solid var(--fg); padding: 1.25rem 1rem 5rem; }
+    aside h2 { font-size: 0.8rem; color: var(--muted); margin: 0 0 0.75rem; font-weight: 400; }
+    aside a { display: block; color: var(--fg); padding: 0.25rem 0; }
+    aside a.active { text-decoration: underline; text-decoration-thickness: 2px; }
+    main#page { padding: 1.5rem 1.25rem 5rem; max-width: 44rem; }
+    main#page h1 { font-size: 1.1rem; margin: 0 0 0.75rem; }
+    main#page h2 { font-size: 1rem; margin: 1.5rem 0 0.5rem; }
+    table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
+    th, td { border: 1px solid var(--fg); padding: 0.35rem 0.5rem; text-align: left; vertical-align: top; }
+    th { color: var(--muted); font-weight: 400; }
+    pre, code { font-family: inherit; font-size: 0.9rem; }
+    pre { border: 1px solid var(--fg); padding: 0.7rem; overflow: auto; background: var(--panel); }
+    code { background: var(--panel); padding: 0.05rem 0.25rem; }
+    pre code { background: none; padding: 0; }
+    .canon { color: var(--muted); font-size: 0.85rem; }
+    .err { color: var(--fg); }
+    #theme {
+      position: fixed; top: 1rem; right: 1rem; z-index: 20;
+      font: inherit; background: var(--bg); color: var(--fg);
+      border: 2px solid var(--fg); padding: 0.15rem 0.55rem; cursor: pointer;
+    }
+    #gh { position: fixed; right: 1rem; bottom: 1rem; z-index: 20; color: var(--fg); }
+    @media (max-width: 800px) {
+      .wrap { grid-template-columns: 1fr; }
+      aside { border-right: 0; border-bottom: 1px solid var(--fg); padding-bottom: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <button type="button" id="theme">dark</button>
+  <a id="gh" href="https://github.com/openOODA">github</a>
+  <header>
+    <a class="brand" href="/guide/">openOODA guide</a>
+    <nav class="top">
+      <a href="/">site</a>
+      <a href="/research/">research</a>
+      <a href="https://registry.openooda.org/">registry</a>
+    </nav>
+  </header>
+  <div class="wrap">
+    <aside>
+      <h2>guide</h2>
+      <a href="#Home.oot" data-page="Home.oot">what it does</a>
+      <a href="#Use.oot" data-page="Use.oot">how to use it</a>
+      <a href="#Options.oot" data-page="Options.oot">options</a>
+      <a href="#Limits.oot" data-page="Limits.oot">limits</a>
+      <a href="#Safety.oot" data-page="Safety.oot">safety</a>
+      <h2>library</h2>
+      <a href="/research/">research</a>
+    </aside>
+    <main id="page">
+      <p class="canon">https://openooda.org/guide/</p>
+      <p>Loading…</p>
+    </main>
+  </div>
+  <script>
+    const PAGES = ["Home.oot", "Use.oot", "Options.oot", "Limits.oot", "Safety.oot"];
+    const root = document.getElementById("page");
+    function currentPage() {
+      const h = (location.hash || "#Home.oot").replace(/^#/, "");
+      return PAGES.includes(h) ? h : "Home.oot";
+    }
+    function wikiLinks(md) {
+      return md.replace(/\]\(([A-Za-z]+\.oot)\)/g, "](#$1)");
+    }
+    async function show() {
+      const name = currentPage();
+      document.querySelectorAll("aside a[data-page]").forEach((a) => {
+        a.classList.toggle("active", a.dataset.page === name);
+      });
+      root.innerHTML = "<p>Loading…</p>";
+      try {
+        const res = await fetch(name, { cache: "no-cache" });
+        if (!res.ok) throw new Error(name + " " + res.status);
+        const text = await res.text();
+        root.innerHTML = '<p class="canon">https://openooda.org/guide/#' + name + "</p>" +
+          marked.parse(wikiLinks(text));
+      } catch (e) {
+        root.innerHTML = '<p class="err">Could not load ' + name + ".</p>";
+      }
+    }
+    window.addEventListener("hashchange", show);
+    if (!location.hash) location.replace("#Home.oot");
+    else show();
+    (function () {
+      var key = "ooda-theme";
+      function apply(t) {
+        document.documentElement.setAttribute("data-theme", t);
+        var b = document.getElementById("theme");
+        if (b) b.textContent = t === "dark" ? "light" : "dark";
+      }
+      apply(document.documentElement.getAttribute("data-theme") || "light");
+      var b = document.getElementById("theme");
+      if (b) b.onclick = function () {
+        var n = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+        localStorage.setItem(key, n);
+        document.cookie = key + "=" + n + ";path=/;domain=.openooda.org;max-age=31536000;SameSite=Lax";
+        apply(n);
+      };
+    })();
+  </script>
+</body>
+</html>

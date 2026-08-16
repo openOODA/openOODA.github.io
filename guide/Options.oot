@@ -1,0 +1,107 @@
+# OPTIONS — Commands, backends, and permissions
+
+File: wiki/Options.oot
+User wiki. Canonical URL: https://wiki.openooda.org/#Options.oot
+
+## 1. `ooda` commands
+
+```
+ooda check <file.oo> [--json-errors]
+ooda build <file.oo> [-o out] [--target c|native|llvm]
+ooda run <file.oo>
+ooda test <file.oo>
+ooda lsp
+ooda dump tokens|ast|check <file.oo>
+ooda outline <file.oo> [--json]
+ooda reflect <file.oo> [symbol] [--json]
+ooda fix <file.oo> [--yes]
+ooda patch <file.oo> --replace-fn <name> --with <body.oo>
+ooda context [path]
+ooda digest <file>
+ooda health
+ooda pkg [--json]
+ooda add <name> --vendor <dir>
+```
+
+`check` typechecks. It does not run the program.
+`build` emits and compiles. Default target is `native` (C + `gcc`).
+`run` is check + emit C + `gcc` + exec.
+`test` runs `verify` / `assert_eq!` / `assert!`.
+`lsp` is a multi-message stdio language server.
+`fix` writes only with `OODA_FS_WRITEDIR` and a yes (or `--yes`).
+`patch` replaces one function body. Absolute paths, `..`, and symlinks are refused.
+
+Also on the CLI: `pm` (package manager), `em`, `migrate`, `pack`, `install`, `context-pack`.
+Those are product commands. Treat `pm` as the local vendor path unless you pass a host you trust.
+
+`ooda add` with `--vendor` reads a file tree on disk.
+The public vendor files may be served at https://registry.openooda.org.
+The CLI does not fetch that host as the default path.
+
+## 2. `oodac` emit options
+
+`oodac` is the compiler. `ooda` calls it.
+
+```
+oodac check <file.oo>
+oodac check --json-errors <file.oo>
+oodac emit-c <file.oo>
+oodac emit-llvm <file.oo>
+oodac emit-wasm <file.oo>
+oodac emit-x86 <file.oo>
+oodac --backend llvm emit-llvm <file.oo>
+```
+
+`emit-c` is the product emit.
+`emit-llvm` writes LLVM IR. Hello and Result `match` have been run through `clang`.
+A full `clang` link of the compiler itself is not product. See [Limits](Limits.oot).
+`emit-wasm` writes a `\0asm` module with one body per source `fn`.
+`emit-x86` writes standalone x86_64 assembly with `_start`. Assemble with `as` and `ld`. AArch64 is not product.
+
+`ooda build --target llvm` and `--emit-llvm` select the LLVM target.
+`ooda build --target wasm` is accepted.
+`--fuzz` on `build` is refused.
+`--release` is only valid with the LLVM target.
+
+## 3. Environment
+
+| Name | What it does |
+| :--- | :--- |
+| `OODA_FS_WRITEDIR` | Directory `write_file` may write. Unset denies writes. |
+| `OODA_FS_READDIR` | Directory confinement for reads. |
+| `OODA_TEST` | Set by `ooda test`. You do not set this for `ooda run`. |
+
+`env_get` in a program only sees `OODA_*` and `OO_*` keys. Host secrets stay out.
+
+## 4. Permission tokens
+
+A function that does an effect takes a token argument, for example `&FsReadCap`.
+Missing, forged, or zero tokens fail closed.
+
+Common tokens:
+
+| Token | Lets the function |
+| :--- | :--- |
+| `&FsReadCap` | `read_file`, `path_exists`, `file_size` |
+| `&FsWriteCap` | `write_file` (needs `OODA_FS_WRITEDIR`) |
+| `&ProcessCap` | `process_exec`, `spawn`, `wait`, `kill` |
+| `&NetCap` / `&HttpCap` / `&TcpCap` / `&UdpCap` | network ops |
+| `&EnvCap` | `env_get` for `OODA_*` / `OO_*` |
+| `&AllocCap` | heap and bump arenas |
+| `&ThreadCap` | threads, channels, actor restart |
+| `&SysCap` | broad OS (Landlock jail, `setrlimit`, …) |
+| `&GpuCap` | CPU/noop launch. Not a device GPU dispatch. |
+
+Prefer the small token. Do not take `&SysCap` when `&FsReadCap` is enough.
+
+On Linux, `&SysCap` can apply a Landlock jail and POSIX `setrlimit`. Empty allowlists and zero quotas fail closed.
+
+## 5. Standard library
+
+Use the small tree that ships with the compiler: `ooda/std`.
+That is the product library.
+
+There is a large extra `std/` tree in the org. File count is not a certificate.
+Do not import that volume and call it product.
+
+This wiki: https://wiki.openooda.org

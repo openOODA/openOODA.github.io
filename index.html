@@ -33,7 +33,13 @@
       color: var(--bg);
       padding: 0.35rem 0.5rem;
     }
-    p { margin: 1.25rem 0 2rem; max-width: 36rem; }
+    p { margin: 1.25rem 0; max-width: 36rem; }
+    pre {
+      margin: 0 0 2rem;
+      padding: 0.6rem 0.7rem;
+      border: 1px solid var(--fg);
+      overflow: auto;
+    }
     dl { margin: 0; display: grid; grid-template-columns: 7.5rem 1fr; gap: 0.4rem 1rem; }
     dt { color: var(--muted); }
     dd { margin: 0; overflow-wrap: anywhere; }
@@ -53,15 +59,15 @@
   <main>
     <h1>openOODA</h1>
     <p>Language. Package manager. Field guide. This page is a door, not the product.</p>
+    <pre>curl -fsSL https://openooda.org/install | sh</pre>
+    <p>No checksum. The compiler tree is private. That fetch may 404.</p>
     <dl>
-      <dt>install</dt>
-      <dd><a href="https://install.openooda.org/">https://install.openooda.org</a></dd>
+      <dt>guide</dt>
+      <dd><a href="/guide/">https://openooda.org/guide/</a></dd>
       <dt>registry</dt>
       <dd><a href="https://registry.openooda.org/">https://registry.openooda.org</a></dd>
-      <dt>wiki</dt>
-      <dd><a href="https://wiki.openooda.org/">https://wiki.openooda.org</a></dd>
       <dt>research</dt>
-      <dd><a href="https://research.openooda.org/">https://research.openooda.org</a></dd>
+      <dd><a href="/research/">https://openooda.org/research/</a></dd>
     </dl>
   </main>
   <script>

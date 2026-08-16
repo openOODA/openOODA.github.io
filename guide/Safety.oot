@@ -1,0 +1,32 @@
+# SAFETY — What you can believe today
+
+File: guide/Safety.oot
+User guide. Canonical URL: https://openooda.org/guide/#Safety.oot
+
+## 1. How to read this page
+
+If a belief would make you less careful, it does not belong here.
+Design papers are not guarantees. Those live under /research.
+
+## 2. Packages
+
+Lock lines carry a sha256 and a *declared* cap name.
+A foreign ELF does not gain Ooda caps because the lock says `FsRead`.
+Ingest pins and wraps. It does not rewrite binaries.
+
+`ooda add --registry` fetches `catalog` and checks minisign
+against the pubkey shipped in the CLI. HMAC `index.sig` is not
+the public trust path.
+
+Path traversal, extra caps, and yank refuse. Host lookalikes refuse.
+`ooda launch --exec` runs only after sha, caps, and yank are ok.
+
+## 3. Install
+
+There is no checksum on the public bootstrap script.
+The compiler tree is private. The fetch may 404.
+
+## 4. Research
+
+Security papers under /research are design notes.
+Do not quote them as “openOODA does this.”

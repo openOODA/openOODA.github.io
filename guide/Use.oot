@@ -1,0 +1,108 @@
+# USE — How to run a program
+
+File: wiki/Use.oot
+User wiki. Canonical URL: https://wiki.openooda.org/#Use.oot
+
+## 1. What you need
+
+You need a checkout of the `ooda` tree that already has a seed compiler.
+You need host `gcc`.
+
+There is no working public one-line install today.
+The line `curl | sh` against the public site is documented. It 404s for the public.
+The compiler repo is private. The script pins an old tag and does not check a hash.
+Do not pipe that script and expect a compiler.
+
+Do not run `cargo`. That toolchain is gone.
+
+## 2. Build the compiler from the checkout
+
+From the `ooda` tree:
+
+```
+cd ooda
+OODAC_BIN=./bootstrap/seed/oodac bash bootstrap/oodac_pure_build oodac/main.oo oodac/oodac
+./oodac/oodac check oodac/main.oo
+```
+
+`bootstrap/oodac_pure_build` is the official rebuild.
+It starts `gcc` and the seed compiler.
+That is the one host shell entry. After that, you use `ooda` and `oodac`.
+
+Put `./bin` on your `PATH` if you want the short `ooda` command:
+
+```
+export PATH="$PWD/bin:$PATH"
+ooda version
+```
+
+## 3. Write a file
+
+Save this as `hello.oo`:
+
+```
+pub fn greet(name: String) -> String {
+    return "Hello, " + name + "!";
+}
+
+verify greet {
+    assert_eq!(greet("World"), "Hello, World!");
+}
+
+pub fn main() {
+    println(greet("openOODA"));
+}
+```
+
+The checkout also has `fixtures/hello.oo` if you want a file that already exists.
+
+## 4. Check, run, test
+
+Typecheck only:
+
+```
+ooda check hello.oo
+```
+
+Typecheck, emit C, compile with `gcc`, run:
+
+```
+ooda run hello.oo
+```
+
+That prints the greeting. It does not run the `verify` block.
+
+Run `verify` and asserts:
+
+```
+ooda test hello.oo
+```
+
+`ooda test` sets `OODA_TEST=1`. A failing assert fails the command.
+
+JSON errors for an editor or a script:
+
+```
+ooda check hello.oo --json-errors
+```
+
+## 5. Fix a file the compiler can patch
+
+`ooda fix` can apply a few error classes: missing import, missing `}`, type errors, unused `Result`, and a discarded `Result` wrap.
+
+It asks yes or no before it writes, unless you pass `--yes`.
+Writes go through `write_file`. That needs `OODA_FS_WRITEDIR`.
+If that env is unset, the write is denied.
+No TTY and no `--yes` refuses.
+Absolute paths and symlinks are refused.
+
+```
+export OODA_FS_WRITEDIR="$PWD"
+ooda fix hello.oo --yes
+```
+
+## 6. Next
+
+Commands, backends, and permission tokens: [Options](Options.oot).
+What is not ready: [Limits](Limits.oot).
+This wiki: https://wiki.openooda.org
