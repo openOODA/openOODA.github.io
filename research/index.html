@@ -26,6 +26,7 @@
     a { color: var(--fg); }
     a:hover { text-decoration-thickness: 2px; }
     header {
+      position: sticky; top: 0; z-index: 10; background: var(--bg);
       display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
       gap: 0.75rem 1.25rem; padding: 0.85rem 1.25rem; border-bottom: 2px solid var(--fg);
     }
@@ -36,23 +37,23 @@
     .cluster { display: flex; align-items: center; gap: 1rem; flex-wrap: nowrap; }
     nav.top { display: flex; align-items: center; gap: 1rem; flex-wrap: nowrap; }
     nav.top a { color: var(--muted); white-space: nowrap; }
+    nav.top a.active { color: var(--fg); text-decoration: underline; text-decoration-thickness: 2px; }
     #theme {
       font: inherit; background: var(--bg); color: var(--fg);
       border: 2px solid var(--fg); padding: 0.15rem 0.55rem; cursor: pointer; white-space: nowrap;
     }
-    .wrap { display: grid; grid-template-columns: 18rem 1fr; }
+    .wrap { display: grid; grid-template-columns: 12rem 1fr; max-width: 60rem; }
     aside {
-      border-right: 1px solid var(--fg);
-      padding: 1rem 1rem 5rem;
-      overflow: auto;
-      max-height: calc(100vh - 4rem);
+      display: flex; flex-direction: column;
+      border-right: 1px solid var(--fg); padding: 1.25rem 1rem 1.25rem;
+      position: sticky; top: 3.4rem; align-self: start;
+      max-height: calc(100vh - 3.4rem);
     }
-    aside h2 { font-size: 0.8rem; color: var(--muted); font-weight: 400; margin: 1rem 0 0.4rem; }
-    aside a {
-      display: block; color: var(--fg); padding: 0.2rem 0; font-size: 0.85rem;
-      text-align: left; overflow-wrap: anywhere; white-space: normal;
-    }
-    aside a.active { text-decoration: underline; text-decoration-thickness: 2px; }
+    .global a, .local a { display: block; color: var(--fg); padding: 0.25rem 0; text-align: left; }
+    .global a.active, .local a.active { text-decoration: underline; text-decoration-thickness: 2px; }
+    .local { margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--fg); overflow: auto; }
+    .local a { padding-left: 0.75rem; font-size: 0.85rem; overflow-wrap: anywhere; }
+    .local h2 { font-size: 0.8rem; color: var(--muted); font-weight: 400; margin: 0.75rem 0 0.35rem; padding-left: 0.75rem; }
     main { padding: 1.5rem 1.25rem 5rem; max-width: 46rem; }
     main h1 { font-size: 1.15rem; }
     main h2 { font-size: 1rem; margin-top: 1.5rem; }
@@ -63,26 +64,35 @@
     @media (max-width: 800px) {
       .cluster { flex-basis: 100%; }
       .wrap { grid-template-columns: 1fr; }
-      aside { max-height: none; border-right: 0; border-bottom: 1px solid var(--fg); }
+      aside { position: static; max-height: none; border-right: 0; border-bottom: 1px solid var(--fg); }
+      .local { overflow: visible; }
     }
   </style>
 </head>
 <body>
   <a id="gh" href="https://github.com/openOODA">github</a>
   <header>
-    <a class="brand" href="/research/">openOODA research</a>
+    <a class="brand" href="/">openOODA</a>
     <div class="cluster">
       <nav class="top">
-        <a href="https://openooda.org/">site</a>
-        <a href="https://openooda.org/guide/">guide</a>
-        <a href="https://openooda.org/research/">research</a>
+        <a href="/">home</a>
+        <a href="/guide/">guide</a>
+        <a class="active" href="/research/">research</a>
         <a href="https://registry.openooda.org/">registry</a>
       </nav>
       <button type="button" id="theme">dark</button>
     </div>
   </header>
   <div class="wrap">
-    <aside id="nav-list"></aside>
+    <aside>
+      <nav class="global">
+        <a href="/">home</a>
+        <a href="/guide/">guide</a>
+        <a class="active" href="/research/">research</a>
+        <a href="https://registry.openooda.org/">registry</a>
+      </nav>
+      <nav class="local" id="nav-list"></nav>
+    </aside>
     <main id="content"><p>Select a paper.</p></main>
   </div>
   <script>
@@ -135,7 +145,7 @@
     }
     function show() {
       const paper = currentPaper();
-      document.querySelectorAll("aside a").forEach((link) => {
+      document.querySelectorAll(".local a").forEach((link) => {
         link.classList.toggle("active", link.dataset.file === paper.file);
       });
       loadPaper(paper.file);

@@ -24,6 +24,7 @@
       line-height: 1.5;
     }
     header {
+      position: sticky; top: 0; z-index: 10; background: var(--bg);
       display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
       gap: 0.75rem 1.25rem; padding: 0.85rem 1.25rem; border-bottom: 2px solid var(--fg);
     }
@@ -34,15 +35,18 @@
     .cluster { display: flex; align-items: center; gap: 1rem; flex-wrap: nowrap; }
     nav.top { display: flex; align-items: center; gap: 1rem; flex-wrap: nowrap; }
     nav.top a { color: var(--muted); white-space: nowrap; }
+    nav.top a.active { color: var(--fg); text-decoration: underline; text-decoration-thickness: 2px; }
     #theme {
       font: inherit; background: var(--bg); color: var(--fg);
       border: 2px solid var(--fg); padding: 0.15rem 0.55rem; cursor: pointer; white-space: nowrap;
     }
     .wrap { display: grid; grid-template-columns: 12rem 1fr; max-width: 60rem; }
-    aside { border-right: 1px solid var(--fg); padding: 1.25rem 1rem 5rem; }
-    aside h2 { font-size: 0.8rem; color: var(--muted); margin: 0 0 0.75rem; font-weight: 400; }
-    aside a { display: block; color: var(--fg); padding: 0.25rem 0; text-align: left; }
-    aside a.active { text-decoration: underline; text-decoration-thickness: 2px; }
+    aside {
+      border-right: 1px solid var(--fg); padding: 1.25rem 1rem 5rem;
+      position: sticky; top: 3.4rem; align-self: start;
+    }
+    .global a { display: block; color: var(--fg); padding: 0.25rem 0; text-align: left; }
+    .global a.active { text-decoration: underline; text-decoration-thickness: 2px; }
     main { padding: 1.5rem 1.25rem 5rem; max-width: 44rem; }
     p { margin: 0 0 1.25rem; }
     pre {
@@ -55,7 +59,7 @@
     @media (max-width: 800px) {
       .cluster { flex-basis: 100%; }
       .wrap { grid-template-columns: 1fr; }
-      aside { border-right: 0; border-bottom: 1px solid var(--fg); padding-bottom: 1rem; }
+      aside { position: static; border-right: 0; border-bottom: 1px solid var(--fg); padding-bottom: 1rem; }
     }
   </style>
 </head>
@@ -65,9 +69,9 @@
     <a class="brand" href="/">openOODA</a>
     <div class="cluster">
       <nav class="top">
-        <a href="https://openooda.org/">site</a>
-        <a href="https://openooda.org/guide/">guide</a>
-        <a href="https://openooda.org/research/">research</a>
+        <a class="active" href="/">home</a>
+        <a href="/guide/">guide</a>
+        <a href="/research/">research</a>
         <a href="https://registry.openooda.org/">registry</a>
       </nav>
       <button type="button" id="theme">dark</button>
@@ -75,11 +79,12 @@
   </header>
   <div class="wrap">
     <aside>
-      <h2>site</h2>
-      <a class="active" href="/">home</a>
-      <a href="/guide/">guide</a>
-      <a href="/research/">research</a>
-      <a href="https://registry.openooda.org/">registry</a>
+      <nav class="global">
+        <a class="active" href="/">home</a>
+        <a href="/guide/">guide</a>
+        <a href="/research/">research</a>
+        <a href="https://registry.openooda.org/">registry</a>
+      </nav>
     </aside>
     <main>
       <p>Language. Package manager. Field guide.</p>
