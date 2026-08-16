@@ -113,36 +113,19 @@
       </div>
       <details class="what">
         <summary>What gets installed</summary>
-        <pre>~/.local/bin/
-  ooda
-  oodac
+        <pre>~/.local/bin/ooda
+~/.local/bin/oodac
 
-~/.local/share/ooda/
-  oodac/oodac
-  std/                 product library
-    actor/  archive/  collections/  core/
-    diag/   encoding/ fs/           hash/
-    io/     markup/   math/         net/
-    os/     sec/      simd/         sync/
-    test/   text/     time/
-  runtime/             C runtime for emit + gcc
-    chs_rt.c   chs_rt.h
-    chs_rt_*.c chs_rt_*.h
-    oo_hide.c  oo_holo.c  oo_sha256.c
-  share/
-    fixtures/hello.oo
-    INSTALL_RECEIPT.txt
-  install/
+~/.local/share/ooda/std/
+~/.local/share/ooda/runtime/
+~/.local/share/ooda/share/fixtures/hello.oo
 
-~/.config/ooda/
-  env                  PATH and OODA_* for your shell
+~/.config/ooda/env
 
-~/.cache/ooda/
-  downloads/
-  bootstrap/           curl | sh work tree
-    &lt;version&gt;/
-      ooda-&lt;version&gt;-linux-x86_64.tar.gz
-      tree/</pre>
+Already on the machine: gcc
+
+. ~/.config/ooda/env
+ooda run hello.oo</pre>
       </details>
     </main>
   </div>
