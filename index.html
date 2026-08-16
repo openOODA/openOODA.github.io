@@ -38,20 +38,24 @@
       font: inherit; background: var(--bg); color: var(--fg);
       border: 2px solid var(--fg); padding: 0.15rem 0.55rem; cursor: pointer; white-space: nowrap;
     }
-    main { max-width: 44rem; padding: 1.5rem 1.25rem 5rem; }
-    p { margin: 1.25rem 0; max-width: 36rem; }
+    .wrap { display: grid; grid-template-columns: 12rem 1fr; max-width: 60rem; }
+    aside { border-right: 1px solid var(--fg); padding: 1.25rem 1rem 5rem; }
+    aside h2 { font-size: 0.8rem; color: var(--muted); margin: 0 0 0.75rem; font-weight: 400; }
+    aside a { display: block; color: var(--fg); padding: 0.25rem 0; text-align: left; }
+    aside a.active { text-decoration: underline; text-decoration-thickness: 2px; }
+    main { padding: 1.5rem 1.25rem 5rem; max-width: 44rem; }
+    p { margin: 0 0 1.25rem; }
     pre {
-      margin: 0 0 2rem; padding: 0.6rem 0.7rem;
+      margin: 0 0 1.5rem; padding: 0.6rem 0.7rem;
       border: 1px solid var(--fg); overflow: auto;
     }
-    dl { margin: 0; display: grid; grid-template-columns: 9ch 1fr; gap: 0.4rem 1rem; align-items: baseline; }
-    dt { color: var(--muted); }
-    dd { margin: 0; overflow-wrap: anywhere; }
     a { color: var(--fg); }
     a:hover { text-decoration-thickness: 2px; }
     #gh { position: fixed; right: 1rem; bottom: 1rem; z-index: 20; color: var(--fg); background: var(--bg); padding: 0.15rem 0.35rem; }
     @media (max-width: 800px) {
       .cluster { flex-basis: 100%; }
+      .wrap { grid-template-columns: 1fr; }
+      aside { border-right: 0; border-bottom: 1px solid var(--fg); padding-bottom: 1rem; }
     }
   </style>
 </head>
@@ -69,18 +73,19 @@
       <button type="button" id="theme">dark</button>
     </div>
   </header>
-  <main>
-    <p>Language. Package manager. Field guide.</p>
-    <pre>curl -fsSL https://openooda.org/install | sh</pre>
-    <dl>
-      <dt>guide</dt>
-      <dd><a href="https://openooda.org/guide/">https://openooda.org/guide/</a></dd>
-      <dt>research</dt>
-      <dd><a href="https://openooda.org/research/">https://openooda.org/research/</a></dd>
-      <dt>registry</dt>
-      <dd><a href="https://registry.openooda.org/">https://registry.openooda.org/</a></dd>
-    </dl>
-  </main>
+  <div class="wrap">
+    <aside>
+      <h2>site</h2>
+      <a class="active" href="/">home</a>
+      <a href="/guide/">guide</a>
+      <a href="/research/">research</a>
+      <a href="https://registry.openooda.org/">registry</a>
+    </aside>
+    <main>
+      <p>Language. Package manager. Field guide.</p>
+      <pre>curl -fsSL https://openooda.org/install | sh</pre>
+    </main>
+  </div>
   <script>
     (function () {
       var key = "ooda-theme";
