@@ -45,39 +45,6 @@
     .global a.active { text-decoration: underline; text-decoration-thickness: 2px; }
     main { padding: 1.5rem 1.25rem 5rem; max-width: 44rem; min-width: 0; }
     p { margin: 0 0 1.25rem; max-width: 36rem; }
-    .install {
-      display: flex; align-items: center; gap: 0.65rem;
-      max-width: 100%; min-width: 0;
-    }
-    .install pre {
-      margin: 0; padding: 0.55rem 0.7rem;
-      border: 1px solid var(--fg);
-      overflow: auto; white-space: nowrap;
-      min-width: 0; flex: 0 1 auto;
-    }
-    #copy {
-      font: inherit; background: var(--bg); color: var(--fg);
-      border: 2px solid var(--fg); padding: 0.15rem 0.55rem;
-      cursor: pointer; flex: 0 0 auto;
-      display: grid; place-items: center;
-    }
-    #copy span { grid-area: 1 / 1; }
-    #copy .on { visibility: hidden; }
-    #copy.is-copied .off { visibility: hidden; }
-    #copy.is-copied .on { visibility: visible; }
-    .what { margin-top: 1rem; max-width: 36rem; }
-    .what summary {
-      cursor: pointer; list-style: none;
-      width: max-content;
-    }
-    .what summary::-webkit-details-marker { display: none; }
-    .what summary::before { content: "+ "; }
-    .what[open] summary::before { content: "− "; }
-    .what pre {
-      margin: 0.75rem 0 0; padding: 0.55rem 0.7rem;
-      border: 1px solid var(--fg); overflow: auto;
-      font-size: 0.9rem; line-height: 1.4;
-    }
     a { color: var(--fg); }
     a:hover { text-decoration-thickness: 2px; }
     #gh { position: fixed; right: 1rem; bottom: 1rem; z-index: 20; color: var(--fg); background: var(--bg); padding: 0.15rem 0.35rem; }
@@ -104,27 +71,7 @@
     </aside>
     <main>
       <p>Build fast. Stay secure. Save tokens.</p>
-      <div class="install">
-        <pre id="cmd">curl -fsSL https://openooda.org/install | sh</pre>
-        <button type="button" id="copy">
-          <span class="off">copy</span>
-          <span class="on">copied</span>
-        </button>
-      </div>
-      <details class="what">
-        <summary>What gets installed</summary>
-        <pre>~/.local/bin/ooda
-~/.local/bin/oodac
-
-~/.local/share/ooda/std/
-~/.local/share/ooda/runtime/
-~/.local/share/ooda/share/fixtures/hello.oo
-
-~/.config/ooda/env
-
-. ~/.config/ooda/env
-ooda run hello.oo</pre>
-      </details>
+      <p>The guide is the way in. Install waits on the compiler and the library.</p>
     </main>
   </div>
   <script>
@@ -143,16 +90,6 @@ ooda run hello.oo</pre>
         document.cookie = key + "=" + n + ";path=/;domain=.openooda.org;max-age=31536000;SameSite=Lax";
         apply(n);
       };
-      var copy = document.getElementById("copy");
-      var cmd = document.getElementById("cmd");
-      if (copy && cmd && navigator.clipboard) {
-        copy.onclick = function () {
-          navigator.clipboard.writeText(cmd.textContent).then(function () {
-            copy.classList.add("is-copied");
-            setTimeout(function () { copy.classList.remove("is-copied"); }, 1500);
-          });
-        };
-      }
     })();
   </script>
 </body>

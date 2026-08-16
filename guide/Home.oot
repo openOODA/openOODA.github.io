@@ -29,15 +29,10 @@ Guide: https://openooda.org/guide/
 Registry: https://registry.openooda.org
 Research library: https://openooda.org/research/
 
-## 2. Install
+## 2. Start here
 
-The public install line:
-
-```
-curl -fsSL https://openooda.org/install | sh
-```
-
-Then do the first run on [Start](Use.oot).
+Install waits on the compiler and the library.
+The first program is on [Start](Use.oot).
 That page is how you check, run, and test a file.
 
 ## 3. Hello

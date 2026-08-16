@@ -21,21 +21,9 @@ That is enough to rebuild the compiler and run a file.
 The rebuild is a [self-hosted ecosystem](/research/#RP-5-1-self-hosted-ecosystem.oot).
 The tools you type after that are the [pure product CLI](/research/#RP-5-1a-pure-product-compiler-cli.oot).
 
-## 2. Public install
+## 2. Install
 
-One line on a new machine:
-
-```
-curl -fsSL https://openooda.org/install | sh
-```
-
-Open a new shell so `ooda` is on your `PATH`.
-Confirm with:
-
-```
-ooda version
-```
-
+The public one-liner is paused while the compiler and the library finish.
 From a checkout you already have, use the official rebuild below.
 Then use `ooda` and `oodac`.
 
