@@ -6,54 +6,81 @@
   <title>openOODA</title>
   <meta name="description" content="openOODA — a language, a local package manager, and a public field guide.">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <script>
+    (function () {
+      var m = document.cookie.match(/(?:^|; )ooda-theme=([^;]*)/);
+      var t = (m && m[1] === "dark") || (typeof localStorage !== "undefined" && localStorage.getItem("ooda-theme") === "dark") ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", t);
+    })();
+  </script>
   <style>
-    html { background: #fff; color: #000; }
+    :root { --bg: #fff; --fg: #000; --muted: #444; }
+    html[data-theme="dark"] { --bg: #000; --fg: #e8e8e8; --muted: #9a9a9a; }
+    html { background: var(--bg); color: var(--fg); }
     body {
       margin: 0;
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
       font-size: 16px;
       line-height: 1.5;
     }
-    main {
-      max-width: 44rem;
-      padding: 2.5rem 1.25rem 4rem;
-    }
+    main { max-width: 44rem; padding: 2.5rem 1.25rem 5rem; }
     h1 {
       margin: 0;
       font-size: 1rem;
       font-weight: 700;
       letter-spacing: 0.08em;
-      background: #000;
-      color: #fff;
+      background: var(--fg);
+      color: var(--bg);
       padding: 0.35rem 0.5rem;
     }
     p { margin: 1.25rem 0 2rem; max-width: 36rem; }
-    dl {
-      margin: 0;
-      display: grid;
-      grid-template-columns: 7.5rem 1fr;
-      gap: 0.4rem 1rem;
-    }
-    dt { color: #444; }
+    dl { margin: 0; display: grid; grid-template-columns: 7.5rem 1fr; gap: 0.4rem 1rem; }
+    dt { color: var(--muted); }
     dd { margin: 0; overflow-wrap: anywhere; }
-    a { color: #000; }
+    a { color: var(--fg); }
     a:hover { text-decoration-thickness: 2px; }
+    #theme {
+      position: fixed; top: 1rem; right: 1rem; z-index: 20;
+      font: inherit; background: var(--bg); color: var(--fg);
+      border: 2px solid var(--fg); padding: 0.15rem 0.55rem; cursor: pointer;
+    }
+    #gh { position: fixed; right: 1rem; bottom: 1rem; z-index: 20; color: var(--fg); }
   </style>
 </head>
 <body>
+  <button type="button" id="theme">dark</button>
+  <a id="gh" href="https://github.com/openOODA">github</a>
   <main>
     <h1>openOODA</h1>
     <p>Language. Package manager. Field guide. This page is a door, not the product.</p>
     <dl>
+      <dt>install</dt>
+      <dd><a href="https://install.openooda.org/">https://install.openooda.org</a></dd>
       <dt>registry</dt>
-      <dd><a href="https://registry.openooda.org/index">https://registry.openooda.org/index</a></dd>
+      <dd><a href="https://registry.openooda.org/">https://registry.openooda.org</a></dd>
       <dt>wiki</dt>
       <dd><a href="https://wiki.openooda.org/">https://wiki.openooda.org</a></dd>
       <dt>research</dt>
-      <dd><a href="research.html">https://openooda.org/research.html</a></dd>
-      <dt>github</dt>
-      <dd><a href="https://github.com/openOODA">https://github.com/openOODA</a></dd>
+      <dd><a href="https://research.openooda.org/">https://research.openooda.org</a></dd>
     </dl>
   </main>
+  <script>
+    (function () {
+      var key = "ooda-theme";
+      function apply(t) {
+        document.documentElement.setAttribute("data-theme", t);
+        var b = document.getElementById("theme");
+        if (b) b.textContent = t === "dark" ? "light" : "dark";
+      }
+      apply(document.documentElement.getAttribute("data-theme") || "light");
+      var b = document.getElementById("theme");
+      if (b) b.onclick = function () {
+        var n = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+        localStorage.setItem(key, n);
+        document.cookie = key + "=" + n + ";path=/;domain=.openooda.org;max-age=31536000;SameSite=Lax";
+        apply(n);
+      };
+    })();
+  </script>
 </body>
 </html>
