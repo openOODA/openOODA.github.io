@@ -119,6 +119,17 @@ ooda run hello.oo</pre>
           <p><strong>The path.</strong> One everyday path: typecheck, emit C, run. Same source for LLVM, wasm, and x86 when you ask. See the <a href="/guide/">guide</a>.</p>
         </div>
       </details>
+      <details class="drop">
+        <summary>Safety and security</summary>
+        <div class="drop-body">
+          <p><strong>Tokens.</strong> A file, process, or network call takes a capability as an argument. Missing, forged, or zero tokens fail closed. Prefer the small token. Do not take <code>&amp;SysCap</code> when <code>&amp;FsReadCap</code> is enough.</p>
+          <p><strong>Writes.</strong> <code>write_file</code> needs <code>&amp;FsWriteCap</code> and <code>OODA_FS_WRITEDIR</code>. Unset denies the write. Absolute paths and symlinks refuse.</p>
+          <p><strong>Secrets.</strong> Mark a field <code>SECRET</code>. <code>println</code> of that field fails check. A sibling that is not secret is allowed. <code>process_exec</code> is a secret sink.</p>
+          <p><strong>Packages.</strong> A lock line is <code>name@version#sha256#CapName</code>. Path traversal, extra caps, and yank refuse. <code>ooda add --registry</code> checks minisign on the catalog. <code>ooda launch --exec</code> checks that the pin exists after sha, caps, and yank.</p>
+          <p><strong>Jail.</strong> On Linux, <code>&amp;SysCap</code> can apply a Landlock jail and POSIX <code>setrlimit</code>. Empty allowlists and zero quotas fail closed.</p>
+          <p>The field guide: <a href="/guide/#Safety.oot">capabilities</a>.</p>
+        </div>
+      </details>
     </main>
   </div>
   <script>
