@@ -121,22 +121,29 @@
         </div>
       </details>
       <details class="drop">
-        <summary>Safety and security</summary>
+        <summary>Safety</summary>
         <div class="drop-body">
           <p><strong><a href="/guide/#Safety.oot">Tokens</a>.</strong> A file, process, or network call takes a <a href="/research/#RP-3-1-unified-capability-sandboxing.oot">capability</a> as an argument. A capability is a permission token. If the token is missing, false, or zero, the call stops. This is fail closed. Use the smallest token that does the job. Do not take <a href="/guide/#Safety.oot"><code>&amp;SysCap</code></a> when <a href="/guide/#Safety.oot"><code>&amp;FsReadCap</code></a> is enough.</p>
           <p><strong><a href="/guide/#Safety.oot">Writes</a>.</strong> <a href="/guide/#Safety.oot"><code>write_file</code></a> needs <a href="/guide/#Safety.oot"><code>&amp;FsWriteCap</code></a> and <a href="/guide/#Options.oot"><code>OODA_FS_WRITEDIR</code></a>. If that environment value is not set, the write is denied. Absolute paths and symbolic links are refused.</p>
           <p><strong><a href="/guide/#Language.oot">Secrets</a>.</strong> Mark a field <a href="/research/#RP-3-5-static-taint-secret.oot"><code>SECRET</code></a>. <code>println</code> of that field fails <a href="/guide/#Options.oot">check</a>. A nearby field that is not secret is allowed. <a href="/guide/#Safety.oot"><code>process_exec</code></a> is a secret sink. A sink is a call that must not receive a secret.</p>
-          <p><strong><a href="/guide/#Packages.oot">Packages</a>.</strong> A <a href="/guide/#Packages.oot">lock line</a> is <code>name@version#sha256#CapName</code>. The installer refuses a path that leaves the package tree. It refuses extra capabilities. It refuses a yanked name. A yank is a name that the <a href="https://registry.openooda.org/">catalog</a> removed. <a href="/guide/#Packages.oot"><code>ooda add --registry</code></a> checks a minisign signature on the catalog. <a href="/guide/#Packages.oot"><code>ooda launch --exec</code></a> checks that the pinned file exists after the hash, the caps, and the yank check.</p>
           <p><strong><a href="/guide/#Safety.oot">Jail</a>.</strong> On Linux, <code>&amp;SysCap</code> can apply a <a href="/research/#RP-3-1-unified-capability-sandboxing.oot">Landlock</a> jail and POSIX <a href="/research/#RP-3-3-memory-quotas-heap-sandbox.oot"><code>setrlimit</code></a>. Landlock is a Linux kernel limit on which paths a process may use. <code>setrlimit</code> sets <a href="/research/#RP-3-4-cpu-quotas-maxcycles.oot">resource limits</a>. An empty path list fails closed. A zero quota fails closed.</p>
+        </div>
+      </details>
+      <details class="drop">
+        <summary>Security</summary>
+        <div class="drop-body">
+          <p><strong><a href="/guide/#Packages.oot">Lock</a>.</strong> A <a href="/guide/#Packages.oot">lock line</a> is <code>name@version#sha256#CapName</code>. The line names the bytes and the permitted effect. Extra capabilities are refused. A path that leaves the package tree is refused.</p>
+          <p><strong><a href="https://registry.openooda.org/">Catalog</a>.</strong> <a href="/guide/#Packages.oot"><code>ooda add --registry</code></a> checks a minisign signature on the catalog. It refuses a yanked name. A yank is a name that the catalog removed.</p>
+          <p><strong><a href="/guide/#Packages.oot">Launch</a>.</strong> <a href="/guide/#Packages.oot"><code>ooda launch --exec</code></a> checks that the pinned file exists after the hash, the caps, and the yank check.</p>
+          <p><strong><a href="/guide/#Packages.oot">Foreign binary</a>.</strong> A foreign ELF file does not receive Ooda tokens from a lock line. The lock names a cap. It does not rewrite the binary.</p>
+          <p><strong><a href="/guide/#Safety.oot">Measured isolate</a>.</strong> Measured isolate hashes the payload, the token, and the domain. You measure what you isolated. See the <a href="/research/#RP-5-2-verifiable-web-of-code.oot">verifiable web of code</a>.</p>
         </div>
       </details>
       <details class="drop">
         <summary>Defense</summary>
         <div class="drop-body">
-          <p><strong><a href="/guide/#Safety.oot">Disk pin</a>.</strong> The <a href="/guide/#Packages.oot">lock</a> pins the exact bytes of a package with a sha256 hash. A rebuild can match the file on disk. See <a href="/research/#RP-4-3-2-deterministic-reproducible-builds.oot">reproducible builds</a>.</p>
-          <p><strong><a href="/guide/#Packages.oot">Foreign binary</a>.</strong> A foreign ELF file does not receive Ooda tokens from a lock line. The lock names a cap. It does not rewrite the binary.</p>
-          <p><strong><a href="/guide/#Safety.oot">Measured isolate</a>.</strong> Measured isolate hashes the payload, the token, and the domain. You measure what you isolated.</p>
-          <p><strong><a href="/research/#RP-3-11-polymorphic-metamorphic-binaries.oot">Memory layout</a>.</strong> The file on disk stays the same. The defense in memory can change the layout at load. One exploit does not fit every machine. That is a <a href="/research/#RP-3-11-polymorphic-metamorphic-binaries.oot">metamorphic binary</a>.</p>
+          <p><strong><a href="/research/#RP-4-3-2-deterministic-reproducible-builds.oot">Disk</a>.</strong> The file on disk stays the same so a rebuild can match. See <a href="/research/#RP-4-3-2-deterministic-reproducible-builds.oot">reproducible builds</a>.</p>
+          <p><strong><a href="/research/#RP-3-11-polymorphic-metamorphic-binaries.oot">Memory layout</a>.</strong> The defense in memory can change the layout at load. One exploit does not fit every machine. That is a <a href="/research/#RP-3-11-polymorphic-metamorphic-binaries.oot">metamorphic binary</a>.</p>
           <p><strong><a href="/research/#RP-3-9-cryptographic-call-graph-integrity.oot">Call graph</a>.</strong> <a href="/research/#RP-3-9-cryptographic-call-graph-integrity.oot">Call-graph integrity</a> seals the approved paths. A hijacked return cannot jump to a random gadget.</p>
           <p><strong><a href="/research/#RP-ES-5-es-zero-day-defense.oot">Zero-day</a>.</strong> The stack is: contain with tokens, detect with contracts, raise cost with layout change. Read <a href="/research/#RP-ES-5-es-zero-day-defense.oot">zero-day defense</a> and <a href="/research/#RP-6-1-tension-metamorphic-vs-deterministic.oot">disk versus memory</a>.</p>
         </div>
