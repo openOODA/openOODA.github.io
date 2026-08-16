@@ -198,7 +198,19 @@ How to add a library: [Packages](Packages.oot).
 The same pin-and-grant idea is [zero-day defense](/research/#RP-ES-5-es-zero-day-defense.oot).
 Where the sandbox meets C: [caps vs FFI](/research/#RP-6-3-tension-caps-vs-ffi.oot).
 
-## 10. How to use caps well
+## 10. Binary defense
+
+The lock pins the exact bytes of a package with a sha256 hash.
+A foreign ELF file does not receive Ooda tokens from a lock line.
+Measured isolate hashes the payload, the token, and the domain.
+The file on disk stays the same so a rebuild can match.
+The defense in memory can change the layout at load.
+One exploit does not fit every machine.
+
+Read [metamorphic binaries](/research/#RP-3-11-polymorphic-metamorphic-binaries.oot)
+and [call-graph integrity](/research/#RP-3-9-cryptographic-call-graph-integrity.oot).
+
+## 11. How to use caps well
 
 1. Declare the tokens the function actually uses.
 2. Pass them down. Every effect call takes its token.
@@ -206,11 +218,12 @@ Where the sandbox meets C: [caps vs FFI](/research/#RP-6-3-tension-caps-vs-ffi.o
 4. Set `OODA_FS_WRITEDIR` before you write.
 5. Mark secret fields. Keep them out of `println` and `process_exec`.
 6. Read the declared cap on the lock line before you launch.
+7. Treat the lock hash as the identity of the bytes.
 
 The product path still typechecks, emits C, compiles with host `gcc`, and runs.
 See [How it works](Limits.oot).
 
-## 11. Further reading
+## 12. Further reading
 
 - [unified capability sandboxing](/research/#RP-3-1-unified-capability-sandboxing.oot)
 - [memory quotas](/research/#RP-3-3-memory-quotas-heap-sandbox.oot)
@@ -220,6 +233,8 @@ See [How it works](Limits.oot).
 - [capability-secure](/research/#RP-ES-2-es-capability-secure.oot)
 - [caps vs FFI](/research/#RP-6-3-tension-caps-vs-ffi.oot)
 - [zero-day defense](/research/#RP-ES-5-es-zero-day-defense.oot)
+- [metamorphic binaries](/research/#RP-3-11-polymorphic-metamorphic-binaries.oot)
+- [call-graph integrity](/research/#RP-3-9-cryptographic-call-graph-integrity.oot)
 
 ## See also
 
