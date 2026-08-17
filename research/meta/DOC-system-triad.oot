@@ -1,19 +1,19 @@
-# DOC-system-triad: Documentation triad (DESIGN · PM · SPRINT)
+# DOC-system-triad: Documentation triad (NORTHSTAR · ROADMAP)
 
 | Field | Value |
 |-------|--------|
 | **Paper ID** | `DOC-system-triad` |
-| **Subject document(s)** | `DESIGN.oot` + monorepo `PM.oot` + monorepo `SPRINT.oot` |
+| **Subject document(s)** | `NORTHSTAR.oot` + monorepo `ROADMAP.oot` |
 | **Status** | `draft` |
 | **Series** | Documentation system (`DOC-*`) |
 
 ## 1. Why this document exists
 
-openOODA needs three non-overlapping control surfaces: vision (DESIGN), progress vs vision (PM), and cycle execution (SPRINT). One file cannot hold stable architecture, honest progress, and high-churn sprint work without rotting.
+openOODA needs clean non-overlapping control surfaces: vision (NORTHSTAR), progress vs vision, and cycle execution (ROADMAP). One file cannot hold stable architecture, honest progress, and high-churn sprint work without rotting.
 
 ## 2. Problem statement
 
-If vision and status share a file, DESIGN becomes a lying checklist or sprint noise rewrites architecture. If status and sprint share a file, tip/residual truth fights mid-cycle WIP. Agents then optimize the wrong document.
+If vision and status share a file, NORTHSTAR becomes a lying checklist or sprint noise rewrites architecture. If status and sprint share a file, tip/residual truth fights mid-cycle WIP. Agents then optimize the wrong document.
 
 ## 3. Related work (university + commercial)
 
@@ -27,15 +27,14 @@ If vision and status share a file, DESIGN becomes a lying checklist or sprint no
 
 | Doc | Cadence | Question |
 |-----|---------|----------|
-| DESIGN | Rare | What is OODA for? |
-| PM | After landings | How far vs DESIGN? |
-| SPRINT | Every depth push | What are we doing this cycle? |
+| NORTHSTAR | Rare | What is OODA for? |
+| ROADMAP | After landings | How far vs NORTHSTAR & what to do next? |
 
 Research series justify claims; these three govern work.
 
 ## 5. Limits and failure modes
 
-Triad fails if PM is not updated after landings; if SPRINT redefines architecture; if DESIGN claims ship status. Public site may summarize; monorepo remains authoritative for PM/SPRINT.
+System fails if ROADMAP is not updated after landings; if ROADMAP redefines architecture; if NORTHSTAR claims ship status. Public site may summarize; monorepo remains authoritative for ROADMAP.
 
 ## 6. Alternatives considered
 
@@ -43,12 +42,12 @@ Wiki-only, issue-tracker-only, single mega-README, or oral tradition — all fai
 
 ## 7. Reality (honesty)
 
-Adopted monorepo + site (2026-08). PROGRESS/PROJECT stubbed into PM. Enforcement is process, not yet CI tip-matching.
+Adopted monorepo + site (2026-08). PROGRESS/PROJECT stubbed into ROADMAP. Enforcement is process, not yet CI tip-matching.
 
 ## 8. Open questions
 
-1. CI check that PM tip SHA equals ooda/main?
-2. Publish PM on GitHub org root?
+1. CI check that ROADMAP tip SHA equals ooda/main?
+2. Publish ROADMAP on GitHub org root?
 
 ## 9. Acceptance criteria
 
@@ -63,8 +62,8 @@ Adopted monorepo + site (2026-08). PROGRESS/PROJECT stubbed into PM. Enforcement
 
 ## Conflicts with other docs / series
 
-**PM tip vs SPRINT tip drift** → re-pin both after merge; SPRINT is “now,” PM follows within one landing.
-**DESIGN marketing vs PM honesty** → never copy DESIGN slogans into PM `done` without product proof.
+**ROADMAP tip drift** → re-pin after merge; ROADMAP is “now” and follows within one landing.
+**NORTHSTAR marketing vs ROADMAP honesty** → never copy NORTHSTAR slogans into ROADMAP `done` without product proof.
 
 ---
-*Index: [README.oot](./README.oot). DESIGN research: [../README.oot](../README.oot). TOOLS research: [../tools/README.oot](../tools/README.oot).*
+*Index: [README.oot](./README.oot). NORTHSTAR research: [../README.oot](../README.oot). TOOLS research: [../tools/README.oot](../tools/README.oot).*

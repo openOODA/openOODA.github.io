@@ -1,6 +1,6 @@
 # RP-2.4: Global Hive-Mind Fuzzing
 
-**Abstract**
+## Abstract
 This paper presents a theoretical framework for global hive-mind fuzzing within the openOODA ecosystem. Traditional local contract fuzzing suffers from computational resource limits. This research proposes a distributed, peer-to-peer network of idle compilers that utilizes artificial intelligence to generate semantic mutations. This distributed architecture mathematically proves or breaks software contracts at scale. The system provides extensive capability isolation to protect peer nodes from malicious code execution while maximizing global test coverage.
 
 ## 1. Introduction

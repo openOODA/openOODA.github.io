@@ -1,4 +1,4 @@
-# Capability-Secure by Construction in Systems Languages
+# RP-ES.2: Capability-Secure by Construction in Systems Languages
 
 ## Abstract
 Standard operating systems and language interfaces provide ambient authority. This authority allows any code within a process to access system resources. This creates significant vulnerabilities to supply-chain attacks and artificial intelligence-generated code. This paper presents a capability-secure architecture for the openOODA programming language. The system denies input and output access by default. Functions must receive explicit capability tokens to interact with the network, file system, or execution environment. This architecture prevents ambient authority attacks. It also provides a secure foundation for automated code generation.

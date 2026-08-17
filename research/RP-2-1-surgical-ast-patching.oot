@@ -1,6 +1,6 @@
 # RP-2.1: Surgical AST Patching and JSON Diagnostics
 
-**Abstract**
+## Abstract
 This paper presents a theoretical framework for surgical Abstract Syntax Tree (AST) patching and JSON diagnostics in the openOODA system. The Observe, Orient, Decide, Act (OODA) loop fails when artificial intelligence agents must process human-oriented error text. This research introduces a dual-surface diagnostic architecture that provides machine-readable, AST-oriented fixes. This system enables coding agents to perform deterministic, single-step code repairs without full-file read and write operations.
 
 ## 1. Introduction

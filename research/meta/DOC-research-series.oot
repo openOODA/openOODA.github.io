@@ -9,11 +9,11 @@
 
 ## 1. Why this document exists
 
-DESIGN leaves and TOOLS claims assert strong science cousins. Without written justification, architecture is assertion theater. Papers force problem, prior art, rationale, honesty mapping, acceptance criteria.
+NORTHSTAR leaves and TOOLS claims assert strong science cousins. Without written justification, architecture is assertion theater. Papers force problem, prior art, rationale, honesty mapping, acceptance criteria.
 
 ## 2. Problem statement
 
-PM can mark not-started forever without explaining why a leaf is in DESIGN. Agents cannot prioritize vision vs residual. Conflicts stay implicit until product pain.
+ROADMAP can mark not-started forever without explaining why a leaf is in NORTHSTAR. Agents cannot prioritize vision vs residual. Conflicts stay implicit until product pain.
 
 ## 3. Related work (university + commercial)
 
@@ -24,7 +24,7 @@ PM can mark not-started forever without explaining why a leaf is in DESIGN. Agen
 
 ## 4. Rationale for openOODA
 
-RP = why in DESIGN; TP = why this process; DOC = why this control doc; CONFLICTS = fights + policy.
+RP = why in NORTHSTAR; TP = why this process; DOC = why this control doc; CONFLICTS = fights + policy.
 
 ## 5. Limits and failure modes
 
@@ -41,11 +41,11 @@ RP and TP drafts landed; DOC series lands with this paper. Promotion to accepted
 ## 8. Open questions
 
 1. External PDF publish later?
-2. Require accepted research before PM done on vision leaves?
+2. Require accepted research before ROADMAP done on vision leaves?
 
 ## 9. Acceptance criteria
 
-- [ ] Every DESIGN leaf has RP.
+- [ ] Every NORTHSTAR leaf has RP.
 - [ ] TOOLS non-obvious claims have TP.
 - [ ] Control docs have DOC.
 - [ ] CONFLICTS kept current.
@@ -57,4 +57,4 @@ RP and TP drafts landed; DOC series lands with this paper. Promotion to accepted
 3. docs/research/README.oot
 
 ---
-*Index: [README.oot](./README.oot). DESIGN research: [../README.oot](../README.oot). TOOLS research: [../tools/README.oot](../tools/README.oot).*
+*Index: [README.oot](./README.oot). NORTHSTAR research: [../README.oot](../README.oot). TOOLS research: [../tools/README.oot](../tools/README.oot).*

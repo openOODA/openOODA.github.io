@@ -1,10 +1,10 @@
 # RP-4.3.3: Compile-Time FFI Generation
 
-**Abstract**
+## Abstract
 
 Systems programming languages must operate with the standard C application binary interface. Programmers often write these interface connections by hand. These hand-written connections cause errors and decay over time. The openOODA compiler automatically generates safe wrappers from C headers. This generation process requires explicit capability gates for all external calls. This document describes the theoretical design and methodology for compile-time foreign function interface generation.
 
-**Introduction**
+## 1. Introduction
 
 Modern software must connect to existing external C libraries. Programmers frequently write these connections manually. Hand-written connections decay when upstream libraries change. This decay causes undefined behavior in the software. When programmers lack automatic tools, they often copy unstable code from other sources. Furthermore, artificial intelligence agents frequently create incorrect function signatures.
 
@@ -12,7 +12,7 @@ Simple automatic generation tools create other structural problems. A simple too
 
 Similar tools exist in other programming languages. The rust-bindgen tool reads C headers and creates Rust declarations. It creates layout tests but possesses limits with complex macros. The Go cgo tool connects Go code to C code with special comments. It is easy to use but causes problems for cross-compilation and portability. The openOODA architecture adopts concepts from these tools but enforces strict capability security.
 
-**Architecture and Methodology**
+## 2. Architecture and Methodology
 
 The theoretical openOODA syntax uses a direct import command. For example, the code uses the directive `import "C" "sqlite3.h"`. An internal parser reads the specified header file. The parser generates external declarations and safe wrapper functions. Each wrapper function explicitly requires the `&UnsafeFFICap` capability token. The system backend subsequently links the program with the external library.
 
@@ -24,13 +24,13 @@ The generated wrappers output as standard C prototypes and openOODA call sites. 
 
 The architecture mitigates several critical security threats. The system prevents the import of full platform headers through approved item lists. The wrappers do not export operations with raw pointers without the correct capability token. The parser expands macros and rejects macros that it cannot understand. Hash checks of headers and local storage stop malicious header injection. The system prevents confused deputy attacks because it continues to require capabilities for file system and network access.
 
-**Conclusion**
+## 3. Conclusion
 
 Compile-time foreign function interface generation operates as a necessary feature for secure systems languages. It successfully removes the errors of hand-written bindings. The openOODA design integrates automatic generation directly with the capability security model. The compiler creates safe wrappers that continuously enforce capability limits. This architecture allows safe and automatic interaction with the standard C ecosystem. It maintains explicit security boundaries for all external code execution.
 
----
+## References
 
-*References: openOODA DESIGN.oot §4, §6.3; RP-6.3 Caps vs FFI; RP-4.x Backend-C.*
+*References: openOODA NORTHSTAR.oot §4, §6.3; RP-6.3 Caps vs FFI; RP-4.x Backend-C.*
 
 ---
 *Series index: [README.oot](./README.oot).*

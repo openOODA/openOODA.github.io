@@ -1,4 +1,4 @@
-# Universal Native Language Server Protocol Integration
+# RP-5.7: Universal Native Language Server Protocol Integration
 
 ## Abstract
 Modern programming languages require fast and interactive feedback in various editing environments. A dedicated compiler analysis engine often leads to editor lock-in and high maintenance costs. This paper describes the architecture for a universal and native Language Server Protocol daemon for the openOODA programming language. The system embeds the language server directly into the compiler. This ensures a single set of rules for all clients. It provides portability for artificial intelligence agents. It maintains self-hosting purity. The daemon operates with sub-millisecond response times using incremental queries and virtual file systems.

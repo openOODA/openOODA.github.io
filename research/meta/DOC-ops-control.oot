@@ -25,9 +25,9 @@ Agents die mid-turn. Humans pause for days. Without handoff artifacts:
 - debt is rediscovered as “new” bugs (entropy **W**),
 - releases skip purity/residual gates,
 - monofiles grow past modularity limits,
-- resume re-explores what SPRINT already knew.
+- resume re-explores what ROADMAP already knew.
 
-SPRINT holds cycle truth; these docs hold **transferable** truth at different cadences.
+ROADMAP holds cycle truth; these docs hold **transferable** truth at different cadences.
 
 ## 3. Related work (university + commercial)
 
@@ -47,9 +47,9 @@ SPRINT holds cycle truth; these docs hold **transferable** truth at different ca
 
 Relationship to triad:
 
-- **DESIGN** — never rewritten by handoff docs.
-- **PM** — residual index may point at handoff packages.
-- **SPRINT** — tip/M-table; SHUTDOWN_RESUME must not disagree for long.
+- **NORTHSTAR** — never rewritten by handoff docs.
+- **ROADMAP** — residual index may point at handoff packages.
+- **ROADMAP** — tip/M-table; SHUTDOWN_RESUME must not disagree for long.
 - **TOOLS** — power law and ≤256 need SPLIT_PLAN as concrete policy.
 
 ## 5. Limits and failure modes
@@ -61,7 +61,7 @@ Relationship to triad:
 
 ## 6. Alternatives considered
 
-- **Only SPRINT.oot** — overloads sprint board; debt depth and release steps drown M-table.
+- **Only ROADMAP.oot** — overloads roadmap board; debt depth and release steps drown M-table.
 - **Only git log / issues** — multi-agent continuity fails without curated “next Act.”
 - **Oral tradition** — zero transfer across sessions.
 - Prefer short, role-specific markdown under bootstrap/monorepo.
@@ -73,14 +73,14 @@ Present as living process docs (2026-08). Quality varies with last author discip
 ## 8. Open questions
 
 1. Should DEBT_HANDOFF be required by TOOLS when entropy **W** (waste) is high?
-2. Auto-generate SHUTDOWN_RESUME tip SHA from SPRINT pin?
+2. Auto-generate SHUTDOWN_RESUME tip SHA from ROADMAP pin?
 3. CI fail if any owned `.oo` exceeds 256 without SPLIT_PLAN entry?
 
 ## 9. Acceptance criteria
 
 - [ ] Each ops doc states its single job in the first section.
-- [ ] No ops doc claims product feature `done` (that is PM).
-- [ ] SHUTDOWN_RESUME tip matches SPRINT or is explicitly “stale.”
+- [ ] No ops doc claims product feature `done` (that is ROADMAP).
+- [ ] SHUTDOWN_RESUME tip matches ROADMAP or is explicitly “stale.”
 - [ ] RELEASE_CHECKLIST links residual honesty and BETA gates.
 
 ## 10. References
@@ -90,9 +90,9 @@ Present as living process docs (2026-08). Quality varies with last author discip
 
 ## Conflicts with other docs / series
 
-**SHUTDOWN_RESUME vs SPRINT tip** → SPRINT is board of record for cycle; resume must re-pin if drift.
+**SHUTDOWN_RESUME vs ROADMAP tip** → ROADMAP is board of record for cycle; resume must re-pin if drift.
 **DEBT_HANDOFF vs residual `*RESIDUAL*.oot`** → residual = deep technical truth; handoff = transfer package pointing at residuals.
 **RELEASE_CHECKLIST vs BETA.oot** → checklist prepares; owner cuts beta.
 
 ---
-*Index: [README.oot](./README.oot).*
+*Index: [README.oot](./README.oot). NORTHSTAR research: [../README.oot](../README.oot). TOOLS research: [../tools/README.oot](../tools/README.oot).*

@@ -1,35 +1,35 @@
 # openOODA design research papers
 
-One research paper **per DESIGN.oot item** (main and sub-items).
-Purpose: **justify why the item is in DESIGN.oot**, with problem, prior art, and openOODA rationale.
+One research paper **per NORTHSTAR.oot item** (main and sub-items).
+Purpose: **justify why the item is in NORTHSTAR.oot**, with problem, prior art, and openOODA rationale.
 
 | Doc | Role |
 |-----|------|
-| `openOODA/DESIGN.oot` | Vision |
-| monorepo `PM.oot` | Progress status per item |
-| monorepo `SPRINT.oot` | Active engineering work |
-| **this series (`RP-*`)** | Research justification per DESIGN item |
+| `openOODA/NORTHSTAR.oot` | Vision |
+| monorepo `ROADMAP.oot` | Progress status per item |
+| monorepo `ROADMAP.oot` | Active engineering work |
+| **this series (`RP-*`)** | Research justification per NORTHSTAR item |
 | **[tools/](./tools/README.oot) (`TP-*`)** | Process research for `ooda/TOOLS.oot` |
-| **[meta/](./meta/README.oot) (`DOC-*`)** | Why control docs exist (DESIGN/PM/SPRINT/TOOLS/…) |
+| **[meta/](./meta/README.oot) (`DOC-*`)** | Why control docs exist (NORTHSTAR/ROADMAP/TOOLS/…) |
 
 ## Draft status (2026-08-09)
 
-All **49** DESIGN leaf papers are filled as **`draft`** (not stubs).  
+All **49** NORTHSTAR leaf papers are filled as **`draft`** (not stubs).  
 Cross-design fights and owner decisions: **[CONFLICTS.oot](./CONFLICTS.oot)**.
 
 Promote individually: `draft` → `review` → `accepted` after human read.
 
 ## Status of papers
 
-Baseline: all leaf papers are **`draft`**. Promote to `review` → `accepted` after human review. New DESIGN leaves start as `planned` stubs from TEMPLATE.oot.
+Baseline: all leaf papers are **`draft`**. Promote to `review` → `accepted` after human review. New NORTHSTAR leaves start as `planned` stubs from TEMPLATE.oot.
 
 ## Template
 
-Copy [TEMPLATE.oot](./TEMPLATE.oot) only if adding a new DESIGN leaf; prefer the pre-created stub for each ID.
+Copy [TEMPLATE.oot](./TEMPLATE.oot) only if adding a new NORTHSTAR leaf; prefer the pre-created stub for each ID.
 
-## Index (by DESIGN.oot)
+## Index (by NORTHSTAR.oot)
 
-| ID | Title | DESIGN | Paper |
+| ID | Title | NORTHSTAR | Paper |
 |----|-------|--------|-------|
 | `ES.1` | AI-native systems language | Executive Summary | [RP-ES-1-es-ai-native-systems-language.oot](./RP-ES-1-es-ai-native-systems-language.oot) |
 | `ES.2` | Capability-secure by construction | Executive Summary | [RP-ES-2-es-capability-secure.oot](./RP-ES-2-es-capability-secure.oot) |
@@ -83,13 +83,13 @@ Copy [TEMPLATE.oot](./TEMPLATE.oot) only if adding a new DESIGN leaf; prefer the
 
 ## How to fill a paper
 
-1. Open the stub for the DESIGN leaf.
+1. Open the stub for the NORTHSTAR leaf.
 2. Write §1–6 and §10 (justification + research).
-3. Keep §7 honest against **PM.oot** (product reality).
-4. Set acceptance criteria in §9 for PM status promotion.
+3. Keep §7 honest against **ROADMAP.oot** (product reality).
+4. Set acceptance criteria in §9 for ROADMAP status promotion.
 5. Mark paper status `draft`/`review`/`accepted` in the header table.
 
 ## Naming
 
-`RP-<id>-<slug>.oot` where `<id>` matches PM.oot row IDs (e.g. `3.6`, `4.1.1`).
+`RP-<id>-<slug>.oot` where `<id>` matches ROADMAP.oot row IDs (e.g. `3.6`, `4.1.1`).
 

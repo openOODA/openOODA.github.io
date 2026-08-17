@@ -1,4 +1,4 @@
-# CPU Quotas and Execution Sandboxing via the MaxCycles Attribute
+# RP-3.4: CPU Quotas and Execution Sandboxing via the MaxCycles Attribute
 
 ## Abstract
 This paper presents the theoretical design of central processing unit (CPU) quotas in the openOODA architecture. The system uses a `MaxCycles` attribute to limit the execution time of functions. This attribute prevents untrusted code from freezing the compiler or the runtime environment. The design combines static analysis with dynamic runtime fuel metering. This dual approach ensures that programs stop safely. We outline the problem of unbounded loops. We also analyze related work and detail the hybrid enforcement architecture.

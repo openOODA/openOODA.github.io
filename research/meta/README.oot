@@ -1,13 +1,13 @@
 # Documentation-system research papers (`DOC-*`)
 
 These papers justify **why openOODA keeps specific markdown control documents**
-(DESIGN, PM, SPRINT, TOOLS, residuals, …).
+(NORTHSTAR, ROADMAP, TOOLS, residuals, …).
 
 They are **not** product feature papers (`RP-*`) and **not** process-lens papers (`TP-*`).
 
 | Series | Path | Question |
 |--------|------|----------|
-| DESIGN features | [`../README.oot`](../README.oot) | Why is this **in the language**? |
+| NORTHSTAR features | [`../README.oot`](../README.oot) | Why is this **in the language**? |
 | TOOLS process | [`../tools/README.oot`](../tools/README.oot) | Why do we **work** this way? |
 | **Doc system (this)** | `research/meta/` | Why does this **document** exist? |
 
@@ -15,17 +15,17 @@ They are **not** product feature papers (`RP-*`) and **not** process-lens papers
 
 | ID | Document | Paper |
 |----|----------|-------|
-| DOC-system-triad | DESIGN · PM · SPRINT overview | [DOC-system-triad.oot](./DOC-system-triad.oot) |
-| DOC-design | `DESIGN.oot` | [DOC-design.oot](./DOC-design.oot) |
-| DOC-pm | `PM.oot` | [DOC-pm.oot](./DOC-pm.oot) |
-| DOC-sprint | `SPRINT.oot` | [DOC-sprint.oot](./DOC-sprint.oot) |
+| DOC-system-triad | NORTHSTAR · ROADMAP overview | [DOC-system-triad.oot](./DOC-system-triad.oot) |
+| DOC-design | `NORTHSTAR.oot` | [DOC-design.oot](./DOC-design.oot) |
+| DOC-pm | `ROADMAP.oot` | [DOC-pm.oot](./DOC-pm.oot) |
+| DOC-sprint | `ROADMAP.oot` (cycle board) | [DOC-sprint.oot](./DOC-sprint.oot) |
 | DOC-tools | `TOOLS.oot` | [DOC-tools.oot](./DOC-tools.oot) |
 | DOC-beta | `bootstrap/BETA.oot` | [DOC-beta.oot](./DOC-beta.oot) |
 | DOC-residual-pattern | Residual honesty docs | [DOC-residual-pattern.oot](./DOC-residual-pattern.oot) |
 | DOC-floor-chs | `FLOOR.oot` + `CHS.oot` | [DOC-floor-chs.oot](./DOC-floor-chs.oot) |
 | DOC-product-readme | Product `README.oot` | [DOC-product-readme.oot](./DOC-product-readme.oot) |
 | DOC-org-hygiene | `ORG_PRODUCT_HYGIENE.oot` | [DOC-org-hygiene.oot](./DOC-org-hygiene.oot) |
-| DOC-rfc-spec | `openOODA/openOODA` DESIGN/SPEC/RFCs | [DOC-rfc-spec.oot](./DOC-rfc-spec.oot) |
+| DOC-rfc-spec | `openOODA/openOODA` NORTHSTAR/SPEC/RFCs | [DOC-rfc-spec.oot](./DOC-rfc-spec.oot) |
 | DOC-research-series | Research series itself | [DOC-research-series.oot](./DOC-research-series.oot) |
 | DOC-stubs-retired | `PROGRESS.oot` / `PROJECT.oot` stubs | [DOC-stubs-retired.oot](./DOC-stubs-retired.oot) |
 | DOC-ops-control | DEBT_HANDOFF · RELEASE_CHECKLIST · SPLIT_PLAN · SHUTDOWN_RESUME | [DOC-ops-control.oot](./DOC-ops-control.oot) |
@@ -40,9 +40,9 @@ Optional later: install README, site-only pages, QA probes — extend this index
 
 | Location | Control docs | Paper |
 |----------|--------------|-------|
-| `openOODA/DESIGN.oot` | Vision | DOC-design, DOC-system-triad |
-| monorepo `PM.oot` | Progress vs DESIGN | DOC-pm |
-| monorepo `SPRINT.oot` | Cycle board | DOC-sprint |
+| `openOODA/NORTHSTAR.oot` | Vision | DOC-design, DOC-system-triad |
+| monorepo `ROADMAP.oot` | Progress vs NORTHSTAR | DOC-pm |
+| monorepo `ROADMAP.oot` | Cycle board | DOC-sprint |
 | `ooda/TOOLS.oot` | Process protocol | DOC-tools (+ `TP-*`) |
 | `ooda/bootstrap/*RESIDUAL*`, `FUZZ_DEFER`, … | Honesty pins | DOC-residual-pattern |
 | `bootstrap/FLOOR.oot`, `CHS.oot` | Bootstrap fences | DOC-floor-chs |

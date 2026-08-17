@@ -3,17 +3,17 @@
 | Field | Value |
 |-------|--------|
 | **Paper ID** | `DOC-rfc-spec` |
-| **Subject document(s)** | `openOODA/openOODA` — DESIGN.oot, SPEC.oot, rfcs/ |
+| **Subject document(s)** | `openOODA/openOODA` — NORTHSTAR.oot, SPEC.oot, rfcs/ |
 | **Status** | `draft` |
 | **Series** | Documentation system (`DOC-*`) |
 
 ## 1. Why this document exists
 
-DESIGN is architecture narrative; SPEC is fuller normative detail; RFCs are numbered evolutionary proposals (e.g. 0001 capabilities, 0002 contracts).
+NORTHSTAR is architecture narrative; SPEC is fuller normative detail; RFCs are numbered evolutionary proposals (e.g. 0001 capabilities, 0002 contracts).
 
 ## 2. Problem statement
 
-Language change without process becomes chat-driven. RFCs provide reviewable evolution under DESIGN/SPEC.
+Language change without process becomes chat-driven. RFCs provide reviewable evolution under NORTHSTAR/SPEC.
 
 ## 3. Related work (university + commercial)
 
@@ -23,11 +23,11 @@ Language change without process becomes chat-driven. RFCs provide reviewable evo
 
 ## 4. Rationale for openOODA
 
-DESIGN north star; SPEC normative; RFC proposed change; PM implementation; residual alpha honesty.
+NORTHSTAR north star; SPEC normative; RFC proposed change; ROADMAP implementation; residual alpha honesty.
 
 ## 5. Limits and failure modes
 
-RFCs without implementation become fiction. Dual DESIGN paths can drift. Not every residual needs an RFC.
+RFCs without implementation become fiction. Dual NORTHSTAR paths can drift. Not every residual needs an RFC.
 
 ## 6. Alternatives considered
 
@@ -39,13 +39,13 @@ RFCs 0001/0002 exist; process maturity partial.
 
 ## 8. Open questions
 
-1. Require RFC for DESIGN leaf → done?
-2. Single canonical DESIGN path?
+1. Require RFC for NORTHSTAR leaf → done?
+2. Single canonical NORTHSTAR path?
 
 ## 9. Acceptance criteria
 
 - [ ] New language features cite RFC or residual.
-- [ ] SPEC does not contradict PM honesty.
+- [ ] SPEC does not contradict ROADMAP honesty.
 
 ## 10. References
 
@@ -53,4 +53,4 @@ RFCs 0001/0002 exist; process maturity partial.
 2. https://adr.github.io/
 
 ---
-*Index: [README.oot](./README.oot). DESIGN research: [../README.oot](../README.oot). TOOLS research: [../tools/README.oot](../tools/README.oot).*
+*Index: [README.oot](./README.oot). NORTHSTAR research: [../README.oot](../README.oot). TOOLS research: [../tools/README.oot](../tools/README.oot).*

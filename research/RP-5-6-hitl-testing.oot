@@ -1,4 +1,4 @@
-# Human-in-the-Loop Testing for Artificial Intelligence-Native Languages
+# RP-5.6: Human-in-the-Loop Testing for Artificial Intelligence-Native Languages
 
 ## Abstract
 Automated tests and pure-domain fuzz tests find objective conditions effectively. However, they do not evaluate subjective quality well. Examples of subjective quality include user interface text, layout judgment, ethical rules, and security design. These decisions do not have a cheap test oracle. This paper presents a human-in-the-loop testing architecture for the openOODA programming language. The architecture introduces native functions that allow autonomous fuzzing loops to pause and request human approval. This gives authority to humans while maintaining active automation. This theoretical system provides a verifiable, secure, and robust methodology for subjective software testing.

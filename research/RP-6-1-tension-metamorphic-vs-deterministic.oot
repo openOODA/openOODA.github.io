@@ -1,4 +1,4 @@
-# The Boundary Policy: Resolving the Tension Between Metamorphic Binaries and Deterministic Builds
+# RP-6.1: The Boundary Policy: Resolving the Tension Between Metamorphic Binaries and Deterministic Builds
 
 ## Abstract
 This paper explores the inherent tension between two critical security goals in software distribution: deterministic builds and metamorphic binaries. Deterministic builds ensure that the same source code always produces the exact same on-disk binary. This prevents supply chain attacks. Metamorphic binaries mutate their assembly instructions, register allocations, and memory layouts at runtime. This prevents memory exploit attacks. These two goals pull in opposite directions. If developers bake entropy into the build artifact, they break auditability. If they ship a fully static layout, they weaken runtime immunity. This paper proposes a strict boundary policy to resolve this tension. We establish that the identity of an on-disk artifact must remain deterministic. Runtime diversity must only occur in memory during the load sequence or just-in-time compilation phase. This paper details the architecture, threat models, and operational profiles required to support this boundary.
@@ -93,8 +93,8 @@ The tension between deterministic builds and metamorphic binaries is a fundament
 This paper establishes a strict phase boundary policy. The on-disk artifact must remain completely deterministic and mathematically verifiable. The system introduces entropy and structural diversity only after the operating system loads the artifact into memory. By separating the identity of the software from its execution state, systems can provide both independent auditability and advanced immune defenses against memory exploitation. This theoretical model provides a robust foundation for building secure, verifiable, and resilient software infrastructure.
 
 ## References
-1. openOODA `openOODA/DESIGN.oot` §3.11, §4.3.2, §6.
-2. openOODA monorepo `PM.oot` rows 3.11, 4.3.2, 6.1, 4.x.
+1. openOODA `openOODA/NORTHSTAR.oot` §3.11, §4.3.2, §6.
+2. openOODA monorepo `ROADMAP.oot` rows 3.11, 4.3.2, 6.1, 4.x.
 3. Reproducible Builds project: <https://reproducible-builds.org/>
 4. C. Lamb & S. Zacchiroli, *Reproducible Builds: Increasing the Integrity of Software Supply Chains*, arXiv:2104.06020 — <https://arxiv.org/pdf/2104.06020>
 5. `SOURCE_DATE_EPOCH` specification — <https://reproducible-builds.org/docs/source-date-epoch/>

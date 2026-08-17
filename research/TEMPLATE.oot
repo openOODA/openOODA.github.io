@@ -3,13 +3,17 @@
 | Field | Value |
 |-------|--------|
 | **Paper ID** | `RP-X.Y` |
-| **DESIGN.oot** | §… |
+| **NORTHSTAR.oot** | §… |
 | **Status** | `planned` \| `draft` \| `review` \| `accepted` |
-| **PM.oot row** | `X.Y` |
+| **ROADMAP.oot row** | `X.Y` |
 
-## 1. Why this is in DESIGN.oot
+## Abstract
 
-_Justify the design item. Quote or paraphrase DESIGN.oot; expand with problem context._
+_Brief summary of the research justification, architectural approach, and security/performance implications._
+
+## 1. Why this is in NORTHSTAR.oot
+
+_Justify the design item. Quote or paraphrase NORTHSTAR.oot; expand with problem context._
 
 ## 2. Problem statement
 
@@ -23,13 +27,17 @@ _Justify the design item. Quote or paraphrase DESIGN.oot; expand with problem co
 
 ## 7. Product reality (alpha honesty)
 
-Link **PM.oot** status. Never claim DESIGN goals as shipped without product proof.
+Link **ROADMAP.oot** status. Never claim NORTHSTAR goals as shipped without product proof.
 
 ## 8. Open research questions
 
-## 9. Acceptance criteria (for PM status promotion)
+## 9. Acceptance criteria (for ROADMAP status promotion)
 
-## 10. References
+## 10. Conclusion
+
+_Summary of findings, key architectural guarantees, and future research directions._
+
+## 11. References
 
 ---
 

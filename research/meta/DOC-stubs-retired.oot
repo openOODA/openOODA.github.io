@@ -9,7 +9,7 @@
 
 ## 1. Why this document exists
 
-PROGRESS and PROJECT merged into PM.oot. Stubs remain so old links and agent habits do not 404. Hard delete deferred.
+PROGRESS and PROJECT merged into ROADMAP.oot. Stubs remain so old links and agent habits do not 404. Hard delete deferred.
 
 ## 2. Problem statement
 
@@ -23,7 +23,7 @@ Hard deletes break continuity; dual maintenance creates drift. Stubs are soft mi
 
 ## 4. Rationale for openOODA
 
-PROGRESS hygiene → PM pin/rails; PROJECT checkboxes → PM DESIGN checklist; one live PM.
+PROGRESS hygiene → ROADMAP pin/rails; PROJECT checkboxes → ROADMAP NORTHSTAR checklist; one live ROADMAP.
 
 ## 5. Limits and failure modes
 
@@ -35,7 +35,7 @@ Wiki-only, issue-tracker-only, single mega-README, or oral tradition — all fai
 
 ## 7. Reality (honesty)
 
-Stubs active; PM authoritative.
+Stubs active; ROADMAP authoritative.
 
 ## 8. Open questions
 
@@ -44,13 +44,13 @@ Stubs active; PM authoritative.
 
 ## 9. Acceptance criteria
 
-- [ ] Stubs only point to PM.
-- [ ] PM linked from SPRINT/TOOLS/site.
+- [ ] Stubs only point to ROADMAP.
+- [ ] ROADMAP linked from TOOLS/site.
 
 ## 10. References
 
-1. monorepo stubs + PM.oot
+1. monorepo stubs + ROADMAP.oot
 2. https://adr.github.io/
 
 ---
-*Index: [README.oot](./README.oot). DESIGN research: [../README.oot](../README.oot). TOOLS research: [../tools/README.oot](../tools/README.oot).*
+*Index: [README.oot](./README.oot). NORTHSTAR research: [../README.oot](../README.oot). TOOLS research: [../tools/README.oot](../tools/README.oot).*

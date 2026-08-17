@@ -9,7 +9,7 @@
 
 ## 1. Why this document exists
 
-README is the public entrypoint: install, what’s real this version, residual table, rails. Tighter honesty than DESIGN; more accessible than PM.
+README is the public entrypoint: install, what’s real this version, residual table, rails. Tighter honesty than NORTHSTAR; more accessible than ROADMAP.
 
 ## 2. Problem statement
 
@@ -23,11 +23,11 @@ Users and agents land on README first. Overclaims (JIT, free, full fuzz) raise t
 
 ## 4. Rationale for openOODA
 
-What’s real → PM done/partial/smoke; residual table → residual docs; quickstart → FLOOR+seed; not beta → BETA.oot.
+What’s real → ROADMAP done/partial/smoke; residual table → residual docs; quickstart → FLOOR+seed; not beta → BETA.oot.
 
 ## 5. Limits and failure modes
 
-Cannot hold full DESIGN checklist. Can lag monorepo PM. Install pin must match BOOTSTRAP_PIN/site.
+Cannot hold full NORTHSTAR checklist. Can lag monorepo ROADMAP. Install pin must match BOOTSTRAP_PIN/site.
 
 ## 6. Alternatives considered
 
@@ -53,4 +53,4 @@ Strong honesty surface for v0.183.0-alpha; keep aligned with site pin.
 2. https://www.infoq.com/articles/book-review-living-documentation/
 
 ---
-*Index: [README.oot](./README.oot). DESIGN research: [../README.oot](../README.oot). TOOLS research: [../tools/README.oot](../tools/README.oot).*
+*Index: [README.oot](./README.oot). NORTHSTAR research: [../README.oot](../README.oot). TOOLS research: [../tools/README.oot](../tools/README.oot).*

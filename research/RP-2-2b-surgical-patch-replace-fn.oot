@@ -1,6 +1,6 @@
 # RP-2.2b: Surgical Function Replacement
 
-**Abstract**
+## Abstract
 This paper presents a theoretical framework for surgical function replacement in the openOODA system. Artificial intelligence agents require safe, constrained mechanisms to modify source code. Traditional whole-file write operations introduce severe security and correctness risks. This architecture introduces a fail-closed tool that atomizes edits at the function level. This design enforces the principle of least privilege for automated code mutations. It prevents widespread corruption and ensures mathematical contract integrity during the action phase of the agent loop.
 
 ## 1. Introduction

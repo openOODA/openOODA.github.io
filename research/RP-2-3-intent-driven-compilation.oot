@@ -1,6 +1,6 @@
 # RP-2.3: Intent-Driven Compilation (Telepathic AST)
 
-**Abstract**
+## Abstract
 This paper presents a theoretical framework for intent-driven compilation in the openOODA system. The software engineering process requires significant effort to write correct implementations. This architecture proposes specification-as-source. Developers write mathematical contracts and leave the function body blank. During compilation, the toolchain utilizes an embedded large language model to synthesize the optimal algorithm. The compiler formally verifies the algorithm before lowering it to machine code. This framework changes mathematical contracts from a runtime oracle to a synthesis goal.
 
 ## 1. Introduction

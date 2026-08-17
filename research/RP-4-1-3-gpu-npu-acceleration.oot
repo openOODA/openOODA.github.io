@@ -31,7 +31,7 @@ Native accelerator compilation is a primary design objective for openOODA. The l
 3. Mongkolsmai, T. SYCL and Multi-vendor Discussion. https://medium.com/@tonymongkolsmai/cuda-rocm-oneapi-running-code-on-a-gpu-any-gpu-28b7bf4cf1d0
 4. LLVM Project. MLIR GPU Dialect. https://mlir.llvm.org/docs/Dialects/GPU/
 5. TensorWave. ROCm Migration Literature. https://tensorwave.com/blog/transitioning-to-high-performance-a-comprehensive-guide-to-switching-from-cuda-to-rocm
-6. openOODA. `DESIGN.oot` Section 4.
+6. openOODA. `NORTHSTAR.oot` Section 4.
 
 ---
 

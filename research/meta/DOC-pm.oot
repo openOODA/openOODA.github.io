@@ -1,19 +1,19 @@
-# DOC-pm: PM.oot as progress against DESIGN
+# DOC-pm: ROADMAP.oot as progress against NORTHSTAR
 
 | Field | Value |
 |-------|--------|
 | **Paper ID** | `DOC-pm` |
-| **Subject document(s)** | monorepo `PM.oot` (merged PROGRESS + PROJECT) |
+| **Subject document(s)** | monorepo `ROADMAP.oot` |
 | **Status** | `draft` |
 | **Series** | Documentation system (`DOC-*`) |
 
 ## 1. Why this document exists
 
-PM.oot is project management: pin, full DESIGN leaf checklist with honest status keys, milestone summary, rails, residual index. It answers how far without becoming a sprint board.
+ROADMAP.oot is project management and execution roadmap: pin, full NORTHSTAR leaf checklist with honest status keys, milestone summary, rails, residual index. It answers how far without becoming a noisy sprint board.
 
 ## 2. Problem statement
 
-PROGRESS went stale; PROJECT over-checked DESIGN items. Two status docs fought. Agents and the website need one DESIGN-aligned progress tracker.
+PROGRESS went stale; PROJECT over-checked NORTHSTAR items. Two status docs fought. Agents and the website need one NORTHSTAR-aligned progress tracker.
 
 ## 3. Related work (university + commercial)
 
@@ -28,7 +28,7 @@ Status keys: done | partial | smoke | residual | not-started. Row IDs (1.2, 3.6,
 
 ## 5. Limits and failure modes
 
-Monorepo-local unless published. Tip can lag SPRINT mid-cycle. Not a residual deep-dive substitute.
+Monorepo-local unless published. Tip can lag mid-cycle. Not a residual deep-dive substitute.
 
 ## 6. Alternatives considered
 
@@ -36,23 +36,23 @@ Wiki-only, issue-tracker-only, single mega-README, or oral tradition — all fai
 
 ## 7. Reality (honesty)
 
-PM is the active tracker; PROGRESS/PROJECT are stubs. Site summarizes PM.
+ROADMAP is the active tracker; PROGRESS/PROJECT are stubs. Site summarizes ROADMAP.
 
 ## 8. Open questions
 
-1. Publish PM on GH org?
-2. Auto-generate site tables from PM?
+1. Publish ROADMAP on GH org?
+2. Auto-generate site tables from ROADMAP?
 
 ## 9. Acceptance criteria
 
-- [ ] Every DESIGN leaf has a PM row.
+- [ ] Every NORTHSTAR leaf has a ROADMAP row.
 - [ ] No false `done` for free/JIT/hive without product proof.
 
 ## 10. References
 
 1. https://scrumguides.org/scrum-guide.html
 2. https://www.infoq.com/articles/book-review-living-documentation/
-3. monorepo PM.oot
+3. monorepo ROADMAP.oot
 
 ---
-*Index: [README.oot](./README.oot). DESIGN research: [../README.oot](../README.oot). TOOLS research: [../tools/README.oot](../tools/README.oot).*
+*Index: [README.oot](./README.oot). NORTHSTAR research: [../README.oot](../README.oot). TOOLS research: [../tools/README.oot](../tools/README.oot).*

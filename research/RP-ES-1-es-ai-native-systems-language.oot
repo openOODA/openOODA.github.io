@@ -1,4 +1,4 @@
-# Artificial Intelligence-Native Systems Language Architecture
+# RP-ES.1: Artificial Intelligence-Native Systems Language Architecture
 
 ## Abstract
 Modern software development integrates human developers and artificial intelligence agents. Traditional systems programming languages were designed exclusively for human workflows. These traditional languages create significant friction when agents attempt to modify code autonomously. This paper presents the architecture of an artificial intelligence-native systems programming language. The openOODA language integrates precise code manipulation, data summarization, capability-based security, and high-speed feedback directly into the compiler. This design enables a continuous observe-orient-decide-act loop. This loop allows agents to generate, verify, and repair systems code securely and efficiently. We demonstrate how embedded language rules prevent common agent errors and how strict capability sandboxes stop malicious code execution. This architecture provides a theoretical foundation for the next generation of safe and autonomous software development.

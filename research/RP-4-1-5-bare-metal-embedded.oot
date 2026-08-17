@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|--------|
 | **Paper ID** | `RP-4.1.5` |
-| **DESIGN.oot** | §4 Targets — Bare-Metal Embedded (`#![no_std]`) |
+| **NORTHSTAR.oot** | §4 Targets — Bare-Metal Embedded (`#![no_std]`) |
 
 ## Abstract
 

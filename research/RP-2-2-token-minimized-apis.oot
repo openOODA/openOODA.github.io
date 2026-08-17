@@ -1,6 +1,6 @@
 # RP-2.2: Token-Minimized APIs
 
-**Abstract**
+## Abstract
 This paper presents a theoretical framework for token-minimized Application Programming Interfaces (APIs) in the openOODA system. Large language models experience context limits when artificial intelligence agents read full source files. This architecture introduces language-first compression mechanisms. The system exports public APIs, contracts, and capabilities without function bodies. This design decreases token consumption and improves long-range structural comprehension for autonomous coding agents.
 
 ## 1. Introduction

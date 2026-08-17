@@ -13,7 +13,7 @@ A residual is deliberately incomplete or unsafe to claim. Residual markdown pins
 
 ## 2. Problem statement
 
-Without residual files, partial work is remembered as complete. Entropy U/F/W explodes. DESIGN leaves need deep “not yet” truth longer than a SPRINT line.
+Without residual files, partial work is remembered as complete. Entropy U/F/W explodes. NORTHSTAR leaves need deep “not yet” truth longer than a ROADMAP line.
 
 ## 3. Related work (university + commercial)
 
@@ -24,11 +24,11 @@ Without residual files, partial work is remembered as complete. Entropy U/F/W ex
 
 ## 4. Rationale for openOODA
 
-Pattern: status · shipped subset · still residual · rebuild · related paths. Index from PM residual table.
+Pattern: status · shipped subset · still residual · rebuild · related paths. Index from ROADMAP residual table.
 
 ## 5. Limits and failure modes
 
-Too many residual files → unread. Must link from PM. Closing requires test + PM flip.
+Too many residual files → unread. Must link from ROADMAP. Closing requires test + ROADMAP flip.
 
 ## 6. Alternatives considered
 
@@ -41,11 +41,11 @@ Core honesty culture; residual_honesty_smoke guards some claims.
 ## 8. Open questions
 
 1. Naming standard *_RESIDUAL.oot only?
-2. Auto-list from directory glob into PM?
+2. Auto-list from directory glob into ROADMAP?
 
 ## 9. Acceptance criteria
 
-- [ ] Every deep partial/residual PM item points at a residual or README section.
+- [ ] Every deep partial/residual ROADMAP item points at a residual or README section.
 - [ ] No soft-pass fixed without residual update.
 
 ## 10. References
@@ -54,4 +54,4 @@ Core honesty culture; residual_honesty_smoke guards some claims.
 2. ooda/bootstrap residual set; TOOLS entropy F,W
 
 ---
-*Index: [README.oot](./README.oot). DESIGN research: [../README.oot](../README.oot). TOOLS research: [../tools/README.oot](../tools/README.oot).*
+*Index: [README.oot](./README.oot). NORTHSTAR research: [../README.oot](../README.oot). TOOLS research: [../tools/README.oot](../tools/README.oot).*

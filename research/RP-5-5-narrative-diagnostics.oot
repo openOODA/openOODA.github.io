@@ -1,4 +1,4 @@
-# Narrative Diagnostics in Artificial Intelligence-Native Compilers
+# RP-5.5: Narrative Diagnostics in Artificial Intelligence-Native Compilers
 
 ## Abstract
 When a violation of a contract or capability occurs, a compiler must do more than send a stack trace. It must provide a causal story. This story traces the data flow from its origin to the violation. This causal story makes complex system bugs easy to read and understand. This paper proposes a theoretical system for narrative diagnostics in the openOODA programming language architecture. Narrative diagnostics operate with syntax tree patching and token-minimized application programming interfaces. Together, these elements create a closed loop for artificial intelligence agents and human developers. The loop allows them to explain, fix, and verify code quickly and accurately.

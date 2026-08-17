@@ -24,7 +24,7 @@ Self-hosting dies when host subset and backend float. Agents invent IR targets m
 
 ## 4. Rationale for openOODA
 
-CHS = allowed self-host surface; FLOOR = how native code is produced; DESIGN §4 = long-term multi-target north star.
+CHS = allowed self-host surface; FLOOR = how native code is produced; NORTHSTAR §4 = long-term multi-target north star.
 
 ## 5. Limits and failure modes
 
@@ -46,7 +46,7 @@ Backend-C + seed is alpha product path. FLOOR/CHS are active control docs.
 ## 9. Acceptance criteria
 
 - [ ] Bootstrap docs cite FLOOR/CHS.
-- [ ] PM 4.x matches FLOOR claims.
+- [ ] ROADMAP 4.x matches FLOOR claims.
 
 ## 10. References
 
@@ -54,4 +54,4 @@ Backend-C + seed is alpha product path. FLOOR/CHS are active control docs.
 2. RP-4-x; https://adr.github.io/
 
 ---
-*Index: [README.oot](./README.oot). DESIGN research: [../README.oot](../README.oot). TOOLS research: [../tools/README.oot](../tools/README.oot).*
+*Index: [README.oot](./README.oot). NORTHSTAR research: [../README.oot](../README.oot). TOOLS research: [../tools/README.oot](../tools/README.oot).*

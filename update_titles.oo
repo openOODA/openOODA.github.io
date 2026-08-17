@@ -1,0 +1,168 @@
+// # Research titles synchronizer
+//
+// Logline: Synchronize research paper titles from Markdown headers into research.html metadata.
+//
+// Setup: FsReadCap and FsWriteCap granted to inspect research files and write research.html.
+//
+// Beats:
+//   1. Read research directory entries and sort RP-*.oot papers.
+//   2. Extract the H1 header title from each paper.
+//   3. Construct the JSON array representation of paper titles.
+//   4. Replace the papers definition inside research.html and save.
+//   5. Print confirmation message.
+
+pub fn escape_json(s: String) -> String {
+    let n = chars_len(s);
+    let mut out = "";
+    let mut i = 0;
+    while i < n {
+        let c = char_at(s, i);
+        if c == "\"" {
+            out = out + "\\\"";
+        } else if c == "\\" {
+            out = out + "\\\\";
+        } else if c == "\n" {
+            out = out + "\\n";
+        } else if c == "\r" {
+            // skip
+        } else {
+            out = out + c;
+        }
+        i = i + 1;
+    }
+    return out;
+}
+
+pub fn extract_title(content: String, fallback: String) -> String {
+    let n = chars_len(content);
+    let mut i = 0;
+    while i < n {
+        let is_h1 = if i == 0 {
+            if n >= 2 {
+                char_at(content, 0) == "#" && char_at(content, 1) == " "
+            } else {
+                false
+            }
+        } else {
+            if char_at(content, i - 1) == "\n" && i + 1 < n {
+                char_at(content, i) == "#" && char_at(content, i + 1) == " "
+            } else {
+                false
+            }
+        };
+
+        if is_h1 {
+            let start = i + 2;
+            let mut end = start;
+            while end < n && char_at(content, end) != "\n" && char_at(content, end) != "\r" {
+                end = end + 1;
+            }
+            return str_slice(content, start, end);
+        }
+        i = i + 1;
+    }
+    return fallback;
+}
+
+pub fn insert_sorted(list: List[String], item: String) -> List[String] {
+    let mut out: List[String] = list_new();
+    let n = list_len(list);
+    let mut inserted = false;
+    let mut i = 0;
+    while i < n {
+        let cur = list_get(list, i);
+        if !inserted {
+            if item < cur {
+                out = list_push(out, item);
+                inserted = true;
+            }
+        }
+        out = list_push(out, cur);
+        i = i + 1;
+    }
+    if !inserted {
+        out = list_push(out, item);
+    }
+    return out;
+}
+
+pub fn main(fsR: &FsReadCap, fsW: &FsWriteCap) {
+    let rdir = if path_exists(fsR, "openOODA.github.io/research") {
+        "openOODA.github.io/research"
+    } else if path_exists(fsR, "research") {
+        "research"
+    } else {
+        "/home/jeryd/Projects/openOODA/openOODA.github.io/research"
+    };
+
+    let html_path = if path_exists(fsR, "openOODA.github.io/research.html") {
+        "openOODA.github.io/research.html"
+    } else if path_exists(fsR, "research.html") {
+        "research.html"
+    } else {
+        "/home/jeryd/Projects/openOODA/openOODA.github.io/research.html"
+    };
+
+    let all_files = oo_fs_read_dir(fsR, rdir);
+    let total_entries = list_len(all_files);
+    let mut sorted_papers: List[String] = list_new();
+    let mut i = 0;
+
+    while i < total_entries {
+        let name = list_get(all_files, i);
+        if str_starts_with(name, "RP-") && str_ends_with(name, ".oot") {
+            sorted_papers = insert_sorted(sorted_papers, name);
+        }
+        i = i + 1;
+    }
+
+    let paper_count = list_len(sorted_papers);
+    let mut json_arr = "[";
+    let mut j = 0;
+
+    while j < paper_count {
+        let fname = list_get(sorted_papers, j);
+        let fpath = rdir + "/" + fname;
+        let file_res = read_file(fsR, fpath);
+        let content = match file_res {
+            Ok(s) => s,
+            Err(_) => ""
+        };
+
+        let raw_title = extract_title(content, fname);
+        let title = escape_json(raw_title);
+        let rel_file = "research/" + fname;
+
+        if j > 0 {
+            json_arr = json_arr + ", ";
+        }
+        json_arr = json_arr + "{\"file\": \"" + rel_file + "\", \"title\": \"" + title + "\"}";
+        j = j + 1;
+    }
+    json_arr = json_arr + "]";
+
+    let existing_res = read_file(fsR, html_path);
+    let html_content = match existing_res {
+        Ok(s) => s,
+        Err(_) => ""
+    };
+
+    let key = "const papers = ";
+    let idx = str_index_of(html_content, key);
+    if idx >= 0 {
+        let prefix = str_slice(html_content, 0, idx + chars_len(key));
+        let rest = str_slice(html_content, idx + chars_len(key), chars_len(html_content));
+        let semi_idx = str_index_of(rest, ";");
+        if semi_idx >= 0 {
+            let suffix = str_slice(rest, semi_idx, chars_len(rest));
+            let new_html = prefix + json_arr + suffix;
+            let _wr: Result[Void, String] = write_file(fsW, html_path, new_html);
+            let _ = _wr;
+            println("Updated research.html with new titles.");
+            process_exit(0);
+        }
+    }
+
+    println("Warning: could not locate 'const papers = ' in " + html_path);
+    process_exit(1);
+}
