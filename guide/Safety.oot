@@ -187,11 +187,11 @@ Ingest pins and wraps.
 The pin is the sha256.
 The wrap is how the blob is stored.
 
-`ooda add --registry` verifies the catalog with minisign.
+`ooda add hello` verifies the stock catalog with minisign.
 
 Path traversal, extra caps, and yank refuse.
 
-`ooda launch --exec` checks that the CAS path exists after sha, caps, and yank are ok.
+`ooda launch --exec` runs the gated payload after sha, caps, and yank are ok.
 
 How to add a library: [Packages](Packages.oot).
 

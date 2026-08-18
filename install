@@ -1,18 +1,14 @@
 // # Public install
 //
-// Logline: Entry for curl | oo. Names the live checkout installer.
+// Logline: Entry for curl | oo.
 //
 // Setup: Run by oo from stdin. Not a shell script.
 //
 // Beats:
 //   1. Name the pin.
-//   2. Name the checkout install.
-//   3. Point at the guide.
+//   2. Point at the guide.
 
 pub fn main() {
     println("openOODA v0.203.0-beta");
-    println("From an ooda checkout after the official rebuild:");
-    println("  OODA_FS_WRITEDIR=$HOME OODA_CHECKOUT=$PWD ooda install");
-    println("  . ~/.config/ooda/env");
     println("https://openooda.org/guide/");
 }

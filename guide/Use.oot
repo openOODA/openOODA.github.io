@@ -23,19 +23,14 @@ The tools you type after that are the [pure product CLI](/research/#RP-5-1a-pure
 
 ## 2. Install
 
-Clone the public tree, rebuild, then install onto XDG:
-
 ```
-git clone https://github.com/openOODA/ooda
-cd ooda
-OODAC_BIN=./bootstrap/seed/oodac bash bootstrap/oodac_pure_build oodac/main.oo oodac/oodac
-OODA_FS_WRITEDIR="$HOME" OODA_CHECKOUT="$PWD" ooda install
+curl -fsSL https://openooda.org/install | oo
 . ~/.config/ooda/env
 ```
 
-`ooda install` copies `ooda`, `oodac`, `std`, and `runtime` under `~/.local` and writes `~/.config/ooda/env`.
-The first machine needs host `gcc` and the seed rebuild.
-The payload at https://openooda.org/install is `.oo`. It is not a shell script.
+The payload at https://openooda.org/install is `.oo`. It is not a shell script. Never `| sh`.
+
+From a checkout you already have, rebuild, then `ooda install` copies `ooda`, `oodac`, `std`, and `runtime` under `~/.local` and writes `~/.config/ooda/env`. Host `gcc` and the seed rebuild are in section 3.
 
 ## 3. Official rebuild
 
@@ -152,7 +147,7 @@ See [Capabilities](Safety.oot) for why writes stay inside `OODA_FS_WRITEDIR`.
 ## 8. After the first run
 
 You now have a compiler, a file, a check, a run, and a test.
-Add a library from [Packages](Packages.oot).
+Add a library with `ooda add hello`. See [Packages](Packages.oot).
 Pick a backend or a flag from [Commands](Options.oot).
 Read [How it works](Limits.oot) when you want the product path in one place.
 Browse [Research](Research.oot) when you want the design papers.

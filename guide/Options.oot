@@ -36,12 +36,16 @@ ooda context [path]
 ooda digest <file>
 ooda health
 ooda pkg [--json]
-ooda add <name> [--vendor path|--registry]
+ooda add <name> [--vendor path]
+ooda search [query]
+ooda registry [add|remove] [url]
 ooda pm add|ingest|launch|remove|update|outdated|why|tree|vendor|clean|audit|sbom|pack
 ooda install
 ```
 
-`ooda install` copies tree `bin/ooda`, `oodac/oodac`, `std`, and `runtime` onto XDG. Set `OODA_FS_WRITEDIR` and run it from the checkout (or set `OODA_CHECKOUT`).
+The public install is `curl -fsSL https://openooda.org/install | oo`.
+The payload is `.oo`. Never `| sh`.
+`ooda install` copies tree `bin/ooda`, `oodac/oodac`, `std`, and `runtime` onto XDG from a checkout.
 
 `check --json-errors` prints machine diagnostics for an editor or a script.
 
@@ -75,15 +79,19 @@ See [surgical replace-fn](/research/#RP-2-2b-surgical-patch-replace-fn.oot).
 
 ## 3. Packages
 
-`ooda add --vendor` reads a file tree on disk.
-
-`ooda add --registry` fetches the catalog at https://registry.openooda.org and checks minisign with the pubkey shipped in the CLI.
+`ooda add hello` installs from the stock store.
 
 ```
+ooda add hello
+ooda search hello
+ooda registry
+ooda registry add https://host
+ooda registry remove https://host
 ooda add hello --vendor ../registry
-ooda add hello --registry
 ooda pkg
 ```
+
+`--vendor` is a folder on disk. `registry add` lists another HTTPS store. Search walks every listed store.
 
 `ooda pm` is the same manager with extra verbs.
 

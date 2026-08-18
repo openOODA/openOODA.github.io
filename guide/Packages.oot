@@ -7,24 +7,41 @@ User wiki. Canonical URL: https://openooda.org/guide/#Packages.oot
 
 ## 1. What you install
 
-You add a package with `ooda add`.
+You add a package with `ooda add hello`.
+That uses the stock store. You do not type a URL.
+You search with `ooda search hello`.
+You list stores with `ooda registry`.
 You read the lock with `ooda pkg`.
-The lock pins a name, a version, a sha256, and a declared cap.
 
-A package is a folder with a `manifest` and a payload.
-The payload is a `.oo` file.
-The vendor also holds an `index`.
+The lock pins a name, a version, a sha256, and a declared cap.
 
 Public examples are `hello`, `mid`, and `world`.
 All three declare `FsRead`.
 `hello` depends on `mid`.
 `mid` depends on `world`.
 
-## 2. Add from a file vendor
+## 2. The stock store
 
-`ooda add NAME --vendor DIR` reads a file-backed vendor.
+```
+ooda add hello
+ooda search hello
+ooda registry
+ooda registry add https://host
+ooda registry remove https://host
+```
 
-The vendor is a directory on disk.
+The stock origin is https://registry.openooda.org
+The CLI GETs `/catalog` and checks minisign with `cli/registry.pub`.
+`search` walks every store you added.
+
+An extra store must serve `catalog`, `index.minisig`, and `registry.pub`.
+The CLI pins that pubkey on `registry add`.
+You cannot remove the stock store.
+
+## 3. Add from a file vendor
+
+`ooda add NAME --vendor DIR` reads a folder on disk.
+It does not use the network.
 
 ```
 DIR/
@@ -51,24 +68,6 @@ It writes the lock.
 
 Local-vendor trust is HMAC with key `ooda-local-pm`.
 That HMAC covers the vendor `index`.
-
-## 3. Add from the public registry
-
-```
-ooda add hello --registry https://registry.openooda.org
-```
-
-The CLI GETs `/catalog` and `/index.minisig`.
-It verifies the catalog with the pubkey shipped in the CLI.
-That pubkey is `cli/registry.pub`.
-Public trust is minisign of the catalog.
-
-The human page is https://registry.openooda.org/
-You read the HTML there.
-The CLI fetches `/catalog`, not the HTML.
-
-The origin is `https://registry.openooda.org`.
-Host lookalikes refuse.
 
 ## 4. The lock
 
@@ -123,8 +122,7 @@ The blob stays as it was.
 Path traversal, extra caps, and yank refuse.
 
 `ooda launch NAME` re-checks the pin against the live CAS bytes.
-`ooda launch NAME --exec` runs after sha, caps, and yank are ok.
-The `--exec` step is an existence check after that gate.
+`ooda launch NAME --exec` runs the gated payload after sha, caps, and yank are ok.
 
 ## 7. The `ooda pm` commands
 
@@ -132,6 +130,9 @@ You can call these as `ooda pm <cmd>`.
 Several also work as a top-level `ooda` command.
 
 ```
+ooda add hello
+ooda search hello
+ooda registry
 ooda pm add
 ooda pm ingest
 ooda pm launch
@@ -149,7 +150,9 @@ ooda pm pack
 
 | Command | What it does |
 | :--- | :--- |
-| `add` | Resolve and install into CAS. Write the lock. |
+| `add` | Install from the stock store. Write the lock. |
+| `search` | Search every listed store. |
+| `registry` | List stores. `add` / `remove` a URL. |
 | `ingest` | Pin and wrap a local recipe. |
 | `launch` | Re-check sha, caps, and yank. `--exec` after the gate. |
 | `remove` | Drop a name from the lock. |
@@ -168,11 +171,10 @@ ooda pm pack
 
 ## 8. Two trust paths
 
-1. Local vendor. HMAC key `ooda-local-pm` on the vendor `index`.
-2. Public registry. minisign of `/catalog` with `cli/registry.pub`.
+1. Stock and extra HTTPS stores. minisign of `/catalog`. Stock uses `cli/registry.pub`. An extra store pins its own `registry.pub`.
+2. Local vendor. HMAC key `ooda-local-pm` on the vendor `index`.
 
-The pubkey stays in the CLI tree.
-Fetch does not replace it.
+Fetch does not replace the stock pubkey.
 
 ## 9. Research
 

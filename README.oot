@@ -7,9 +7,9 @@ Public site for https://openooda.org. Splash, research viewer, install endpoint.
 
 | Path | What it actually is |
 | :--- | :--- |
-| `index.html` | Marketing splash. Not a language tutorial. |
+| `index.html` | Product door. Macintosh chrome. Pin next to the wordmark. |
 | `research.html` | Research paper index. Papers are design, not proof. |
-| `install` | `.oo` payload. Names the live checkout installer. Not a shell script. |
+| `install` | `.oo` payload for `curl -fsSL https://openooda.org/install | oo`. Not a shell script. |
 | `research/` | RP / ES papers. Present-tense moonshots are residual. |
 | `assets/` | Branding. |
 
@@ -17,14 +17,11 @@ There is no playground. There are no API docs on this site. Product truth lives 
 
 ## Install
 
-From an `ooda` checkout after the official rebuild:
-
 ```
-OODA_FS_WRITEDIR=$HOME OODA_CHECKOUT=$PWD ooda install
-. ~/.config/ooda/env
+curl -fsSL https://openooda.org/install | oo
 ```
 
-`https://openooda.org/install` is `.oo`. Never `| sh`. The `ooda` GitHub repo is private, so a stranger cannot clone it.
+`https://openooda.org/install` is `.oo`. Never `| sh`.
 
 ## Local preview
 

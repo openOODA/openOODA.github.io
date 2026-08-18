@@ -31,8 +31,8 @@ Research library: https://openooda.org/research/
 
 ## 2. Start here
 
-Install is live from an ooda checkout. See [Start](Use.oot).
-That page is how you install, check, run, and test a file.
+Install is `curl -fsSL https://openooda.org/install | oo`.
+See [Start](Use.oot). That page is how you install, check, run, and test a file.
 
 ## 3. Hello
 
@@ -89,7 +89,9 @@ The full flag list lives on [Commands](Options.oot).
 | `digest` | Hash a file. |
 | `health` | Check the toolchain. |
 | `pkg` | List locked packages. |
-| `add` | Add a package. |
+| `add` | Install a package from the stock store. |
+| `search` | Search every store you added. |
+| `registry` | List stores. `add` / `remove` a URL. |
 | `pm` | Package manager. |
 
 `outline`, `reflect`, `fix`, and `patch` keep the edit loop small.
@@ -115,8 +117,9 @@ The language is [capability-secure](/research/#RP-ES-2-es-capability-secure.oot)
 Product std ships as `ooda/std`.
 Import from that tree.
 
-Add a package with `ooda add` or `ooda pm`.
-`ooda add --registry` fetches the catalog and checks minisign.
+Add a package with `ooda add hello`.
+That uses the stock store.
+`ooda search` walks every store you added.
 The public catalog is https://registry.openooda.org
 How packages work: [Packages](Packages.oot).
 
@@ -130,7 +133,7 @@ Start here. Then pick a page.
 - [Start](Use.oot) — first run, first test.
 - [Language](Language.oot) — `.oo` syntax.
 - [Commands](Options.oot) — `ooda` commands and flags.
-- [Packages](Packages.oot) — `ooda/std`, `add`, `pm`.
+- [Packages](Packages.oot) — `add`, `search`, `registry`.
 - [Capabilities](Safety.oot) — tokens and effects.
 - [How it works](Limits.oot) — typecheck, emit C, host `gcc`, run.
 - [Research](Research.oot) — how this wiki points at the library.
