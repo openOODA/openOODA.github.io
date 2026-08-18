@@ -6,7 +6,6 @@
   <title>openOODA</title>
   <meta name="description" content="Build fast. Stay secure. Save tokens.">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="site.css">
   <script>
     (function () {
       var m = document.cookie.match(/(?:^|; )ooda-theme=([^;]*)/);
@@ -14,145 +13,146 @@
       document.documentElement.setAttribute("data-theme", t);
     })();
   </script>
+  <style>
+    :root { --bg: #fff; --fg: #000; --muted: #444; }
+    html[data-theme="dark"] { --bg: #000; --fg: #e8e8e8; --muted: #9a9a9a; }
+    html { background: var(--bg); color: var(--fg); }
+    body {
+      margin: 0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    header {
+      position: sticky; top: 0; z-index: 10; background: var(--bg);
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+      gap: 0.75rem 1.25rem; padding: 0.85rem 1.25rem; border-bottom: 2px solid var(--fg);
+    }
+    .brand-row { display: flex; align-items: baseline; gap: 0.45rem; }
+    .brand {
+      font-weight: 700; letter-spacing: 0.08em; color: var(--bg);
+      background: var(--fg); padding: 0.2rem 0.45rem; text-decoration: none; white-space: nowrap;
+    }
+    .ver { font-size: 0.85rem; white-space: nowrap; }
+    #theme {
+      font: inherit; background: var(--bg); color: var(--fg);
+      border: 2px solid var(--fg); padding: 0.15rem 0.55rem; cursor: pointer; white-space: nowrap;
+    }
+    .wrap { display: grid; grid-template-columns: 12rem 1fr; max-width: 60rem; }
+    aside {
+      border-right: 1px solid var(--fg); padding: 1.25rem 1rem 5rem;
+      position: sticky; top: 3.4rem; align-self: start;
+    }
+    .global a { display: block; color: var(--fg); padding: 0.25rem 0; text-align: left; }
+    .global a.active { text-decoration: underline; text-decoration-thickness: 2px; }
+    main { padding: 1.5rem 1.25rem 5rem; max-width: 44rem; min-width: 0; }
+    p { margin: 0 0 1.25rem; max-width: 36rem; }
+    pre {
+      margin: 0 0 1.25rem; padding: 0.55rem 0.7rem;
+      border: 1px solid var(--fg); width: max-content; max-width: 100%;
+      overflow: auto; white-space: nowrap; box-sizing: border-box;
+    }
+    .drop { margin: 0 0 0.75rem; max-width: 40rem; }
+    .drop summary {
+      cursor: pointer; list-style: none; width: max-content;
+    }
+    .drop summary::-webkit-details-marker { display: none; }
+    .drop summary::before { content: "+ "; }
+    .drop[open] summary::before { content: "− "; }
+    .drop-body { margin-top: 0.75rem; }
+    .drop-body p { margin: 0 0 0.85rem; }
+    .drop-body p:last-child { margin-bottom: 0; }
+    .drop-body strong { font-weight: 700; }
+    .drop-body pre {
+      width: auto; max-width: 100%; white-space: pre;
+      margin: 0; overflow: auto;
+    }
+    .drop-body ul { margin: 0; padding-left: 1.2rem; }
+    .drop-body li { margin: 0.25rem 0; }
+    a { color: var(--fg); }
+    a:hover { text-decoration-thickness: 2px; }
+    #gh { position: fixed; right: 1rem; bottom: 1rem; z-index: 20; color: var(--fg); background: var(--bg); padding: 0.15rem 0.35rem; }
+    @media (max-width: 800px) {
+      .wrap { grid-template-columns: 1fr; }
+      aside { position: static; border-right: 0; border-bottom: 1px solid var(--fg); padding-bottom: 1rem; }
+    }
+  </style>
 </head>
 <body>
   <a id="gh" href="https://github.com/openOODA">github</a>
-  <header class="chrome">
-    <div class="title">
-      <a class="close" href="/" aria-label="home"></a>
-      <div class="brand-row">
-        <a class="brand" href="/">openOODA</a>
-        <span class="ver">v0.203.0-beta</span>
-      </div>
+  <header>
+    <div class="brand-row">
+      <a class="brand" href="/">openOODA</a>
+      <span class="ver">v0.203.0-beta</span>
     </div>
     <button type="button" id="theme">dark</button>
   </header>
-  <nav class="menubar">
-    <a class="active" href="/">home</a>
-    <a href="/guide/">guide</a>
-    <a href="/research/">research</a>
-    <a href="https://registry.openooda.org/">registry</a>
-  </nav>
-  <div class="wrap solo">
+  <div class="wrap">
+    <aside>
+      <nav class="global">
+        <a class="active" href="/">home</a>
+        <a href="/guide/">guide</a>
+        <a href="/research/">research</a>
+        <a href="https://registry.openooda.org/">registry</a>
+      </nav>
+    </aside>
     <main>
       <p>Build fast. Stay secure. Save tokens.</p>
-      <p>A systems language. You write <code>.oo</code>. A function that talks to the world holds a token. If the token is not there, the call does not run.</p>
-
-      <div class="win">
-        <div class="win-bar"><span>install</span></div>
-        <pre>curl -fsSL <a href="https://openooda.org/install">https://openooda.org/install</a> | oo</pre>
-      </div>
-
-      <div class="win">
-        <div class="win-bar"><span>hello.oo</span></div>
-        <pre>pub fn greet(name: String) -&gt; String {
-    return "Hello, " + name + "!";
-}
-
-verify greet {
-    assert_eq!(greet("World"), "Hello, World!");
-}
-
-pub fn main() {
-    println(greet("openOODA"));
-}</pre>
-      </div>
-
-      <div class="win">
-        <div class="win-bar"><span>commands</span></div>
-        <pre>ooda check hello.oo
-ooda run hello.oo
-ooda test hello.oo</pre>
-      </div>
-
-      <div class="win">
-        <div class="win-bar"><span>store</span></div>
-        <pre>ooda add hello
-ooda search hello
-ooda registry
-ooda registry add https://host</pre>
-      </div>
-
-      <p><code>ooda run</code> typechecks, emits C, calls host <code>gcc</code>, and runs the binary. <code>ooda test</code> runs <code>verify</code>. The <a href="/guide/">guide</a> is the way in.</p>
-
-      <h2>Why</h2>
-      <div class="grid">
-        <div class="win">
-          <div class="win-bar"><span>Effects</span></div>
-          <p>In Rust, Go, Zig, and C, a function can use files or the network if the process can. In openOODA the function must hold a <a href="/guide/#Safety.oot">token</a>, for example <code>&amp;FsReadCap</code>. <a href="/research/#RP-ES-2-es-capability-secure.oot">No token, no effect</a>.</p>
+      <pre>curl -fsSL <a href="https://openooda.org/install">https://openooda.org/install</a> | oo</pre>
+      <p>The payload is <code>.oo</code>. It is not a shell script. Then <code>. ~/.config/ooda/env</code>. The <a href="/guide/">guide</a> is the way in.</p>
+      <details class="drop">
+        <summary>What gets installed</summary>
+        <div class="drop-body">
+          <ul>
+            <li><code>~/.local/bin/<a href="/guide/#Options.oot">ooda</a></code> — the <a href="/guide/#Options.oot">command line</a></li>
+            <li><code>~/.local/bin/<a href="/guide/#Limits.oot">oodac</a></code> — the <a href="/guide/#Limits.oot">compiler</a></li>
+            <li><code>~/.local/share/ooda/<a href="/guide/#Packages.oot">std</a>/</code> — the <a href="/guide/#Language.oot">library</a> you import</li>
+            <li><code>~/.local/share/ooda/<a href="/guide/#Limits.oot">runtime</a>/</code> — C runtime for <a href="/guide/#Use.oot"><code>ooda run</code></a></li>
+            <li><code>~/.local/share/ooda/share/fixtures/<a href="/guide/#Use.oot">hello.oo</a></code> — first program</li>
+            <li><code>~/.config/ooda/<a href="/guide/#Options.oot">env</a></code> — <code>PATH</code> and <code>OODA_*</code></li>
+          </ul>
+          <p><code>. ~/.config/ooda/env</code></p>
+          <p><a href="/guide/#Use.oot"><code>ooda run hello.oo</code></a></p>
         </div>
-        <div class="win">
-          <div class="win-bar"><span>Agents</span></div>
-          <p>Other languages expect a person to read full source files. openOODA gives a short loop: <a href="/guide/#Options.oot"><code>outline</code></a>, <a href="/research/#RP-2-2-token-minimized-apis.oot"><code>reflect</code></a>, <a href="/guide/#Use.oot"><code>fix</code></a>, and <a href="/research/#RP-2-2b-surgical-patch-replace-fn.oot"><code>patch</code></a> one function. The agent does not send the full project to the model.</p>
+      </details>
+      <details class="drop">
+        <summary>Why openOODA</summary>
+        <div class="drop-body">
+          <p><strong><a href="/guide/#Safety.oot">Effects</a>.</strong> In Rust, Go, Zig, and C, a function can use files or the network if the process can. In openOODA, the function must hold a <a href="/guide/#Safety.oot">token</a>. A token is a permission argument, for example <a href="/guide/#Safety.oot"><code>&amp;FsReadCap</code></a>. If the token is not there, the call does not run. <a href="/research/#RP-ES-2-es-capability-secure.oot">No token, no effect</a>.</p>
+          <p><strong><a href="/guide/#Options.oot">Agents</a>.</strong> Other languages expect a person to read full source files. openOODA gives a short command loop: <a href="/guide/#Options.oot"><code>outline</code></a>, <a href="/research/#RP-2-2-token-minimized-apis.oot"><code>reflect</code></a>, <a href="/guide/#Use.oot"><code>fix</code></a>, and <a href="/research/#RP-2-2b-surgical-patch-replace-fn.oot"><code>patch</code></a> one function. The agent does not send the full project to the model.</p>
+          <p><strong><a href="/guide/#Language.oot">Secrets</a>.</strong> If you print a key, the key leaves the program. openOODA marks secret fields with <a href="/research/#RP-3-5-static-taint-secret.oot"><code>SECRET</code></a>. <a href="/guide/#Options.oot">Check</a> stops a print of that field.</p>
+          <p><strong><a href="/guide/#Packages.oot">Packages</a>.</strong> <code>cargo add</code> and <code>go get</code> fetch code with the full rights of the process. An openOODA <a href="/guide/#Packages.oot">lock line</a> is <code>name@version#sha256#CapName</code>. The line names the hash and the permitted effect. Extra rights are refused. See the <a href="/research/#RP-5-2-verifiable-web-of-code.oot">verifiable web of code</a>.</p>
+          <p><strong><a href="/guide/#Limits.oot">The path</a>.</strong> The usual path is: <a href="/guide/#Use.oot">typecheck</a>, <a href="/research/#RP-4-x-backend-c-product-floor.oot">emit C</a>, run. You can also emit <a href="/research/#RP-4-1-2-production-llvm.oot">LLVM</a>, <a href="/research/#RP-4-1-4-direct-webassembly.oot">wasm</a>, or x86 when you ask. See the <a href="/guide/">guide</a>.</p>
         </div>
-        <div class="win">
-          <div class="win-bar"><span>Secrets</span></div>
-          <p>If you print a key, the key leaves the program. Mark a field <a href="/research/#RP-3-5-static-taint-secret.oot"><code>SECRET</code></a>. <a href="/guide/#Options.oot">Check</a> stops a print of that field.</p>
+      </details>
+      <details class="drop">
+        <summary>Safety</summary>
+        <div class="drop-body">
+          <p><strong><a href="/guide/#Safety.oot">Tokens</a>.</strong> A file, process, or network call takes a <a href="/research/#RP-3-1-unified-capability-sandboxing.oot">capability</a> as an argument. A capability is a permission token. If the token is missing, false, or zero, the call stops. This is fail closed. Use the smallest token that does the job. Do not take <a href="/guide/#Safety.oot"><code>&amp;SysCap</code></a> when <a href="/guide/#Safety.oot"><code>&amp;FsReadCap</code></a> is enough.</p>
+          <p><strong><a href="/guide/#Safety.oot">Writes</a>.</strong> <a href="/guide/#Safety.oot"><code>write_file</code></a> needs <a href="/guide/#Safety.oot"><code>&amp;FsWriteCap</code></a> and <a href="/guide/#Options.oot"><code>OODA_FS_WRITEDIR</code></a>. If that environment value is not set, the write is denied. Absolute paths and symbolic links are refused.</p>
+          <p><strong><a href="/guide/#Language.oot">Secrets</a>.</strong> Mark a field <a href="/research/#RP-3-5-static-taint-secret.oot"><code>SECRET</code></a>. <code>println</code> of that field fails <a href="/guide/#Options.oot">check</a>. A nearby field that is not secret is allowed. <a href="/guide/#Safety.oot"><code>process_exec</code></a> is a secret sink. A sink is a call that must not receive a secret.</p>
+          <p><strong><a href="/guide/#Safety.oot">Jail</a>.</strong> On Linux, <code>&amp;SysCap</code> can apply a <a href="/research/#RP-3-1-unified-capability-sandboxing.oot">Landlock</a> jail and POSIX <a href="/research/#RP-3-3-memory-quotas-heap-sandbox.oot"><code>setrlimit</code></a>. Landlock is a Linux kernel limit on which paths a process may use. <code>setrlimit</code> sets <a href="/research/#RP-3-4-cpu-quotas-maxcycles.oot">resource limits</a>. An empty path list fails closed. A zero quota fails closed.</p>
         </div>
-        <div class="win">
-          <div class="win-bar"><span>Packages</span></div>
-          <p>A <a href="/guide/#Packages.oot">lock line</a> is <code>name@version#sha256#CapName</code>. The line names the hash and the permitted effect. Extra rights are refused. See the <a href="/research/#RP-5-2-verifiable-web-of-code.oot">verifiable web of code</a>.</p>
+      </details>
+      <details class="drop">
+        <summary>Security</summary>
+        <div class="drop-body">
+          <p><strong><a href="/guide/#Packages.oot">Lock</a>.</strong> A <a href="/guide/#Packages.oot">lock line</a> is <code>name@version#sha256#CapName</code>. The line names the bytes and the permitted effect. Extra capabilities are refused. A path that leaves the package tree is refused.</p>
+          <p><strong><a href="https://registry.openooda.org/">Catalog</a>.</strong> <a href="/guide/#Packages.oot"><code>ooda add hello</code></a> uses the stock store. <code>ooda search</code> walks every store you added. A yanked name is refused.</p>
+          <p><strong><a href="/guide/#Packages.oot">Launch</a>.</strong> <a href="/guide/#Packages.oot"><code>ooda launch --exec</code></a> runs the gated payload after the hash, the caps, and the yank check.</p>
+          <p><strong><a href="/guide/#Packages.oot">Foreign binary</a>.</strong> A foreign ELF file does not receive Ooda tokens from a lock line. The lock names a cap. It does not rewrite the binary.</p>
+          <p><strong><a href="/guide/#Safety.oot">Measured isolate</a>.</strong> Measured isolate hashes the payload, the token, and the domain. You measure what you isolated. See the <a href="/research/#RP-5-2-verifiable-web-of-code.oot">verifiable web of code</a>.</p>
         </div>
-      </div>
-
-      <h2>The toolchain</h2>
-      <table>
-        <tr><th>name</th><th>what it is</th></tr>
-        <tr><td><a href="/guide/#Options.oot"><code>ooda</code></a></td><td>the command line</td></tr>
-        <tr><td><a href="/guide/#Limits.oot"><code>oodac</code></a></td><td>the compiler</td></tr>
-        <tr><td><a href="/guide/#Packages.oot"><code>std</code></a></td><td>the <a href="/guide/#Language.oot">library</a> you import</td></tr>
-        <tr><td><a href="/guide/#Limits.oot"><code>runtime</code></a></td><td>C runtime for <a href="/guide/#Use.oot"><code>ooda run</code></a></td></tr>
-        <tr><td><a href="https://registry.openooda.org/">registry</a></td><td>signed catalog</td></tr>
-      </table>
-
-      <h2>Get it</h2>
-      <p>The install link is <a href="https://openooda.org/install">https://openooda.org/install</a>. The payload is <code>.oo</code>. It is not a shell script. Never <code>| sh</code>.</p>
-      <pre>curl -fsSL https://openooda.org/install | oo
-. ~/.config/ooda/env
-ooda run hello.oo</pre>
-      <p>First program: <a href="/guide/#Use.oot"><code>hello.oo</code></a>. Rebuild lives on <a href="/guide/#Use.oot">start</a>.</p>
-
-      <h2>Commands</h2>
-      <table>
-        <tr><th>command</th><th>what you use it for</th></tr>
-        <tr><td><code>check</code></td><td>typecheck a <code>.oo</code> file</td></tr>
-        <tr><td><code>run</code></td><td>typecheck, emit C, <code>gcc</code>, run</td></tr>
-        <tr><td><code>test</code></td><td>run <code>verify</code> / <code>assert_eq!</code></td></tr>
-        <tr><td><code>outline</code></td><td>names and shapes in a file</td></tr>
-        <tr><td><code>reflect</code></td><td>look up one symbol</td></tr>
-        <tr><td><code>fix</code></td><td>apply compiler patches</td></tr>
-        <tr><td><code>patch</code></td><td>replace one function body</td></tr>
-        <tr><td><code>lsp</code></td><td>talk to your editor</td></tr>
-        <tr><td><code>add</code></td><td>install a package from the stock store</td></tr>
-        <tr><td><code>search</code></td><td>search every store you added</td></tr>
-        <tr><td><code>registry</code></td><td>list stores; <code>add</code> / <code>remove</code> a URL</td></tr>
-        <tr><td><code>launch --exec</code></td><td>run a gated payload</td></tr>
-        <tr><td><code>bench</code></td><td>time <code>oodac check</code></td></tr>
-      </table>
-      <p>The full flag list lives on <a href="/guide/#Options.oot">commands</a>.</p>
-
-      <h2>Safety</h2>
-      <div class="win">
-        <div class="win-bar"><span>tokens</span></div>
-        <p>A file, process, or network call takes a <a href="/research/#RP-3-1-unified-capability-sandboxing.oot">capability</a> as an argument. If the token is missing, false, or zero, the call stops. Use the smallest token that does the job. Do not take <code>&amp;SysCap</code> when <code>&amp;FsReadCap</code> is enough.</p>
-      </div>
-      <div class="win">
-        <div class="win-bar"><span>writes</span></div>
-        <p><code>write_file</code> needs <code>&amp;FsWriteCap</code> and <code>OODA_FS_WRITEDIR</code>. If that environment value is not set, the write is denied. Absolute paths and symbolic links are refused.</p>
-      </div>
-      <div class="win">
-        <div class="win-bar"><span>secrets</span></div>
-        <p>Mark a field <code>SECRET</code>. <code>println</code> of that field fails check. <code>process_exec</code> is a secret sink. A sink is a call that must not receive a secret.</p>
-      </div>
-      <div class="win">
-        <div class="win-bar"><span>jail</span></div>
-        <p>On Linux, <code>&amp;SysCap</code> can apply a <a href="/research/#RP-3-1-unified-capability-sandboxing.oot">Landlock</a> jail and POSIX <code>setrlimit</code>. An empty path list fails closed. A zero quota fails closed.</p>
-      </div>
-
-      <h2>Packages</h2>
-      <p>A lock line is <code>name@version#sha256#CapName</code>. The line names the bytes and the permitted effect. Extra capabilities are refused. A path that leaves the package tree is refused.</p>
-      <p><a href="/guide/#Packages.oot"><code>ooda add hello</code></a> uses the stock <a href="https://registry.openooda.org/">store</a>. <code>ooda search</code> walks every store you added. Extra stores: <code>ooda registry add https://host</code>. A yanked name is refused. <code>ooda launch --exec</code> runs the gated payload after the hash, the caps, and the yank check. A foreign ELF file does not receive Ooda tokens from a lock line.</p>
-      <p>Measured isolate hashes the payload, the token, and the domain. The file on disk stays the same so a rebuild can match. See <a href="/research/#RP-4-3-2-deterministic-reproducible-builds.oot">reproducible builds</a> and the <a href="/research/#RP-5-2-verifiable-web-of-code.oot">verifiable web of code</a>.</p>
+      </details>
+      <details class="drop">
+        <summary>Defense</summary>
+        <div class="drop-body">
+          <p><strong><a href="/research/#RP-4-3-2-deterministic-reproducible-builds.oot">Disk</a>.</strong> The file on disk stays the same so a rebuild can match. See <a href="/research/#RP-4-3-2-deterministic-reproducible-builds.oot">reproducible builds</a>.</p>
+          <p><strong><a href="/research/#RP-3-11-polymorphic-metamorphic-binaries.oot">Memory layout</a>.</strong> The defense in memory can change the layout at load. One exploit does not fit every machine. That is a <a href="/research/#RP-3-11-polymorphic-metamorphic-binaries.oot">metamorphic binary</a>.</p>
+          <p><strong><a href="/research/#RP-3-9-cryptographic-call-graph-integrity.oot">Call graph</a>.</strong> <a href="/research/#RP-3-9-cryptographic-call-graph-integrity.oot">Call-graph integrity</a> seals the approved paths. A hijacked return cannot jump to a random gadget.</p>
+          <p><strong><a href="/research/#RP-ES-5-es-zero-day-defense.oot">Zero-day</a>.</strong> The stack is: contain with tokens, detect with contracts, raise cost with layout change. Read <a href="/research/#RP-ES-5-es-zero-day-defense.oot">zero-day defense</a> and <a href="/research/#RP-6-1-tension-metamorphic-vs-deterministic.oot">disk versus memory</a>.</p>
+        </div>
+      </details>
     </main>
   </div>
   <script>

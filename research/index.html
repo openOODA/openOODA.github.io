@@ -5,15 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>openOODA research</title>
   <meta name="description" content="openOODA research library.">
-  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="../site.css">
-  <style>
-    aside { display: flex; flex-direction: column; padding-bottom: 1.25rem; }
-    .local { overflow: auto; }
-    .local a { font-size: 0.85rem; overflow-wrap: anywhere; }
-    main { max-width: 46rem; }
-    @media (max-width: 800px) { .local { overflow: visible; } }
-  </style>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script>
     (function () {
@@ -22,27 +13,76 @@
       document.documentElement.setAttribute("data-theme", t);
     })();
   </script>
+  <style>
+    :root { --bg: #fff; --fg: #000; --muted: #444; --panel: #f2f2f2; }
+    html[data-theme="dark"] { --bg: #000; --fg: #e8e8e8; --muted: #9a9a9a; --panel: #141414; }
+    html { background: var(--bg); color: var(--fg); }
+    body {
+      margin: 0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    a { color: var(--fg); }
+    a:hover { text-decoration-thickness: 2px; }
+    header {
+      position: sticky; top: 0; z-index: 10; background: var(--bg);
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+      gap: 0.75rem 1.25rem; padding: 0.85rem 1.25rem; border-bottom: 2px solid var(--fg);
+    }
+    .brand-row { display: flex; align-items: baseline; gap: 0.45rem; }
+    .brand {
+      font-weight: 700; letter-spacing: 0.08em; color: var(--bg);
+      background: var(--fg); padding: 0.2rem 0.45rem; text-decoration: none; white-space: nowrap;
+    }
+    .ver { font-size: 0.85rem; white-space: nowrap; }
+    #theme {
+      font: inherit; background: var(--bg); color: var(--fg);
+      border: 2px solid var(--fg); padding: 0.15rem 0.55rem; cursor: pointer; white-space: nowrap;
+    }
+    .wrap { display: grid; grid-template-columns: 12rem 1fr; max-width: 60rem; }
+    aside {
+      display: flex; flex-direction: column;
+      border-right: 1px solid var(--fg); padding: 1.25rem 1rem 1.25rem;
+      position: sticky; top: 3.4rem; align-self: start;
+      max-height: calc(100vh - 3.4rem);
+    }
+    .global a, .local a { display: block; color: var(--fg); padding: 0.25rem 0; text-align: left; }
+    .global a.active, .local a.active { text-decoration: underline; text-decoration-thickness: 2px; }
+    .local { margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--fg); overflow: auto; }
+    .local a { padding-left: 0.75rem; font-size: 0.85rem; overflow-wrap: anywhere; }
+    .local h2 { font-size: 0.8rem; color: var(--muted); font-weight: 400; margin: 0.75rem 0 0.35rem; padding-left: 0.75rem; }
+    main { padding: 1.5rem 1.25rem 5rem; max-width: 46rem; }
+    main h1 { font-size: 1.15rem; }
+    main h2 { font-size: 1rem; margin-top: 1.5rem; }
+    pre { border: 1px solid var(--fg); padding: 0.7rem; overflow: auto; background: var(--panel); }
+    code { font-family: inherit; background: var(--panel); padding: 0.05rem 0.25rem; }
+    pre code { background: none; padding: 0; }
+    #gh { position: fixed; right: 1rem; bottom: 1rem; z-index: 20; color: var(--fg); background: var(--bg); padding: 0.15rem 0.35rem; }
+    @media (max-width: 800px) {
+      .wrap { grid-template-columns: 1fr; }
+      aside { position: static; max-height: none; border-right: 0; border-bottom: 1px solid var(--fg); }
+      .local { overflow: visible; }
+    }
+  </style>
 </head>
 <body>
   <a id="gh" href="https://github.com/openOODA">github</a>
-  <header class="chrome">
-    <div class="title">
-      <a class="close" href="/" aria-label="home"></a>
-      <div class="brand-row">
-        <a class="brand" href="/">openOODA</a>
-        <span class="ver">v0.203.0-beta</span>
-      </div>
+  <header>
+    <div class="brand-row">
+      <a class="brand" href="/">openOODA</a>
+      <span class="ver">v0.203.0-beta</span>
     </div>
     <button type="button" id="theme">dark</button>
   </header>
-  <nav class="menubar">
-    <a href="/">home</a>
-    <a href="/guide/">guide</a>
-    <a class="active" href="/research/">research</a>
-    <a href="https://registry.openooda.org/">registry</a>
-  </nav>
   <div class="wrap">
     <aside>
+      <nav class="global">
+        <a href="/">home</a>
+        <a href="/guide/">guide</a>
+        <a class="active" href="/research/">research</a>
+        <a href="https://registry.openooda.org/">registry</a>
+      </nav>
       <nav class="local" id="nav-list"></nav>
     </aside>
     <main id="content"><p>Select a paper.</p></main>
