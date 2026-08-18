@@ -3,7 +3,7 @@
 File: guide/Options.oot
 User wiki. Canonical URL: https://openooda.org/guide/#Options.oot
 
-[Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [How it works](Limits.oot)
+[Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [How it works](Limits.oot) [Pay](Pay.oot)
 
 ## 1. Everyday path
 
@@ -170,4 +170,4 @@ Take `&FsReadCap` when you only read. Take `&HttpCap` when you only fetch. Take 
 
 On Linux, `&SysCap` can apply a Landlock jail and POSIX `setrlimit`. See [Capabilities](Safety.oot).
 
-[Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [How it works](Limits.oot)
+[Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [How it works](Limits.oot) [Pay](Pay.oot)

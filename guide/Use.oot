@@ -10,6 +10,7 @@ You run your first `.oo` program on this page.
 [Packages](Packages.oot) is how you add a library.
 [Capabilities](Safety.oot) is how an effect gets a token.
 [How it works](Limits.oot) is the product path.
+[Pay](Pay.oot) is HTTP 402 / x402.
 
 ## 1. What you need
 

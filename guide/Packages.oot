@@ -3,11 +3,12 @@
 File: guide/Packages.oot
 User wiki. Canonical URL: https://openooda.org/guide/#Packages.oot
 
-[Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Commands](Options.oot) [Capabilities](Safety.oot) [How it works](Limits.oot)
+[Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Commands](Options.oot) [Capabilities](Safety.oot) [How it works](Limits.oot) [Pay](Pay.oot)
 
 ## 1. What you install
 
 You add a package with `ooda add hello`.
+HTTP 402 on the store is not this page. See [Pay](Pay.oot).
 That uses the stock store. You do not type a URL.
 You search with `ooda search hello`.
 You list stores with `ooda registry`.
@@ -180,4 +181,4 @@ ooda pm pack
 
 Fetch does not replace the stock pubkey.
 
-[Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Commands](Options.oot) [Capabilities](Safety.oot) [How it works](Limits.oot)
+[Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Commands](Options.oot) [Capabilities](Safety.oot) [How it works](Limits.oot) [Pay](Pay.oot)

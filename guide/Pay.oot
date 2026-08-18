@@ -1,0 +1,99 @@
+# PAY — HTTP 402 and x402
+
+File: guide/Pay.oot
+User wiki. Canonical URL: https://openooda.org/guide/#Pay.oot
+
+[Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Commands](Options.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [How it works](Limits.oot)
+
+This page is how an `.oo` program reads an HTTP 402 and names a price.
+It is not a wallet. It does not send money by itself.
+The helpers live in `ooda/std` (`std/net/x402.oo`, `std/net/x402_spend.oo`).
+
+## 1. What 402 is
+
+HTTP 402 means payment required.
+x402 is a handshake on that status: the server quotes a price, the client may attach proof and retry.
+
+openOODA teaches the program to **see** the quote and to **refuse spend** unless you pin it.
+It does not put a wallet on disk when you install.
+It does not charge the public door.
+
+## 2. Import
+
+```
+import "std/net/x402.oo";
+import "std/net/x402_spend.oo";
+```
+
+These files are in the product tree on branch `feat/x402-std`.
+They are not in the v0.204.0-beta tag until that branch is merged.
+
+## 3. See a 402
+
+`x402_is_payment_required(status)` is true only for `402`.
+`http_response_reason(402)` is `Payment Required`.
+
+When the body is an x402 JSON quote, parse it:
+
+```
+let q: X402Quote = x402_parse_quote(body);
+if x402_is_payment_required(402) {
+    if x402_quote_ready(q) {
+        println(x402_format_quote(q));
+    }
+}
+```
+
+`x402_quote_ready` is true when `payTo` and `maxAmountRequired` are both present.
+`x402_format_quote` prints one line: amount, network, pay-to address.
+
+A fixture you can parse without the network: `fixtures/x402_quote.json`.
+Check: `ooda run scripts/x402_parse_smoke.oo`.
+
+## 4. Build a 402 body (if you sell)
+
+If your program is the seller, build the JSON the client will parse:
+
+```
+let body: String = x402_required_json(
+    "0xYourAddress",
+    "1000",
+    "base",
+    "0xusdc",
+    "https://example.com/resource"
+);
+```
+
+That is a body string. You still have to send HTTP 402 on your server.
+GitHub Pages cannot do that handshake. A Worker or other origin can.
+
+## 5. Spend stays off
+
+Attaching an `X-PAYMENT` proof is denied unless:
+
+1. The spend pin is exactly `1` (callers pass `OODA_X402_SPEND`).
+2. The proof string is not empty.
+
+```
+let pin: String = "";
+let r: Result[Bool, String] = x402_attach_or_deny(pin, "proof");
+if r.is_err() {
+    println("spend denied");
+}
+```
+
+Empty pin → denied.
+Pin `1` and empty proof → denied.
+Pin `1` and a proof → `Ok(true)`. Then use `x402_payment_header_line(proof)` for `X-PAYMENT: …`.
+
+There is no chain send and no facilitator in this library.
+Install does not turn spend on.
+
+## 6. What this is not
+
+- Not a compiler change. C, LLVM, WASM, and x86 are unchanged.
+- Not hop-2 / mind-virus gates. Those are a different story.
+- Not the store. Package pay-on-download is later.
+
+Capabilities for network fetch are on [Capabilities](Safety.oot).
+First run is on [Start](Use.oot).

@@ -3,7 +3,7 @@
 File: guide/Language.oot
 User wiki. Canonical URL: https://openooda.org/guide/#Language.oot
 
-[Home](Home.oot) [Start](Use.oot) [Commands](Options.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [How it works](Limits.oot)
+[Home](Home.oot) [Start](Use.oot) [Commands](Options.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [How it works](Limits.oot) [Pay](Pay.oot)
 
 You write `.oo` programs on this page.
 [Home](Home.oot) is the one-minute picture.
@@ -208,4 +208,4 @@ pub fn main() {
 A std function that does an effect still takes a token.
 Std does not grant ambient authority.
 
-[Home](Home.oot) [Start](Use.oot) [Commands](Options.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [How it works](Limits.oot)
+[Home](Home.oot) [Start](Use.oot) [Commands](Options.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [How it works](Limits.oot) [Pay](Pay.oot)

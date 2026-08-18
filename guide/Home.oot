@@ -26,6 +26,7 @@ More on the path: [How it works](Limits.oot).
 First run: [Start](Use.oot).
 Tokens: [Capabilities](Safety.oot).
 Add a package: [Packages](Packages.oot).
+HTTP 402 / x402: [Pay](Pay.oot).
 
 The public system is three places: door, guide, store.
 
@@ -43,6 +44,7 @@ Start here. Then pick a page.
 - [Packages](Packages.oot) — `add`, `search`, store list.
 - [Capabilities](Safety.oot) — tokens and effects.
 - [How it works](Limits.oot) — typecheck, emit C, host `gcc`, run.
+- [Pay](Pay.oot) — HTTP 402 and x402 quotes.
 
 Door: https://openooda.org/
 Guide: https://openooda.org/guide/#Home.oot
