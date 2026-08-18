@@ -93,8 +93,8 @@
     </aside>
     <main>
       <p>Build fast. Stay secure. Save tokens.</p>
-      <pre>curl -fsSL https://openooda.org/install | oo</pre>
-      <p>Install waits on the compiler and the library. The <a href="/guide/">guide</a> is the way in.</p>
+      <pre>OODA_FS_WRITEDIR=$HOME OODA_CHECKOUT=$PWD ooda install</pre>
+      <p>From an ooda checkout after the official rebuild. Then <code>. ~/.config/ooda/env</code>. The <a href="/guide/">guide</a> is the way in.</p>
       <details class="drop">
         <summary>What gets installed</summary>
         <div class="drop-body">

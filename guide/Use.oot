@@ -23,23 +23,28 @@ The tools you type after that are the [pure product CLI](/research/#RP-5-1a-pure
 
 ## 2. Install
 
-The public one-liner is paused while the compiler and the library finish.
-From a checkout you already have, use the official rebuild below.
-Then use `ooda` and `oodac`.
-
-## 3. Official rebuild from the ooda tree
-
-From the `ooda` tree:
+From a checkout you already have, rebuild, then install onto XDG:
 
 ```
 cd ooda
 OODAC_BIN=./bootstrap/seed/oodac bash bootstrap/oodac_pure_build oodac/main.oo oodac/oodac
-./oodac/oodac check oodac/main.oo
+OODA_FS_WRITEDIR="$HOME" OODA_CHECKOUT="$PWD" ooda install
+. ~/.config/ooda/env
 ```
+
+`ooda install` copies `ooda`, `oodac`, `std`, and `runtime` under `~/.local` and writes `~/.config/ooda/env`.
+The first machine still needs this tree, host `gcc`, and the seed rebuild.
+The payload at https://openooda.org/install is `.oo`. It is not a shell script.
+
+## 3. Official rebuild
 
 `bootstrap/oodac_pure_build` is the official rebuild.
 It starts `gcc` and the seed compiler.
-After that, use `ooda` and `oodac`.
+After the rebuild in section 2:
+
+```
+./oodac/oodac check oodac/main.oo
+```
 
 The emit path is the [C backend](/research/#RP-4-x-backend-c-product-floor.oot).
 You typecheck, emit C, compile that C with host `gcc`, and run the binary.

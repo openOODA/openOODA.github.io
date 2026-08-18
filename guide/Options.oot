@@ -38,7 +38,10 @@ ooda health
 ooda pkg [--json]
 ooda add <name> [--vendor path|--registry]
 ooda pm add|ingest|launch|remove|update|outdated|why|tree|vendor|clean|audit|sbom|pack
+ooda install
 ```
+
+`ooda install` copies tree `bin/ooda`, `oodac/oodac`, `std`, and `runtime` onto XDG. Set `OODA_FS_WRITEDIR` and run it from the checkout (or set `OODA_CHECKOUT`).
 
 `check --json-errors` prints machine diagnostics for an editor or a script.
 
