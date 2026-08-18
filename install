@@ -9,6 +9,6 @@
 //   2. Point at the guide.
 
 pub fn main() {
-    println("openOODA v0.203.0-beta");
+    println("openOODA v0.204.0-beta");
     println("https://openooda.org/guide/");
 }
