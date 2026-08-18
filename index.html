@@ -6,6 +6,14 @@
   <title>openOODA</title>
   <meta name="description" content="openOODA">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <meta property="og:title" content="openOODA">
+  <meta property="og:description" content="openOODA">
+  <meta property="og:url" content="https://openooda.org/">
+  <meta property="og:image" content="https://openooda.org/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
   <script>
     (function () {
       var m = document.cookie.match(/(?:^|; )ooda-theme=([^;]*)/);
@@ -88,13 +96,30 @@
     a { color: var(--fg); }
     a:hover { text-decoration-thickness: 2px; }
     #gh { position: fixed; right: 1rem; bottom: 1rem; z-index: 20; color: var(--fg); background: var(--bg); padding: 0.15rem 0.35rem; }
+    #skip {
+      position: absolute; left: 0.5rem; top: 0.5rem; z-index: 30;
+      background: var(--bg); color: var(--fg); padding: 0.15rem 0.45rem;
+      clip-path: inset(50%); width: 1px; height: 1px; overflow: hidden;
+    }
+    #skip:focus {
+      clip-path: none; width: auto; height: auto; overflow: visible;
+      outline: 2px solid var(--fg);
+    }
     @media (max-width: 800px) {
       .wrap { grid-template-columns: 1fr; }
       aside { position: static; border-right: 0; border-bottom: 1px solid var(--fg); padding-bottom: 1rem; }
     }
+    @media print {
+      html, body { background: #fff; color: #000; }
+      #skip, #gh, #theme, #copy, header, aside { display: none !important; }
+      .wrap { display: block; max-width: none; }
+      main { padding: 0; max-width: none; }
+      a { color: #000; }
+    }
   </style>
 </head>
 <body>
+  <a id="skip" href="/guide/">guide</a>
   <a id="gh" href="https://github.com/openOODA">github</a>
   <header>
     <div class="brand-row">
@@ -208,6 +233,9 @@
         }
         fallback();
       };
+      window.addEventListener("beforeprint", function () {
+        document.querySelectorAll("details").forEach(function (d) { d.setAttribute("open", ""); });
+      });
     })();
   </script>
 </body>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>openOODA — not found</title>
+  <meta name="description" content="Not found.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <meta property="og:title" content="openOODA — not found">
+  <meta property="og:description" content="Not found.">
+  <meta property="og:url" content="https://openooda.org/">
+  <meta property="og:image" content="https://openooda.org/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <script>
+    (function () {
+      var m = document.cookie.match(/(?:^|; )ooda-theme=([^;]*)/);
+      var t = (m && m[1] === "dark") || (typeof localStorage !== "undefined" && localStorage.getItem("ooda-theme") === "dark") ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", t);
+    })();
+  </script>
+  <style>
+    :root { --bg: #fff; --fg: #000; --muted: #444; }
+    html[data-theme="dark"] { --bg: #000; --fg: #e8e8e8; --muted: #9a9a9a; }
+    html { background: var(--bg); color: var(--fg); }
+    body {
+      margin: 0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    header {
+      position: sticky; top: 0; z-index: 10; background: var(--bg);
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+      gap: 0.75rem 1.25rem; padding: 0.85rem 1.25rem; border-bottom: 2px solid var(--fg);
+    }
+    .brand-row { display: flex; align-items: baseline; gap: 0.45rem; }
+    .brand {
+      font-weight: 700; letter-spacing: 0.08em; color: var(--bg);
+      background: var(--fg); padding: 0.2rem 0.45rem; text-decoration: none; white-space: nowrap;
+    }
+    .ver { font-size: 0.85rem; white-space: nowrap; }
+    #theme {
+      font: inherit; background: var(--bg); color: var(--fg);
+      border: 2px solid var(--fg); padding: 0.15rem 0.55rem; cursor: pointer; white-space: nowrap;
+    }
+    .wrap { display: grid; grid-template-columns: 12rem 1fr; max-width: 60rem; }
+    aside {
+      border-right: 1px solid var(--fg); padding: 1.25rem 1rem 5rem;
+      position: sticky; top: 3.4rem; align-self: start;
+    }
+    .global a { display: block; color: var(--fg); padding: 0.25rem 0; text-align: left; }
+    main { padding: 1.5rem 1.25rem 5rem; max-width: 44rem; }
+    p { margin: 0 0 1.25rem; max-width: 36rem; }
+    a { color: var(--fg); }
+    a:hover { text-decoration-thickness: 2px; }
+    #gh { position: fixed; right: 1rem; bottom: 1rem; z-index: 20; color: var(--fg); background: var(--bg); padding: 0.15rem 0.35rem; }
+    #skip {
+      position: absolute; left: 0.5rem; top: 0.5rem; z-index: 30;
+      background: var(--bg); color: var(--fg); padding: 0.15rem 0.45rem;
+      clip-path: inset(50%); width: 1px; height: 1px; overflow: hidden;
+    }
+    #skip:focus {
+      clip-path: none; width: auto; height: auto; overflow: visible;
+      outline: 2px solid var(--fg);
+    }
+    @media (max-width: 800px) {
+      .wrap { grid-template-columns: 1fr; }
+      aside { position: static; border-right: 0; border-bottom: 1px solid var(--fg); padding-bottom: 1rem; }
+    }
+    @media print {
+      html, body { background: #fff; color: #000; }
+      #skip, #gh, #theme, header, aside { display: none !important; }
+      .wrap { display: block; }
+      main { padding: 0; }
+      a { color: #000; }
+    }
+  </style>
+</head>
+<body>
+  <a id="skip" href="/guide/">guide</a>
+  <a id="gh" href="https://github.com/openOODA">github</a>
+  <header>
+    <div class="brand-row">
+      <a class="brand" href="/">openOODA</a>
+      <span class="ver">v0.203.0-beta</span>
+    </div>
+    <button type="button" id="theme">dark</button>
+  </header>
+  <div class="wrap">
+    <aside>
+      <nav class="global">
+        <a href="/">home</a>
+        <a href="/guide/">guide</a>
+        <a href="https://registry.openooda.org/">registry</a>
+      </nav>
+    </aside>
+    <main>
+      <p>Not found.</p>
+    </main>
+  </div>
+  <script>
+    (function () {
+      var key = "ooda-theme";
+      function apply(t) {
+        document.documentElement.setAttribute("data-theme", t);
+        var b = document.getElementById("theme");
+        if (b) b.textContent = t === "dark" ? "light" : "dark";
+      }
+      apply(document.documentElement.getAttribute("data-theme") || "light");
+      var b = document.getElementById("theme");
+      if (b) b.onclick = function () {
+        var n = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+        localStorage.setItem(key, n);
+        document.cookie = key + "=" + n + ";path=/;domain=.openooda.org;max-age=31536000;SameSite=Lax";
+        apply(n);
+      };
+    })();
+  </script>
+</body>
+</html>

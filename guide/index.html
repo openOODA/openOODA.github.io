@@ -5,7 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>openOODA guide</title>
   <link rel="canonical" href="https://openooda.org/guide/">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <meta name="description" content="openOODA user wiki — language, commands, packages, and capabilities.">
+  <meta property="og:title" content="openOODA guide">
+  <meta property="og:description" content="openOODA user wiki — language, commands, packages, and capabilities.">
+  <meta property="og:url" content="https://openooda.org/guide/">
+  <meta property="og:image" content="https://openooda.org/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script>
     (function () {
@@ -64,13 +73,31 @@
     .canon { color: var(--muted); font-size: 0.85rem; }
     .err { color: var(--fg); }
     #gh { position: fixed; right: 1rem; bottom: 1rem; z-index: 20; color: var(--fg); background: var(--bg); padding: 0.15rem 0.35rem; }
+    #skip {
+      position: absolute; left: 0.5rem; top: 0.5rem; z-index: 30;
+      background: var(--bg); color: var(--fg); padding: 0.15rem 0.45rem;
+      clip-path: inset(50%); width: 1px; height: 1px; overflow: hidden;
+    }
+    #skip:focus {
+      clip-path: none; width: auto; height: auto; overflow: visible;
+      outline: 2px solid var(--fg);
+    }
     @media (max-width: 800px) {
       .wrap { grid-template-columns: 1fr; }
       aside { position: static; max-height: none; border-right: 0; border-bottom: 1px solid var(--fg); padding-bottom: 1rem; }
     }
+    @media print {
+      html, body { background: #fff; color: #000; }
+      #skip, #gh, #theme, header, aside { display: none !important; }
+      .wrap { display: block; max-width: none; }
+      main#page { padding: 0; max-width: none; }
+      a { color: #000; }
+      pre, code { background: none; }
+    }
   </style>
 </head>
 <body>
+  <a id="skip" href="#page">guide</a>
   <a id="gh" href="https://github.com/openOODA">github</a>
   <header>
     <div class="brand-row">
@@ -96,7 +123,7 @@
         <a href="Limits.oot" data-page="Limits.oot">how it works</a>
       </nav>
     </aside>
-    <main id="page">
+    <main id="page" tabindex="-1">
       <noscript>
         <p class="canon">https://openooda.org/guide/</p>
         <p>User wiki. Open a page:</p>
