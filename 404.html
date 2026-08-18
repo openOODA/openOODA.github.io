@@ -52,7 +52,6 @@
     .wrap { display: grid; grid-template-columns: 12rem 1fr; max-width: 60rem; flex: 1 0 auto; }
     footer {
       flex: 0 0 auto;
-      border-top: 2px solid var(--fg);
       padding: 0.85rem 1.25rem;
       padding-bottom: calc(0.85rem + env(safe-area-inset-bottom, 0px));
       background: var(--bg);
@@ -76,12 +75,12 @@
       border: 2px solid var(--fg); padding: 0.15rem 0.55rem;
       min-width: 12rem; flex: 1 1 10rem;
     }
-    .mail #save {
+    .mail #join {
       font: inherit; background: var(--bg); color: var(--fg);
       border: 2px solid var(--fg); padding: 0.15rem 0.55rem;
-      cursor: pointer; white-space: nowrap; min-width: 6ch; text-align: center;
+      cursor: pointer; white-space: nowrap; min-width: 7ch; text-align: center;
     }
-    .mail #save.is-on { background: var(--fg); color: var(--bg); }
+    .mail #join.is-on { background: var(--fg); color: var(--bg); }
     .mail .hp {
       position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;
     }
@@ -106,7 +105,7 @@
         margin-top: 0.75rem; padding: 0.75rem 0 0;
         border-top: 1px solid var(--fg);
       }
-      #theme, .mail #save, .mail input[type="email"] {
+      #theme, .mail #join, .mail input[type="email"] {
         min-height: 44px; padding: 0.55rem 0.85rem; box-sizing: border-box;
       }
       .global a {
@@ -150,7 +149,7 @@
         <p class="note">Join the mail list</p>
         <input type="email" name="email" placeholder="you@host" autocomplete="email" required>
         <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off">
-        <button type="submit" id="save">save</button>
+        <button type="submit" id="join">join</button>
       </form>
   </footer>
   <script>
@@ -172,14 +171,15 @@
       var mail = document.getElementById("mail");
       if (mail) mail.addEventListener("submit", function (ev) {
         ev.preventDefault();
-        var btn = document.getElementById("save");
+        var btn = document.getElementById("join");
         var email = (mail.email && mail.email.value) || "";
         var website = (mail.website && mail.website.value) || "";
         function fail() {
-          if (btn) { btn.textContent = "not saved"; btn.className = ""; }
+          if (btn) { btn.textContent = "join"; btn.className = ""; }
         }
         function ok() {
-          if (btn) { btn.textContent = "saved"; btn.className = "is-on"; }
+          if (btn) { btn.textContent = "joined"; btn.className = "is-on"; }
+          if (mail.email) mail.email.value = "";
         }
         fetch("https://collect.openooda.org/v1/emails", {
           method: "POST",
