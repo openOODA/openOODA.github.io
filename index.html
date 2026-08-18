@@ -38,6 +38,15 @@
       font: inherit; background: var(--bg); color: var(--fg);
       border: 2px solid var(--fg); padding: 0.15rem 0.55rem; cursor: pointer; white-space: nowrap;
     }
+    #copy {
+      min-width: 6ch;
+      text-align: center;
+      box-sizing: content-box;
+    }
+    #copy.is-on {
+      background: var(--fg);
+      color: var(--bg);
+    }
     .install {
       display: flex; align-items: center; flex-wrap: wrap;
       gap: 0.55rem 0.75rem; margin: 0 0 1.25rem;
@@ -175,7 +184,9 @@
       var copy = document.getElementById("copy");
       var cmd = "curl -fsSL https://openooda.org/install | oo";
       function copied() {
-        if (copy) copy.textContent = "copied";
+        if (!copy) return;
+        copy.textContent = "copied";
+        copy.className = "is-on";
       }
       function fallback() {
         var ta = document.createElement("textarea");
