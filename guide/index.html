@@ -26,9 +26,12 @@
   <style>
     :root { --bg: #fff; --fg: #000; --muted: #444; --panel: #f2f2f2; }
     html[data-theme="dark"] { --bg: #000; --fg: #e8e8e8; --muted: #9a9a9a; --panel: #141414; }
-    html { background: var(--bg); color: var(--fg); }
+    html { background: var(--bg); color: var(--fg); height: 100%; }
     body {
       margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
       font-size: 16px;
       line-height: 1.5;
@@ -50,7 +53,17 @@
       font: inherit; background: var(--bg); color: var(--fg);
       border: 2px solid var(--fg); padding: 0.15rem 0.55rem; cursor: pointer; white-space: nowrap;
     }
-    .wrap { display: grid; grid-template-columns: 12rem 1fr; max-width: 60rem; }
+    .wrap { display: grid; grid-template-columns: 12rem 1fr; max-width: 60rem; flex: 1 0 auto; }
+    footer {
+      flex: 0 0 auto;
+      border-top: 2px solid var(--fg);
+      padding: 0.85rem 1.25rem;
+      padding-bottom: calc(0.85rem + env(safe-area-inset-bottom, 0px));
+      background: var(--bg);
+    }
+    @media (min-width: 801px) {
+      footer { padding-right: 6rem; }
+    }
     aside {
       border-right: 1px solid var(--fg); padding: 1.25rem 1rem 5rem;
       position: sticky; top: 3.4rem; align-self: start;
@@ -119,7 +132,7 @@
     }
     @media print {
       html, body { background: #fff; color: #000; }
-      #skip, #gh, #theme, .mail, header, aside { display: none !important; }
+      #skip, #gh, #theme, footer, header, aside { display: none !important; }
       .wrap { display: block; max-width: none; }
       main, #page { padding: 0; max-width: none; }
       a { color: #000; }
@@ -170,14 +183,16 @@
         </ul>
       </noscript>
       </div>
+    </main>
+  </div>
+  <footer>
       <form class="mail" id="mail" action="https://collect.openooda.org/v1/emails" method="post">
         <p class="note">Join the mail list</p>
         <input type="email" name="email" placeholder="you@host" autocomplete="email" required>
         <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off">
         <button type="submit" id="save">save</button>
       </form>
-    </main>
-  </div>
+  </footer>
   <script>
     const PAGES = ["Home.oot", "Use.oot", "Language.oot", "Options.oot", "Packages.oot", "Safety.oot", "Limits.oot"];
     const root = document.getElementById("page");
