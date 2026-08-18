@@ -1,20 +1,25 @@
 # openOODA public site
 
 File: openOODA.github.io/README.oot
-Public site for https://openooda.org. Door, guide, install endpoint. Not the compiler. Not the wiki (`openOODA/wiki`). Not the registry (`registry.openooda.org`).
+Public site for https://openooda.org. This tree is the door, the guide, and the pin endpoint. Not the compiler. Not the wiki (`openOODA/wiki`).
 
 The public system is three places: door, guide, store.
+
+Door: https://openooda.org/
+Guide: https://openooda.org/guide/
+Store: https://registry.openooda.org
+
+The store host is `registry.openooda.org`. Do not rename that host.
 
 ## What is on disk
 
 | Path | What it actually is |
 | :--- | :--- |
-| `index.html` | Product door. Macintosh chrome. Pin next to the wordmark. |
+| `index.html` | Product door. Pin next to the wordmark. |
 | `guide/` | User wiki. Home, start, language, commands, packages, capabilities, how it works. |
-| `install` | `.oo` payload for `curl -fsSL https://openooda.org/install | oo`. Not a shell script. |
-| `research/` | Archive of design drafts. Not nav. Not product. Old URLs stay so they do not 404. |
-| `research.html` | Redirect to `/research/`. Same archive. |
-| `assets/` | Branding. |
+| `install` | `.oo` payload for the public pin command `curl -fsSL https://openooda.org/install | oo`. Not a shell script. |
+
+`research/` is an archive of design drafts. Not nav. Not product. Old URLs stay so they do not 404. `research.html` redirects to `/research/`.
 
 There is no playground. There are no API docs on this site. Product truth lives on the private boards: `openOODA/SHIPPED.oot`.
 

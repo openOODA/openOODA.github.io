@@ -17,9 +17,11 @@ You need host `gcc` to emit and run.
 The public command names the pin. It does not fetch a private tree.
 
 The compiler, the driver, and the tests are `.oo`.
-The tools you type after install are `ooda` and `oodac`.
+The tools you type after `ooda install` are `ooda` and `oodac`.
 
-## 2. Install
+## 2. Pin
+
+The public pin command:
 
 ```
 curl -fsSL https://openooda.org/install | oo
@@ -28,7 +30,7 @@ curl -fsSL https://openooda.org/install | oo
 The payload at https://openooda.org/install is `.oo`. It is not a shell script. Never `| sh`.
 That program names the pin and the guide. It does not copy binaries.
 
-From a checkout you already have:
+Install from a checkout you already have:
 
 ```
 OODA_FS_WRITEDIR=$HOME OODA_CHECKOUT=$PWD ooda install

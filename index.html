@@ -150,7 +150,7 @@
       <nav class="global">
         <a class="active" href="/">home</a>
         <a href="/guide/">guide</a>
-        <a href="https://registry.openooda.org/">registry</a>
+        <a href="https://registry.openooda.org/">store</a>
       </nav>
       <a id="gh" href="https://github.com/openOODA">github</a>
     </aside>
@@ -159,7 +159,7 @@
         <span class="install-cmd">curl -fsSL <a href="https://openooda.org/install">https://openooda.org/install</a> | oo</span>
         <button type="button" id="copy">copy</button>
       </div>
-      <details class="drop">
+      <details class="drop" open>
         <summary>Tokens</summary>
         <div class="drop-body">
           <p><strong><a href="/guide/#Safety.oot">Effects</a>.</strong> In Rust, Go, Zig, and C, a function can use files or the network if the process can. In openOODA the function must hold a <a href="/guide/#Safety.oot">token</a>, for example <a href="/guide/#Safety.oot"><code>&amp;FsReadCap</code></a>. You pass the token in. You do not mint one from bytes. If the token is missing, false, or zero, the call stops. No token, no effect. See <a href="/guide/#Safety.oot">capabilities</a>.</p>

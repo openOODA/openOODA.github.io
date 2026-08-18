@@ -23,138 +23,24 @@ The product path is:
 That path is `ooda run`.
 More on the path: [How it works](Limits.oot).
 
-This page is the start of the user wiki.
+First run: [Start](Use.oot).
+Tokens: [Capabilities](Safety.oot).
+Add a package: [Packages](Packages.oot).
+
 The public system is three places: door, guide, store.
 
 Door: https://openooda.org/
 Guide: https://openooda.org/guide/
 Store: https://registry.openooda.org
 
-## 2. Start here
-
-```
-curl -fsSL https://openooda.org/install | oo
-```
-
-The file at https://openooda.org/install is `.oo`.
-That program names the pin and the guide.
-It does not copy binaries.
-Never `| sh`.
-
-The checkout install is on [Start](Use.oot).
-That page is how you install, check, run, and test a file.
-
-## 3. Hello
-
-Save this as `hello.oo`:
-
-```
-pub fn greet(name: String) -> String {
-    return "Hello, " + name + "!";
-}
-
-verify greet {
-    assert_eq!(greet("World"), "Hello, World!");
-}
-
-pub fn main() {
-    println(greet("openOODA"));
-}
-```
-
-`pub fn` is a public function.
-`verify` is a test block next to the function.
-
-```
-ooda check hello.oo
-ooda run hello.oo
-ooda test hello.oo
-```
-
-`ooda run` typechecks, emits C, calls host `gcc`, and runs the binary.
-It prints the greeting. It does not run `verify`.
-`ooda test` runs `verify` / `assert_eq!` / `assert!`.
-
-First run steps: [Start](Use.oot).
-Syntax and types: [Language](Language.oot).
-
-## 4. Commands
-
-You drive the language with `ooda`.
-The full flag list lives on [Commands](Options.oot).
-
-| Command | What you use it for |
-| :--- | :--- |
-| `check` | Typecheck a `.oo` file. |
-| `build` | Emit C and compile with host `gcc`. |
-| `run` | Typecheck, emit C, `gcc`, run. |
-| `test` | Run `verify` / `assert_eq!` / `assert!`. |
-| `bench` | Time `oodac check`. |
-| `dump` | Print tokens, ast, or check. |
-| `outline` | Names and shapes in a file. |
-| `reflect` | Look up one symbol. |
-| `fix` | Apply compiler patches. |
-| `patch` | Replace one function body. |
-| `lsp` | Talk to your editor. |
-| `context` | List `.oo` files. |
-| `digest` | Hash a file. |
-| `health` | Check the toolchain. |
-| `pkg` | List locked packages. |
-| `add` | Install a package from the stock store. |
-| `search` | Search every store you added. |
-| `registry` | List stores. `add` / `remove` a URL. |
-| `pm` | Package manager. |
-
-`outline`, `reflect`, `fix`, and `patch` keep the edit loop small.
-That loop is `outline`, `reflect`, `fix`, and `patch`. See [Commands](Options.oot).
-
-## 5. Tokens
-
-A function that does an effect takes a token.
-A function that only computes takes no token.
-
-```
-pub fn load_notes(fs: &FsReadCap, path: String) -> Result[String, String] {
-    return read_file(fs, path);
-}
-
-pub fn main(fs: &FsReadCap) {
-    let text = load_notes(fs, "notes.txt");
-}
-```
-
-`read_file` takes `fs`.
-`load_notes` takes `fs`.
-`main` takes `fs`.
-You pass the token in. You do not hide the effect.
-Prefer the small token.
-`write_file` needs `&FsWriteCap` and `OODA_FS_WRITEDIR`.
-Details: [Capabilities](Safety.oot).
-
-## 6. Packages and std
-
-Product std ships as `ooda/std`.
-Import from that tree.
-Named emit+gcc+run is the proof. A folder name is not a volume cert.
-
-Add a package with `ooda add hello`.
-That uses the stock store.
-`ooda search` walks every store you added.
-`ooda launch --exec NAME` runs a gated payload.
-The public catalog is https://registry.openooda.org
-How packages work: [Packages](Packages.oot).
-
-The compiler, CLI, tests, and package tools are `.oo`.
-See [How it works](Limits.oot).
-
-## 7. This wiki
+## 2. This wiki
 
 Start here. Then pick a page.
 
 - [Start](Use.oot) — first run, first test.
 - [Language](Language.oot) — `.oo` syntax.
 - [Commands](Options.oot) — `ooda` commands and flags.
-- [Packages](Packages.oot) — `add`, `search`, `registry`.
+- [Packages](Packages.oot) — `add`, `search`, store list.
 - [Capabilities](Safety.oot) — tokens and effects.
 - [How it works](Limits.oot) — typecheck, emit C, host `gcc`, run.
 
