@@ -1,4 +1,4 @@
-# PAY — HTTP 402 and x402
+# PAY — HTTP 402 and x402 v2
 
 File: guide/Pay.oot
 User wiki. Canonical URL: https://openooda.org/guide/#Pay.oot
@@ -8,18 +8,32 @@ User wiki. Canonical URL: https://openooda.org/guide/#Pay.oot
 This page is how an `.oo` program reads an HTTP 402 and names a price.
 It is not a wallet. It does not send money by itself.
 The helpers live in `ooda/std` (`std/net/x402.oo`, `std/net/x402_spend.oo`).
+They speak **x402 v2**.
+
+Spec: https://github.com/x402-foundation/x402/blob/main/specs/x402-specification-v2.md
+HTTP transport: https://github.com/x402-foundation/x402/blob/main/specs/transports-v2/http.md
 
 ## 1. What 402 is
 
 HTTP 402 means payment required.
-x402 is a handshake on that status: the server quotes a price, the client may attach proof and retry.
+x402 v2 is a handshake on that status: the server quotes a price, the client may attach a signed payload and retry.
 
 openOODA teaches the program to **see** the quote and to **refuse spend** unless you pin it.
 It does not put a wallet on disk when you install.
 It does not charge the public door.
 A tip quote Worker is `GET https://pay.openooda.org/tip`.
-After you set the `PAY_TO` secret it returns HTTP 402 plus JSON. Until then it is 503.
+After you set the `PAY_TO` secret it returns HTTP 402 plus a `PAYMENT-REQUIRED` header. Until then it is 503.
 That is not the door. Authors put their own `payTo` on a package manifest.
+
+v2 headers:
+
+| Header | Direction | Contents |
+|---|---|---|
+| `PAYMENT-REQUIRED` | server → client | base64 `PaymentRequired` JSON |
+| `PAYMENT-SIGNATURE` | client → server | base64 `PaymentPayload` JSON |
+| `PAYMENT-RESPONSE` | server → client | base64 settlement JSON |
+
+This library does not send `PAYMENT-RESPONSE`. That header is a settlement receipt. We do not settle.
 
 ## 2. Import
 
@@ -36,7 +50,7 @@ They are not in the v0.204.0-beta tag until that branch is merged.
 `x402_is_payment_required(status)` is true only for `402`.
 `http_response_reason(402)` is `Payment Required`.
 
-When the body is an x402 JSON quote, parse it:
+Decode the `PAYMENT-REQUIRED` header to JSON, then parse:
 
 ```
 let q: X402Quote = x402_parse_quote(body);
@@ -47,32 +61,33 @@ if x402_is_payment_required(402) {
 }
 ```
 
-`x402_quote_ready` is true when `payTo` and `maxAmountRequired` are both present.
+`x402_quote_ready` is true when `payTo`, `amount`, `network`, `asset`, and `resource.url` are present.
+`amount` is atomic token units. `network` is CAIP-2 (`eip155:8453` is Base).
 `x402_format_quote` prints one line: amount, network, pay-to address.
 
 A fixture you can parse without the network: `fixtures/x402_quote.json`.
 Check: `ooda run scripts/x402_parse_smoke.oo`.
 
-## 4. Build a 402 body (if you sell)
+## 4. Build a v2 quote (if you sell)
 
-If your program is the seller, build the JSON the client will parse:
+If your program is the seller, build the JSON, then put it in `PAYMENT-REQUIRED` (base64) on HTTP 402:
 
 ```
 let body: String = x402_required_json(
     "0xYourAddress",
     "1000",
-    "base",
-    "0xusdc",
+    "eip155:8453",
+    "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
     "https://example.com/resource"
 );
 ```
 
-That is a body string. You still have to send HTTP 402 on your server.
+That is a v2 `PaymentRequired` string. You still have to send HTTP 402 on your server.
 GitHub Pages cannot do that handshake. A Worker or other origin can.
 
 ## 5. Spend stays off
 
-Attaching an `X-PAYMENT` proof is denied unless:
+Attaching a `PAYMENT-SIGNATURE` proof is denied unless:
 
 1. The spend pin is exactly `1` (callers pass `OODA_X402_SPEND`).
 2. The proof string is not empty.
@@ -87,7 +102,8 @@ if r.is_err() {
 
 Empty pin → denied.
 Pin `1` and empty proof → denied.
-Pin `1` and a proof → `Ok(true)`. Then use `x402_payment_header_line(proof)` for `X-PAYMENT: …`.
+Pin `1` and a proof → `Ok(true)`. Then use `x402_payment_header_line(proof)` for `PAYMENT-SIGNATURE: …`.
+That is permission to attach a header. It is not a payment.
 
 There is no chain send and no facilitator in this library.
 Install does not turn spend on.
