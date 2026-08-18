@@ -89,11 +89,5 @@ Pin `1` and a proof → `Ok(true)`. Then use `x402_payment_header_line(proof)` f
 There is no chain send and no facilitator in this library.
 Install does not turn spend on.
 
-## 6. What this is not
-
-- Not a compiler change. C, LLVM, WASM, and x86 are unchanged.
-- Not hop-2 / mind-virus gates. Those are a different story.
-- Not the store. Package pay-on-download is later.
-
 Capabilities for network fetch are on [Capabilities](Safety.oot).
 First run is on [Start](Use.oot).
