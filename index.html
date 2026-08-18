@@ -59,21 +59,29 @@
       color: var(--bg);
     }
     .install {
-      display: flex; align-items: center; flex-wrap: wrap;
-      gap: 0.55rem 0.75rem; margin: 0 0 1.25rem;
+      display: grid;
+      grid-template-columns: minmax(0, 44ch) auto;
+      justify-content: start;
+      justify-items: stretch;
+      align-items: center;
+      column-gap: 0.75rem;
+      row-gap: 0.55rem;
+      margin: 0 0 1.25rem;
+      width: max-content;
+      max-width: 100%;
     }
     .install-cmd {
       font: inherit; white-space: nowrap;
     }
     .wrap { display: grid; grid-template-columns: 12rem 1fr; max-width: 60rem; flex: 1 0 auto; }
+    .col { display: flex; flex-direction: column; min-width: 0; }
     footer {
       flex: 0 0 auto;
       padding: 0.85rem 1.25rem;
       padding-bottom: calc(0.85rem + env(safe-area-inset-bottom, 0px));
       background: var(--bg);
-    }
-    @media (min-width: 801px) {
-      footer { padding-right: 6rem; }
+      max-width: 44rem;
+      box-sizing: border-box;
     }
     aside {
       border-right: 1px solid var(--fg); padding: 1.25rem 1rem 5rem;
@@ -81,7 +89,7 @@
     }
     .global a { display: block; color: var(--fg); padding: 0.25rem 0; text-align: left; }
     .global a.active { text-decoration: underline; text-decoration-thickness: 2px; }
-    main { padding: 1.5rem 1.25rem 5rem; max-width: 44rem; min-width: 0; }
+    main { padding: 1.5rem 1.25rem 1.5rem; max-width: 44rem; min-width: 0; flex: 1 0 auto; }
     p { margin: 0 0 1.25rem; max-width: 36rem; }
     pre {
       margin: 0 0 1.25rem; padding: 0.55rem 0.7rem;
@@ -106,24 +114,33 @@
     .drop-body ul { margin: 0; padding-left: 1.2rem; }
     .drop-body li { margin: 0.25rem 0; }
     .mail {
-      display: flex; align-items: center; flex-wrap: wrap;
-      gap: 0.55rem 0.75rem; margin: 1.5rem 0 0; max-width: 36rem;
+      display: grid;
+      grid-template-columns: minmax(0, 44ch) auto;
+      justify-content: start;
+      justify-items: stretch;
+      align-items: center;
+      column-gap: 0.75rem;
+      row-gap: 0.55rem;
+      margin: 0;
+      width: max-content;
+      max-width: 100%;
     }
     .mail input[type="email"] {
       font: inherit; background: var(--bg); color: var(--fg);
       border: 2px solid var(--fg); padding: 0.15rem 0.55rem;
-      min-width: 12rem; flex: 1 1 10rem;
+      width: 100%; min-width: 0; box-sizing: border-box;
     }
     .mail #join {
       font: inherit; background: var(--bg); color: var(--fg);
       border: 2px solid var(--fg); padding: 0.15rem 0.55rem;
-      cursor: pointer; white-space: nowrap; min-width: 7ch; text-align: center;
+      cursor: pointer; white-space: nowrap; min-width: 6ch;
+      text-align: center; box-sizing: content-box;
     }
     .mail #join.is-on { background: var(--fg); color: var(--bg); }
     .mail .hp {
       position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;
     }
-    .mail .note { margin: 0; font-size: 0.85rem; color: var(--muted); flex: 1 1 100%; }
+    .mail .note { margin: 0; font-size: 0.85rem; color: var(--muted); grid-column: 1 / -1; }
     a { color: var(--fg); }
     a:hover { text-decoration-thickness: 2px; }
     #gh { position: fixed; right: 1rem; bottom: 1rem; z-index: 20; color: var(--fg); background: var(--bg); padding: 0.15rem 0.35rem; }
@@ -150,8 +167,9 @@
       .global a {
         min-height: 44px; padding-top: 0.65rem; padding-bottom: 0.65rem; box-sizing: border-box;
       }
-      .install { flex-direction: column; align-items: flex-start; }
+      .install, .mail { grid-template-columns: minmax(0, 1fr); width: 100%; }
       .install-cmd { white-space: normal; overflow-wrap: anywhere; }
+      #copy, .mail #join { justify-self: start; }
       .drop summary {
         min-height: 44px; display: flex; align-items: center;
         width: auto; max-width: 100%;
@@ -161,7 +179,7 @@
     @media print {
       html, body { background: #fff; color: #000; }
       #skip, #gh, #theme, #copy, footer, header, aside { display: none !important; }
-      .wrap { display: block; max-width: none; }
+      .wrap, .col { display: block; max-width: none; }
       main { padding: 0; max-width: none; }
       a { color: #000; }
     }
@@ -185,6 +203,7 @@
       </nav>
       <a id="gh" href="https://github.com/openOODA">github</a>
     </aside>
+    <div class="col">
     <main>
       <div class="install">
         <span class="install-cmd">curl -fsSL <a href="https://openooda.org/install">https://openooda.org/install</a> | oo</span>
@@ -238,15 +257,16 @@
         </div>
       </details>
     </main>
-  </div>
-  <footer>
+    <footer>
       <form class="mail" id="mail" action="https://collect.openooda.org/v1/emails" method="post">
         <p class="note">Join the mail list</p>
         <input type="email" name="email" placeholder="you@host" autocomplete="email" required>
         <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off">
         <button type="submit" id="join">join</button>
       </form>
-  </footer>
+    </footer>
+    </div>
+  </div>
   <script>
     (function () {
       var key = "ooda-theme";
