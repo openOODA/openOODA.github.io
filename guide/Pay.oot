@@ -17,7 +17,8 @@ x402 is a handshake on that status: the server quotes a price, the client may at
 openOODA teaches the program to **see** the quote and to **refuse spend** unless you pin it.
 It does not put a wallet on disk when you install.
 It does not charge the public door.
-A tip quote Worker (when deployed) is `GET https://pay.openooda.org/tip` — HTTP 402 plus JSON.
+A tip quote Worker is `GET https://pay.openooda.org/tip`.
+After you set the `PAY_TO` secret it returns HTTP 402 plus JSON. Until then it is 503.
 That is not the door. Authors put their own `payTo` on a package manifest.
 
 ## 2. Import
