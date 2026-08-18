@@ -86,7 +86,7 @@ if need "$HOME"; then
     ok 'Home.oot has no greet("World")'
   fi
 
-  if awk '
+  table=$(awk '
     BEGIN { cmd = 0; c=0; b=0; r=0; t=0; be=0; d=0; o=0 }
     /^[[:space:]]*\|/ {
       if ($0 ~ /^[[:space:]]*\|[[:space:]]*:?-/) next
@@ -102,19 +102,17 @@ if need "$HOME"; then
       }
     }
     END {
-      if (cmd >= 10) exit 10
-      if (c && b && r && t && be && d && o) exit 11
-      exit 0
+      if (cmd >= 10) { print "ten"; exit }
+      if (c && b && r && t && be && d && o) { print "catalog"; exit }
+      print "ok"
     }
-  ' "$HOME"; then
-    ok "Home.oot has no long command table"
+  ' "$HOME")
+  if [ "$table" = "catalog" ]; then
+    bad "Home.oot has a command table with check/build/run/test/bench/dump/outline"
+  elif [ "$table" = "ten" ]; then
+    bad "Home.oot has a markdown table with 10+ command rows"
   else
-    rc=$?
-    if [ "$rc" -eq 11 ]; then
-      bad "Home.oot has a command table with check/build/run/test/bench/dump/outline"
-    else
-      bad "Home.oot has a markdown table with 10+ command rows"
-    fi
+    ok "Home.oot has no long command table"
   fi
 fi
 
@@ -183,31 +181,29 @@ fi
 # 9. After the install copy button, next element is Tokens details.
 #    No lecture <p> between install and first drop.
 if [ -f "$DOOR" ]; then
-  if awk '
-    BEGIN { st = 1 }
+  drop=$(awk '
+    BEGIN { out = "missing" }
     /id="copy"/ { after=1; next }
-    after && /<p([ >]|$)/ { st = 2; exit }
+    after && /<p([ >]|$)/ { out = "p"; exit }
     after && /<details/ {
       if ($0 ~ /class="drop"/ && $0 ~ /(^|[[:space:]])open([[:space:]>]|$)/) {
-        if ($0 ~ /<summary>Tokens<\/summary>/) { st = 0; exit }
+        if ($0 ~ /<summary>Tokens<\/summary>/) { out = "ok"; exit }
         pending=1
         next
       }
-      st = 1
+      out = "not-tokens"
       exit
     }
-    pending && /<summary>Tokens<\/summary>/ { st = 0; exit }
-    pending && /<summary>/ { st = 1; exit }
-    END { if (!after && st == 1) st = 1; exit st }
-  ' "$DOOR"; then
+    pending && /<summary>Tokens<\/summary>/ { out = "ok"; exit }
+    pending && /<summary>/ { out = "not-tokens"; exit }
+    END { print out }
+  ' "$DOOR")
+  if [ "$drop" = "ok" ]; then
     ok "Tokens details follows install copy button"
+  elif [ "$drop" = "p" ]; then
+    bad "lecture <p> between install copy button and first drop"
   else
-    rc=$?
-    if [ "$rc" -eq 2 ]; then
-      bad "lecture <p> between install copy button and first drop"
-    else
-      bad "Tokens details does not follow install copy button"
-    fi
+    bad "Tokens details does not follow install copy button"
   fi
 fi
 
