@@ -124,6 +124,7 @@ p { margin: 0 0 1.1rem; max-width: 38rem; }
 .win p { margin: 0; padding: 0.55rem 0.7rem; max-width: none; }
 .win ul { margin: 0; padding: 0.45rem 0.7rem 0.55rem 1.6rem; }
 .win li { margin: 0.2rem 0; }
+.win table { margin: 0; max-width: none; width: 100%; }
 
 pre {
   margin: 0 0 1.15rem;
