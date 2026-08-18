@@ -8,7 +8,7 @@ ok() { printf 'PASS %s\n' "$1"; }
 bad() { printf 'FAIL %s\n' "$1"; fail=1; }
 
 has_form() {
-  if grep -q 'collect.openooda.org/v1/emails' "$1" && grep -q 'id="mail"' "$1" && grep -q 'We store the address.' "$1"; then
+  if grep -q 'collect.openooda.org/v1/emails' "$1" && grep -q 'id="mail"' "$1" && grep -q 'Join the mail list' "$1"; then
     ok "mail row: $2"
   else
     bad "mail row missing: $2"
