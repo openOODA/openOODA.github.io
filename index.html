@@ -109,7 +109,7 @@
         <button type="button" id="copy">copy</button>
       </div>
       <details class="drop">
-        <summary>What gets installed</summary>
+        <summary>Files</summary>
         <div class="drop-body">
           <ul>
             <li><code>~/.local/bin/<a href="/guide/#Options.oot">ooda</a></code> — the <a href="/guide/#Options.oot">command line</a></li>
@@ -120,45 +120,32 @@
             <li><code>~/.config/ooda/<a href="/guide/#Options.oot">env</a></code> — <code>PATH</code> and <code>OODA_*</code></li>
           </ul>
           <p><code>. ~/.config/ooda/env</code></p>
-          <p><a href="/guide/#Use.oot"><code>ooda run hello.oo</code></a></p>
+          <p><a href="/guide/#Use.oot"><code>ooda check</code></a> typechecks. <a href="/guide/#Use.oot"><code>ooda run</code></a> typechecks, <a href="/guide/#Limits.oot">emits C</a>, calls host <code>gcc</code>, and runs the binary. <a href="/guide/#Use.oot"><code>ooda test</code></a> runs <code>verify</code> next to the function. <code>ooda run</code> does not.</p>
         </div>
       </details>
       <details class="drop">
-        <summary>Why openOODA</summary>
+        <summary>Tokens</summary>
         <div class="drop-body">
-          <p><strong><a href="/guide/#Safety.oot">Effects</a>.</strong> In Rust, Go, Zig, and C, a function can use files or the network if the process can. In openOODA, the function must hold a <a href="/guide/#Safety.oot">token</a>. A token is a permission argument, for example <a href="/guide/#Safety.oot"><code>&amp;FsReadCap</code></a>. If the token is not there, the call does not run. <a href="/research/#RP-ES-2-es-capability-secure.oot">No token, no effect</a>.</p>
-          <p><strong><a href="/guide/#Options.oot">Agents</a>.</strong> Other languages expect a person to read full source files. openOODA gives a short command loop: <a href="/guide/#Options.oot"><code>outline</code></a>, <a href="/research/#RP-2-2-token-minimized-apis.oot"><code>reflect</code></a>, <a href="/guide/#Use.oot"><code>fix</code></a>, and <a href="/research/#RP-2-2b-surgical-patch-replace-fn.oot"><code>patch</code></a> one function. The agent does not send the full project to the model.</p>
-          <p><strong><a href="/guide/#Language.oot">Secrets</a>.</strong> If you print a key, the key leaves the program. openOODA marks secret fields with <a href="/research/#RP-3-5-static-taint-secret.oot"><code>SECRET</code></a>. <a href="/guide/#Options.oot">Check</a> stops a print of that field.</p>
-          <p><strong><a href="/guide/#Packages.oot">Packages</a>.</strong> <code>cargo add</code> and <code>go get</code> fetch code with the full rights of the process. An openOODA <a href="/guide/#Packages.oot">lock line</a> is <code>name@version#sha256#CapName</code>. The line names the hash and the permitted effect. Extra rights are refused. See the <a href="/research/#RP-5-2-verifiable-web-of-code.oot">verifiable web of code</a>.</p>
-          <p><strong><a href="/guide/#Limits.oot">The path</a>.</strong> The usual path is: <a href="/guide/#Use.oot">typecheck</a>, <a href="/research/#RP-4-x-backend-c-product-floor.oot">emit C</a>, run. You can also emit <a href="/research/#RP-4-1-2-production-llvm.oot">LLVM</a>, <a href="/research/#RP-4-1-4-direct-webassembly.oot">wasm</a>, or x86 when you ask. See the <a href="/guide/">guide</a>.</p>
-        </div>
-      </details>
-      <details class="drop">
-        <summary>Safety</summary>
-        <div class="drop-body">
-          <p><strong><a href="/guide/#Safety.oot">Tokens</a>.</strong> A file, process, or network call takes a <a href="/research/#RP-3-1-unified-capability-sandboxing.oot">capability</a> as an argument. A capability is a permission token. If the token is missing, false, or zero, the call stops. This is fail closed. Use the smallest token that does the job. Do not take <a href="/guide/#Safety.oot"><code>&amp;SysCap</code></a> when <a href="/guide/#Safety.oot"><code>&amp;FsReadCap</code></a> is enough.</p>
+          <p><strong><a href="/guide/#Safety.oot">Effects</a>.</strong> In Rust, Go, Zig, and C, a function can use files or the network if the process can. In openOODA the function must hold a <a href="/guide/#Safety.oot">token</a>, for example <a href="/guide/#Safety.oot"><code>&amp;FsReadCap</code></a>. You pass the token in. You do not mint one from bytes. If the token is missing, false, or zero, the call stops. <a href="/research/#RP-ES-2-es-capability-secure.oot">No token, no effect</a>.</p>
           <p><strong><a href="/guide/#Safety.oot">Writes</a>.</strong> <a href="/guide/#Safety.oot"><code>write_file</code></a> needs <a href="/guide/#Safety.oot"><code>&amp;FsWriteCap</code></a> and <a href="/guide/#Options.oot"><code>OODA_FS_WRITEDIR</code></a>. If that environment value is not set, the write is denied. Absolute paths and symbolic links are refused.</p>
-          <p><strong><a href="/guide/#Language.oot">Secrets</a>.</strong> Mark a field <a href="/research/#RP-3-5-static-taint-secret.oot"><code>SECRET</code></a>. <code>println</code> of that field fails <a href="/guide/#Options.oot">check</a>. A nearby field that is not secret is allowed. <a href="/guide/#Safety.oot"><code>process_exec</code></a> is a secret sink. A sink is a call that must not receive a secret.</p>
-          <p><strong><a href="/guide/#Safety.oot">Jail</a>.</strong> On Linux, <code>&amp;SysCap</code> can apply a <a href="/research/#RP-3-1-unified-capability-sandboxing.oot">Landlock</a> jail and POSIX <a href="/research/#RP-3-3-memory-quotas-heap-sandbox.oot"><code>setrlimit</code></a>. Landlock is a Linux kernel limit on which paths a process may use. <code>setrlimit</code> sets <a href="/research/#RP-3-4-cpu-quotas-maxcycles.oot">resource limits</a>. An empty path list fails closed. A zero quota fails closed.</p>
+          <p><strong><a href="/guide/#Language.oot">Secrets</a>.</strong> Mark a field <a href="/research/#RP-3-5-static-taint-secret.oot"><code>SECRET</code></a>. <code>println</code> of that field fails <a href="/guide/#Options.oot">check</a>. <a href="/guide/#Safety.oot"><code>process_exec</code></a> is a secret sink.</p>
+          <p><strong><a href="/guide/#Safety.oot">Jail</a>.</strong> On Linux, <code>&amp;SysCap</code> can apply a <a href="/research/#RP-3-1-unified-capability-sandboxing.oot">Landlock</a> jail and POSIX <a href="/research/#RP-3-3-memory-quotas-heap-sandbox.oot"><code>setrlimit</code></a>. An empty path list fails closed. A zero quota fails closed. The token list is on <a href="/guide/#Safety.oot">capabilities</a>.</p>
         </div>
       </details>
       <details class="drop">
-        <summary>Security</summary>
+        <summary>Agents</summary>
+        <div class="drop-body">
+          <p>Other languages expect a person to read full source files. openOODA gives a short loop: <a href="/guide/#Options.oot"><code>outline</code></a>, <a href="/research/#RP-2-2-token-minimized-apis.oot"><code>reflect</code></a>, <a href="/guide/#Use.oot"><code>fix</code></a>, and <a href="/research/#RP-2-2b-surgical-patch-replace-fn.oot"><code>patch</code></a> one function. The agent does not send the full project to the model.</p>
+          <p><a href="/guide/#Options.oot"><code>ooda lsp</code></a> talks to the editor. <a href="/guide/#Options.oot"><code>check --json-errors</code></a> prints machine diagnostics. The full command list is on <a href="/guide/#Options.oot">commands</a>.</p>
+        </div>
+      </details>
+      <details class="drop">
+        <summary>Locks</summary>
         <div class="drop-body">
           <p><strong><a href="/guide/#Packages.oot">Lock</a>.</strong> A <a href="/guide/#Packages.oot">lock line</a> is <code>name@version#sha256#CapName</code>. The line names the bytes and the permitted effect. Extra capabilities are refused. A path that leaves the package tree is refused.</p>
-          <p><strong><a href="https://registry.openooda.org/">Catalog</a>.</strong> <a href="/guide/#Packages.oot"><code>ooda add hello</code></a> uses the stock store. <code>ooda search</code> walks every store you added. A yanked name is refused.</p>
-          <p><strong><a href="/guide/#Packages.oot">Launch</a>.</strong> <a href="/guide/#Packages.oot"><code>ooda launch --exec</code></a> runs the gated payload after the hash, the caps, and the yank check.</p>
-          <p><strong><a href="/guide/#Packages.oot">Foreign binary</a>.</strong> A foreign ELF file does not receive Ooda tokens from a lock line. The lock names a cap. It does not rewrite the binary.</p>
-          <p><strong><a href="/guide/#Safety.oot">Measured isolate</a>.</strong> Measured isolate hashes the payload, the token, and the domain. You measure what you isolated. See the <a href="/research/#RP-5-2-verifiable-web-of-code.oot">verifiable web of code</a>.</p>
-        </div>
-      </details>
-      <details class="drop">
-        <summary>Defense</summary>
-        <div class="drop-body">
-          <p><strong><a href="/research/#RP-4-3-2-deterministic-reproducible-builds.oot">Disk</a>.</strong> The file on disk stays the same so a rebuild can match. See <a href="/research/#RP-4-3-2-deterministic-reproducible-builds.oot">reproducible builds</a>.</p>
-          <p><strong><a href="/research/#RP-3-11-polymorphic-metamorphic-binaries.oot">Memory layout</a>.</strong> The defense in memory can change the layout at load. One exploit does not fit every machine. That is a <a href="/research/#RP-3-11-polymorphic-metamorphic-binaries.oot">metamorphic binary</a>.</p>
-          <p><strong><a href="/research/#RP-3-9-cryptographic-call-graph-integrity.oot">Call graph</a>.</strong> <a href="/research/#RP-3-9-cryptographic-call-graph-integrity.oot">Call-graph integrity</a> seals the approved paths. A hijacked return cannot jump to a random gadget.</p>
-          <p><strong><a href="/research/#RP-ES-5-es-zero-day-defense.oot">Zero-day</a>.</strong> The stack is: contain with tokens, detect with contracts, raise cost with layout change. Read <a href="/research/#RP-ES-5-es-zero-day-defense.oot">zero-day defense</a> and <a href="/research/#RP-6-1-tension-metamorphic-vs-deterministic.oot">disk versus memory</a>.</p>
+          <p><strong><a href="https://registry.openooda.org/">Catalog</a>.</strong> <a href="/guide/#Packages.oot"><code>ooda add hello</code></a> uses the stock store. <a href="/guide/#Packages.oot"><code>ooda search</code></a> walks every store you added. A yanked name is refused.</p>
+          <p><strong><a href="/guide/#Packages.oot">Launch</a>.</strong> <a href="/guide/#Packages.oot"><code>ooda launch --exec</code></a> runs the gated payload after the hash, the caps, and the yank check. A foreign ELF file does not receive Ooda tokens from a lock line.</p>
+          <p>How packages work: <a href="/guide/#Packages.oot">packages</a>. How tokens work: <a href="/guide/#Safety.oot">capabilities</a>.</p>
         </div>
       </details>
     </main>
