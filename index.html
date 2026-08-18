@@ -34,9 +34,16 @@
       background: var(--fg); padding: 0.2rem 0.45rem; text-decoration: none; white-space: nowrap;
     }
     .ver { font-size: 0.85rem; white-space: nowrap; }
-    #theme {
+    #theme, #copy {
       font: inherit; background: var(--bg); color: var(--fg);
       border: 2px solid var(--fg); padding: 0.15rem 0.55rem; cursor: pointer; white-space: nowrap;
+    }
+    .install {
+      display: flex; align-items: center; flex-wrap: wrap;
+      gap: 0.55rem 0.75rem; margin: 0 0 1.25rem;
+    }
+    .install-cmd {
+      font: inherit; white-space: nowrap;
     }
     .wrap { display: grid; grid-template-columns: 12rem 1fr; max-width: 60rem; }
     aside {
@@ -98,7 +105,10 @@
     </aside>
     <main>
       <p>Build fast. Stay secure. Save tokens.</p>
-      <pre>curl -fsSL <a href="https://openooda.org/install">https://openooda.org/install</a> | oo</pre>
+      <div class="install">
+        <span class="install-cmd">curl -fsSL <a href="https://openooda.org/install">https://openooda.org/install</a> | oo</span>
+        <button type="button" id="copy">copy</button>
+      </div>
       <details class="drop">
         <summary>What gets installed</summary>
         <div class="drop-body">
@@ -169,6 +179,31 @@
         localStorage.setItem(key, n);
         document.cookie = key + "=" + n + ";path=/;domain=.openooda.org;max-age=31536000;SameSite=Lax";
         apply(n);
+      };
+      var copy = document.getElementById("copy");
+      var cmd = "curl -fsSL https://openooda.org/install | oo";
+      function copied() {
+        if (copy) copy.textContent = "copied";
+      }
+      function fallback() {
+        var ta = document.createElement("textarea");
+        ta.value = cmd;
+        ta.setAttribute("readonly", "");
+        ta.style.position = "fixed";
+        ta.style.left = "-9999px";
+        document.body.appendChild(ta);
+        ta.select();
+        var did = false;
+        try { did = document.execCommand("copy"); } catch (e) {}
+        document.body.removeChild(ta);
+        if (did) copied();
+      }
+      if (copy) copy.onclick = function () {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(cmd).then(copied, fallback);
+          return;
+        }
+        fallback();
       };
     })();
   </script>
