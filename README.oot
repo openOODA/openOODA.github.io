@@ -23,6 +23,8 @@ The store host is `registry.openooda.org`. Do not rename that host.
 
 There is no playground. There are no API docs on this site. Product truth lives on the private boards: `openOODA/SHIPPED.oot`.
 
+The door, guide, and 404 have a one-line address field. It POSTs to `https://collect.openooda.org/v1/emails`. That stores the address. It is not a newsletter.
+
 ## Install
 
 ```

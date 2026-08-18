@@ -60,9 +60,28 @@
     .global a.active, .local a.active { text-decoration: underline; text-decoration-thickness: 2px; }
     .local { margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--fg); }
     .local a { padding-left: 0.75rem; }
-    main#page { padding: 1.5rem 1.25rem 5rem; max-width: 44rem; }
-    main#page h1 { font-size: 1.1rem; margin: 0 0 0.75rem; }
-    main#page h2 { font-size: 1rem; margin: 1.5rem 0 0.5rem; }
+    main { padding: 1.5rem 1.25rem 5rem; max-width: 44rem; }
+    #page h1 { font-size: 1.1rem; margin: 0 0 0.75rem; }
+    #page h2 { font-size: 1rem; margin: 1.5rem 0 0.5rem; }
+    .mail {
+      display: flex; align-items: center; flex-wrap: wrap;
+      gap: 0.55rem 0.75rem; margin: 1.5rem 0 0; max-width: 36rem;
+    }
+    .mail input[type="email"] {
+      font: inherit; background: var(--bg); color: var(--fg);
+      border: 2px solid var(--fg); padding: 0.15rem 0.55rem;
+      min-width: 12rem; flex: 1 1 10rem;
+    }
+    .mail #save {
+      font: inherit; background: var(--bg); color: var(--fg);
+      border: 2px solid var(--fg); padding: 0.15rem 0.55rem;
+      cursor: pointer; white-space: nowrap; min-width: 6ch; text-align: center;
+    }
+    .mail #save.is-on { background: var(--fg); color: var(--bg); }
+    .mail .hp {
+      position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;
+    }
+    .mail .note { margin: 0; font-size: 0.85rem; color: var(--muted); flex: 1 1 100%; }
     table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
     th, td { border: 1px solid var(--fg); padding: 0.35rem 0.5rem; text-align: left; vertical-align: top; }
     th { color: var(--muted); font-weight: 400; }
@@ -90,7 +109,7 @@
         margin-top: 0.75rem; padding: 0.75rem 0 0;
         border-top: 1px solid var(--fg);
       }
-      #theme {
+      #theme, .mail #save, .mail input[type="email"] {
         min-height: 44px; padding: 0.55rem 0.85rem; box-sizing: border-box;
       }
       .global a, .local a {
@@ -100,9 +119,9 @@
     }
     @media print {
       html, body { background: #fff; color: #000; }
-      #skip, #gh, #theme, header, aside { display: none !important; }
+      #skip, #gh, #theme, .mail, header, aside { display: none !important; }
       .wrap { display: block; max-width: none; }
-      main#page { padding: 0; max-width: none; }
+      main, #page { padding: 0; max-width: none; }
       a { color: #000; }
       pre, code { background: none; }
     }
@@ -135,7 +154,8 @@
       </nav>
       <a id="gh" href="https://github.com/openOODA">github</a>
     </aside>
-    <main id="page" tabindex="-1">
+    <main>
+      <div id="page" tabindex="-1">
       <noscript>
         <p class="canon">https://openooda.org/guide/</p>
         <p>User wiki. Open a page:</p>
@@ -149,6 +169,13 @@
           <li><a href="Limits.oot">how it works</a></li>
         </ul>
       </noscript>
+      </div>
+      <form class="mail" id="mail" action="https://collect.openooda.org/v1/emails" method="post">
+        <input type="email" name="email" placeholder="you@host" autocomplete="email" required>
+        <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off">
+        <button type="submit" id="save">save</button>
+        <p class="note">We store the address.</p>
+      </form>
     </main>
   </div>
   <script>
@@ -204,6 +231,27 @@
         document.cookie = key + "=" + n + ";path=/;domain=.openooda.org;max-age=31536000;SameSite=Lax";
         apply(n);
       };
+      var mail = document.getElementById("mail");
+      if (mail) mail.addEventListener("submit", function (ev) {
+        ev.preventDefault();
+        var btn = document.getElementById("save");
+        var email = (mail.email && mail.email.value) || "";
+        var website = (mail.website && mail.website.value) || "";
+        function fail() {
+          if (btn) { btn.textContent = "not saved"; btn.className = ""; }
+        }
+        function ok() {
+          if (btn) { btn.textContent = "saved"; btn.className = "is-on"; }
+        }
+        fetch("https://collect.openooda.org/v1/emails", {
+          method: "POST",
+          credentials: "omit",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: email, website: website, source: "guide" })
+        }).then(function (r) {
+          if (r.ok) ok(); else fail();
+        }).catch(fail);
+      });
     })();
   </script>
 </body>
