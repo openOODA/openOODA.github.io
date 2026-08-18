@@ -31,12 +31,15 @@ ooda registry remove https://host
 ```
 
 The stock origin is https://registry.openooda.org
-The CLI GETs `/catalog` and checks minisign with `cli/registry.pub`.
-`search` walks every store you added.
+`ooda add` GETs `/catalog` and `/index.minisig`.
+It verifies the catalog with `cli/registry.pub`.
+`ooda search` GETs `/catalog` only. It does not minisign.
+Bare `ooda add NAME` walks every listed store. The first catalog that names the package wins.
 
 An extra store must serve `catalog`, `index.minisig`, and `registry.pub`.
 The CLI pins that pubkey on `registry add`.
 You cannot remove the stock store.
+The human page at the origin searches `/catalog`. It is not a second install path.
 
 ## 3. Add from a file vendor
 
@@ -154,7 +157,7 @@ ooda pm pack
 | `search` | Search every listed store. |
 | `registry` | List stores. `add` / `remove` a URL. |
 | `ingest` | Pin and wrap a local recipe. |
-| `launch` | Re-check sha, caps, and yank. `--exec` after the gate. |
+| `launch` | Re-check sha, caps, and yank. `--exec NAME` runs the gated payload. |
 | `remove` | Drop a name from the lock. |
 | `update` | Re-resolve from the vendor. |
 | `outdated` | Compare lock versions to the catalog. |

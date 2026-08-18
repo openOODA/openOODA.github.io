@@ -64,8 +64,9 @@ Tests next to the function: [self-testing](/research/#RP-ES-3-es-self-testing.oo
 ## 3. Option and Result
 
 `Int`, `String`, `Bool`, `Float`, and `Void` are the primitives.
-`Option` and `Result` are sum types check tracks.
+`Option[Int]` and `Result[Int]` are sum types check tracks.
 `type Name = struct { ... }` names a record.
+`List[Name]` and `List[Float]` emit. One-level `List[List[Int]]` emits. Deeper nests stay residual.
 
 Unused `Ok`, `Err`, or `Some` fail `ooda check`.
 A discarded `Result` fails `ooda check`.
@@ -179,11 +180,19 @@ pub fn main() {
 
 `println(c.token)` fails check.
 `println(c.name)` is allowed.
-
+`process_exec` is a secret sink.
 Design note: [static taint](/research/#RP-3-5-static-taint-secret.oot).
-Caps and taint are different knobs. See [Capabilities](Safety.oot).
 
-## 8. Product std
+## 8. Lists, loops, and sums
+
+`for x in xs` walks a list. `for i in 0..n` walks a range.
+`type Name = A(Int) | B(Int)` is a tagged sum. Match binds the Int payload.
+`&mut Name` writes through. `(*p).f = rhs` writes the field.
+
+String-payload sums and unit variants stay residual.
+Full SMT stays residual. Const header contracts fold at check.
+
+## 9. Product std
 
 Product std is `ooda/std`.
 Import from that tree.
@@ -202,26 +211,4 @@ pub fn main() {
 A std function that does an effect still takes a token.
 Std does not grant ambient authority.
 
-## 9. See also
-
-- [Home](Home.oot) — what openOODA is.
-- [Start](Use.oot) — first check, first run, first test.
-- [Commands](Options.oot) — `ooda` and `oodac`.
-- [Packages](Packages.oot) — `ooda/std`, `add`, `pm`.
-- [Capabilities](Safety.oot) — tokens and effects.
-- [How it works](Limits.oot) — typecheck, emit C, host `gcc`, run.
-- [Research](Research.oot) — design library.
-
-Papers used on this page:
-
-- [mathematical contracts](/research/#RP-1-2-mathematical-contracts.oot)
-- [type-state](/research/#RP-1-5-compile-time-type-state.oot)
-- [first-class AST macros](/research/#RP-1-4-first-class-ast-macros.oot)
-- [narrative diagnostics](/research/#RP-5-5-narrative-diagnostics.oot)
-- [self-testing](/research/#RP-ES-3-es-self-testing.oot)
-- [static taint](/research/#RP-3-5-static-taint-secret.oot)
-
 [Home](Home.oot) [Start](Use.oot) [Commands](Options.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [How it works](Limits.oot) [Research](Research.oot)
-
-Site: https://openooda.org
-This page: https://openooda.org/guide/#Language.oot

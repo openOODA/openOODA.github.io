@@ -2,6 +2,7 @@
 
 File: guide/Home.oot
 User wiki. Canonical URL: https://openooda.org/guide/#Home.oot
+Pin: v0.203.0-beta.
 
 ## 1. In one minute
 
@@ -32,6 +33,7 @@ Research library: https://openooda.org/research/
 ## 2. Start here
 
 Install is `curl -fsSL https://openooda.org/install | oo`.
+The payload is `.oo`. Never `| sh`.
 See [Start](Use.oot). That page is how you install, check, run, and test a file.
 
 ## 3. Hello
@@ -79,6 +81,7 @@ The full flag list lives on [Commands](Options.oot).
 | `build` | Emit C and compile with host `gcc`. |
 | `run` | Typecheck, emit C, `gcc`, run. |
 | `test` | Run `verify` / `assert_eq!` / `assert!`. |
+| `bench` | Time `oodac check`. |
 | `dump` | Print tokens, ast, or check. |
 | `outline` | Names and shapes in a file. |
 | `reflect` | Look up one symbol. |
@@ -104,27 +107,29 @@ A function that does an effect takes a token, for example `&FsReadCap`.
 The token is a permission that function holds.
 You pass the token in. You do not hide the effect.
 
-Common tokens: files, process, net, env, alloc, threads.
+Common tokens: files, process, env, alloc, threads, sys.
 Prefer the small token.
+`write_file` needs `&FsWriteCap` and `OODA_FS_WRITEDIR`.
 Details: [Capabilities](Safety.oot).
-Flags and env that go with them: [Commands](Options.oot).
+Flags and env: [Commands](Options.oot).
 
 The model is [capability sandboxing](/research/#RP-3-1-unified-capability-sandboxing.oot).
-The language is [capability-secure](/research/#RP-ES-2-es-capability-secure.oot).
 
 ## 6. Packages and std
 
 Product std ships as `ooda/std`.
 Import from that tree.
+Named emit+gcc+run is the proof. A folder name is not a volume cert.
 
 Add a package with `ooda add hello`.
 That uses the stock store.
 `ooda search` walks every store you added.
+`ooda launch --exec NAME` runs a gated payload.
 The public catalog is https://registry.openooda.org
 How packages work: [Packages](Packages.oot).
 
-The compiler, CLI, tests, and package tools are one language.
-That is the [self-hosted ecosystem](/research/#RP-5-1-self-hosted-ecosystem.oot).
+The compiler, CLI, tests, and package tools are `.oo`.
+That is the [self-hosted ecosystem](/research/#RP-5-1-self-hosted-ecosystem.oot) shape.
 
 ## 7. This wiki
 
@@ -153,8 +158,6 @@ The research library is https://openooda.org/research/
 - [capability sandboxing](/research/#RP-3-1-unified-capability-sandboxing.oot)
 - [C backend](/research/#RP-4-x-backend-c-product-floor.oot)
 - [self-hosted ecosystem](/research/#RP-5-1-self-hosted-ecosystem.oot)
-- [AI-native language](/research/#RP-ES-1-es-ai-native-systems-language.oot)
-- [capability-secure](/research/#RP-ES-2-es-capability-secure.oot)
 - Site: https://openooda.org/
 - Guide: https://openooda.org/guide/#Home.oot
 - Registry: https://registry.openooda.org

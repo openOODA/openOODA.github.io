@@ -14,9 +14,8 @@ You run your first `.oo` program on this page.
 
 ## 1. What you need
 
-You need a checkout of `ooda`.
-You need host `gcc`.
-That is enough to rebuild the compiler and run a file.
+You need host `gcc` to emit and run.
+The public command names the pin. It does not fetch a private tree.
 
 The rebuild is a [self-hosted ecosystem](/research/#RP-5-1-self-hosted-ecosystem.oot).
 The tools you type after that are the [pure product CLI](/research/#RP-5-1a-pure-product-compiler-cli.oot).
@@ -25,39 +24,24 @@ The tools you type after that are the [pure product CLI](/research/#RP-5-1a-pure
 
 ```
 curl -fsSL https://openooda.org/install | oo
-. ~/.config/ooda/env
 ```
 
 The payload at https://openooda.org/install is `.oo`. It is not a shell script. Never `| sh`.
+That program prints the pin and the guide. It does not copy binaries.
 
-From a checkout you already have, rebuild, then `ooda install` copies `ooda`, `oodac`, `std`, and `runtime` under `~/.local` and writes `~/.config/ooda/env`. Host `gcc` and the seed rebuild are in section 3.
-
-## 3. Official rebuild
-
-`bootstrap/oodac_pure_build` is the official rebuild.
-It starts `gcc` and the seed compiler.
-After the rebuild in section 2:
+From a checkout you already have:
 
 ```
-./oodac/oodac check oodac/main.oo
-```
-
-The emit path is the [C backend](/research/#RP-4-x-backend-c-product-floor.oot).
-You typecheck, emit C, compile that C with host `gcc`, and run the binary.
-That is also what `ooda run` does. See [How it works](Limits.oot).
-
-## 4. PATH
-
-Put `./bin` on your `PATH` for the short `ooda` command:
-
-```
-export PATH="$PWD/bin:$PATH"
+OODA_FS_WRITEDIR=$HOME OODA_CHECKOUT=$PWD ooda install
+. ~/.config/ooda/env
 ooda version
 ```
 
-Stay in the `ooda` tree when you export this, so `$PWD/bin` is `ooda/bin`.
+`ooda install` copies `ooda`, `oodac`, `std`, and `runtime` under `~/.local` and writes `~/.config/ooda/env`.
+The first program on disk after that is `~/.local/share/ooda/share/fixtures/hello.oo`.
+Host `gcc` and the seed rebuild are on [How it works](Limits.oot).
 
-## 5. Write hello.oo
+## 3. Write hello.oo
 
 Save this as `hello.oo`:
 
@@ -79,12 +63,10 @@ pub fn main() {
 `verify` is a test block next to the function.
 `main` is the entry you run.
 
-The checkout also has `fixtures/hello.oo` if you want a file that already exists.
-
 Read [Language](Language.oot) for more of the grammar.
 An effect needs a capability token. That story is on [Capabilities](Safety.oot).
 
-## 6. Check, run, test
+## 4. Check, run, test
 
 Typecheck only:
 
@@ -118,7 +100,7 @@ ooda check hello.oo --json-errors
 `check` is the fast loop. That is [sub-second feedback](/research/#RP-ES-4-es-subsecond-feedback.oot).
 The full command list is on [Commands](Options.oot).
 
-## 7. Fix a file
+## 5. Fix a file
 
 `ooda fix` patches these error classes:
 
@@ -138,13 +120,12 @@ export OODA_FS_WRITEDIR="$PWD"
 ooda fix hello.oo --yes
 ```
 
-This is the human [HITL / fix loop](/research/#RP-5-6-hitl-testing.oot).
+The human loop is `ooda fix`. HITL is not product.
 The edits are [surgical AST patching](/research/#RP-2-1-surgical-ast-patching.oot).
-JSON errors plus `ooda fix` is the Observe / Act pair.
 
 See [Capabilities](Safety.oot) for why writes stay inside `OODA_FS_WRITEDIR`.
 
-## 8. After the first run
+## 6. After the first run
 
 You now have a compiler, a file, a check, a run, and a test.
 Add a library with `ooda add hello`. See [Packages](Packages.oot).
@@ -152,12 +133,12 @@ Pick a backend or a flag from [Commands](Options.oot).
 Read [How it works](Limits.oot) when you want the product path in one place.
 Browse [Research](Research.oot) when you want the design papers.
 
-## 9. See also
+## 7. See also
 
 - [Home](Home.oot) — what openOODA does.
 - [Language](Language.oot) — `.oo` syntax.
 - [Commands](Options.oot) — `ooda` and `oodac`.
-- [Packages](Packages.oot) — vendor and lock.
+- [Packages](Packages.oot) — `add`, `search`, `registry`.
 - [Capabilities](Safety.oot) — tokens and writes.
 - [How it works](Limits.oot) — product path.
 - [Research](Research.oot) — design library.
@@ -168,7 +149,6 @@ Papers used on this page:
 - [pure product CLI](/research/#RP-5-1a-pure-product-compiler-cli.oot)
 - [sub-second feedback](/research/#RP-ES-4-es-subsecond-feedback.oot)
 - [C backend](/research/#RP-4-x-backend-c-product-floor.oot)
-- [HITL / fix loop](/research/#RP-5-6-hitl-testing.oot)
 - [surgical AST patching](/research/#RP-2-1-surgical-ast-patching.oot)
 
 Site: https://openooda.org

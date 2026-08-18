@@ -23,7 +23,7 @@ You can also ask the same frontend for other text: LLVM IR, a WebAssembly module
 
 `ooda` is the driver. It calls `oodac`, then `gcc`, then exec.
 
-They are different binaries. Never copy one onto the other. If you overwrite `oodac` with `ooda`, check forks itself.
+They are different binaries. Never copy `bin/ooda` onto `oodac/oodac`. If you overwrite `oodac` with `ooda`, check forks itself.
 
 Put `ooda` on your `PATH` when you want the short command. Keep `oodac` as the compiler you rebuilt.
 
@@ -41,7 +41,7 @@ Typecheck, emit C, compile with `gcc`, run:
 ooda run hello.oo
 ```
 
-That is `check` + emit C + `gcc` + exec. You do not run those steps by hand unless you want to see the C.
+That is `check` + emit C (`chs_rt`) + `gcc` + exec. You do not run those steps by hand unless you want to see the C.
 
 `ooda build` stops at the binary. `ooda test` runs `verify` blocks and asserts. `ooda run` skips `verify`.
 
@@ -54,10 +54,11 @@ You rebuild the compiler from the seed compiler:
 ```
 cd ooda
 OODAC_BIN=./bootstrap/seed/oodac bash bootstrap/oodac_pure_build oodac/main.oo oodac/oodac
+OODAC_BIN=./oodac/oodac bash bootstrap/oodac_pure_build oodac/main.oo oodac/oodac
 ./oodac/oodac check oodac/main.oo
 ```
 
-`bootstrap/oodac_pure_build` is the official rebuild. It starts `gcc` and the seed. That is the one host shell entry. After that you use `ooda` and `oodac`.
+`bootstrap/oodac_pure_build` is the official rebuild. The first line uses the seed. The second uses the tree compiler. That is the one host shell entry. After that you use `ooda` and `oodac`.
 
 The seed is a trusted `oodac`. The rebuild emits each `.oo` module to C, links once with `chs_rt`, and writes a new compiler binary.
 
@@ -81,8 +82,9 @@ oodac emit-x86 hello.oo
 `emit-x86` writes standalone x86_64 assembly.
 
 You pick an emit when you need that artifact. The check is the same check.
+LLVM as a gcc replacement is residual. Extra emits have named hello locks. They are not the everyday path.
 
-Design notes: [C backend](/research/#RP-4-x-backend-c-product-floor.oot), [LLVM](/research/#RP-4-1-2-production-llvm.oot), [WebAssembly](/research/#RP-4-1-4-direct-webassembly.oot), [bytecode VM](/research/#RP-4-1-1-development-bytecode-vm.oot), [bare metal](/research/#RP-4-1-5-bare-metal-embedded.oot).
+Design notes: [C backend](/research/#RP-4-x-backend-c-product-floor.oot), [LLVM](/research/#RP-4-1-2-production-llvm.oot), [WebAssembly](/research/#RP-4-1-4-direct-webassembly.oot).
 
 ## 6. Memory
 

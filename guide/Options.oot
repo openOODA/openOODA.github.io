@@ -25,8 +25,9 @@ ooda test hello.oo
 ooda check <file.oo> [--json-errors]
 ooda build <file.oo> [-o out] [--target c|native|llvm]
 ooda run <file.oo>
-ooda test <file.oo>
-ooda lsp
+ooda test <file.oo> [--fuzz]
+ooda lsp [request.json]
+ooda bench <file.oo> [--run]
 ooda dump tokens|ast|check <file.oo>
 ooda outline <file.oo> [--json]
 ooda reflect <file.oo> [symbol] [--json]
@@ -49,9 +50,12 @@ The payload is `.oo`. Never `| sh`.
 
 `check --json-errors` prints machine diagnostics for an editor or a script.
 
-`build` emits and compiles. Default target is `native` (C + `gcc`). `-o` sets the output path. `--target llvm` and `--emit-llvm` select LLVM. `--release` is valid with LLVM.
+`build` emits and compiles. Default target is `native` (C + `gcc`). `-o` sets the output path.
+`--target llvm` is an extra emit. It is not the everyday path.
 
-`lsp` is a multi-message stdio language server. Point your editor at `ooda lsp`. See [native LSP](/research/#RP-5-7-universal-native-lsp.oot).
+`lsp` is a multi-message stdio language server. Point your editor at `ooda lsp`.
+Initialize advertises completion on `&`. `&Fs` completes to `&FsCap`.
+See [native LSP](/research/#RP-5-7-universal-native-lsp.oot).
 
 `dump` prints the compiler view: tokens, AST, or check.
 
@@ -77,6 +81,9 @@ See [surgical replace-fn](/research/#RP-2-2b-surgical-patch-replace-fn.oot).
 
 `pkg` prints the CAS lock inventory. `--json` is the machine form.
 
+`bench` times `oodac check` and prints `ooda bench: check FILE Nms`.
+`--run` also times `ooda run`.
+
 ## 3. Packages
 
 `ooda add hello` installs from the stock store.
@@ -99,7 +106,7 @@ ooda pkg
 | :--- | :--- |
 | `add` | Install a name into CAS and the lock. |
 | `ingest` | Lock a local recipe directory. |
-| `launch` | Re-hash a pinned payload. `--exec` runs it after sha, caps, and yank checks. |
+| `launch` | Re-check sha, caps, and yank. `--exec NAME` runs the gated payload. |
 | `remove` | Drop a name from the lock. |
 | `update` | Re-resolve from the vendor. |
 | `outdated` | Compare the lock to the catalog. |
@@ -160,9 +167,9 @@ A function that does an effect takes a token argument, for example `&FsReadCap`.
 | `&AllocCap` | heap and bump arenas |
 | `&ThreadCap` | threads, channels, actor restart |
 | `&SysCap` | Landlock jail, `setrlimit` |
-| `&GpuCap` | `gpu_launch_shader` |
 
 Take `&FsReadCap` when you only read. Take `&HttpCap` when you only fetch. Take `&SysCap` when you need Landlock or `setrlimit`.
+`&GpuCap` CPU/noop launch is product. Device GPU dispatch is residual.
 
 On Linux, `&SysCap` can apply a Landlock jail and POSIX `setrlimit`. See [Capabilities](Safety.oot).
 

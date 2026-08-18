@@ -19,7 +19,9 @@ The call does not run.
 `main` lists the tokens this program holds.
 Helpers take the tokens they need as parameters.
 You pass the token down.
-You do not build one from bytes.
+You cannot mint a token from bytes.
+A forged parent seal does not verify.
+HMAC attenuation makes a narrower child seal. The child is not the parent.
 
 The model is [capability sandboxing](/research/#RP-3-1-unified-capability-sandboxing.oot).
 The language is [capability-secure](/research/#RP-ES-2-es-capability-secure.oot).
@@ -198,17 +200,14 @@ How to add a library: [Packages](Packages.oot).
 The same pin-and-grant idea is [zero-day defense](/research/#RP-ES-5-es-zero-day-defense.oot).
 Where the sandbox meets C: [caps vs FFI](/research/#RP-6-3-tension-caps-vs-ffi.oot).
 
-## 10. Binary defense
+## 10. Binary pins
 
 The lock pins the exact bytes of a package with a sha256 hash.
 A foreign ELF file does not receive Ooda tokens from a lock line.
 Measured isolate hashes the payload, the token, and the domain.
+That is a hash, not a hardware enclave.
 The file on disk stays the same so a rebuild can match.
-The defense in memory can change the layout at load.
-One exploit does not fit every machine.
-
-Read [metamorphic binaries](/research/#RP-3-11-polymorphic-metamorphic-binaries.oot)
-and [call-graph integrity](/research/#RP-3-9-cryptographic-call-graph-integrity.oot).
+Load-time layout change is research, not this path.
 
 ## 11. How to use caps well
 
@@ -223,28 +222,6 @@ and [call-graph integrity](/research/#RP-3-9-cryptographic-call-graph-integrity.
 The product path still typechecks, emits C, compiles with host `gcc`, and runs.
 See [How it works](Limits.oot).
 
-## 12. Further reading
-
-- [unified capability sandboxing](/research/#RP-3-1-unified-capability-sandboxing.oot)
-- [memory quotas](/research/#RP-3-3-memory-quotas-heap-sandbox.oot)
-- [CPU quotas](/research/#RP-3-4-cpu-quotas-maxcycles.oot)
-- [static taint](/research/#RP-3-5-static-taint-secret.oot)
-- [Landlock-related time/entropy](/research/#RP-3-2-time-entropy-sandboxing.oot)
-- [capability-secure](/research/#RP-ES-2-es-capability-secure.oot)
-- [caps vs FFI](/research/#RP-6-3-tension-caps-vs-ffi.oot)
-- [zero-day defense](/research/#RP-ES-5-es-zero-day-defense.oot)
-- [metamorphic binaries](/research/#RP-3-11-polymorphic-metamorphic-binaries.oot)
-- [call-graph integrity](/research/#RP-3-9-cryptographic-call-graph-integrity.oot)
-
-## See also
-
-- [Home](Home.oot)
-- [Start](Use.oot)
-- [Language](Language.oot)
-- [Commands](Options.oot)
-- [Packages](Packages.oot)
-- [How it works](Limits.oot)
-- [Research](Research.oot)
+See [Research](Research.oot) for design papers.
 
 This page: https://openooda.org/guide/#Safety.oot
-Site: https://openooda.org
