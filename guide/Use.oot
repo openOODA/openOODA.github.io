@@ -26,7 +26,7 @@ curl -fsSL https://openooda.org/install | oo
 ```
 
 The payload at https://openooda.org/install is `.oo`. It is not a shell script. Never `| sh`.
-That program prints the pin and the guide. It does not copy binaries.
+That program names the pin and the guide. It does not copy binaries.
 
 From a checkout you already have:
 

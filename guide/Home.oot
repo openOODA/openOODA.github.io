@@ -24,15 +24,25 @@ That path is `ooda run`.
 More on the path: [How it works](Limits.oot).
 
 This page is the start of the user wiki.
-Site: https://openooda.org/
+The public system is three places: door, guide, store.
+
+Door: https://openooda.org/
 Guide: https://openooda.org/guide/
-Registry: https://registry.openooda.org
+Store: https://registry.openooda.org
 
 ## 2. Start here
 
-Install is `curl -fsSL https://openooda.org/install | oo`.
-The payload is `.oo`. Never `| sh`.
-See [Start](Use.oot). That page is how you install, check, run, and test a file.
+```
+curl -fsSL https://openooda.org/install | oo
+```
+
+The file at https://openooda.org/install is `.oo`.
+That program names the pin and the guide.
+It does not copy binaries.
+Never `| sh`.
+
+The checkout install is on [Start](Use.oot).
+That page is how you install, check, run, and test a file.
 
 ## 3. Hello
 
@@ -98,19 +108,28 @@ The full flag list lives on [Commands](Options.oot).
 `outline`, `reflect`, `fix`, and `patch` keep the edit loop small.
 That loop is `outline`, `reflect`, `fix`, and `patch`. See [Commands](Options.oot).
 
-## 5. Capabilities
+## 5. Tokens
 
-A function that does an effect takes a token, for example `&FsReadCap`.
-The token is a permission that function holds.
+A function that does an effect takes a token.
+A function that only computes takes no token.
+
+```
+pub fn load_notes(fs: &FsReadCap, path: String) -> Result[String, String] {
+    return read_file(fs, path);
+}
+
+pub fn main(fs: &FsReadCap) {
+    let text = load_notes(fs, "notes.txt");
+}
+```
+
+`read_file` takes `fs`.
+`load_notes` takes `fs`.
+`main` takes `fs`.
 You pass the token in. You do not hide the effect.
-
-Common tokens: files, process, env, alloc, threads, sys.
 Prefer the small token.
 `write_file` needs `&FsWriteCap` and `OODA_FS_WRITEDIR`.
 Details: [Capabilities](Safety.oot).
-Flags and env: [Commands](Options.oot).
-
-The model is on [Capabilities](Safety.oot).
 
 ## 6. Packages and std
 
@@ -139,6 +158,6 @@ Start here. Then pick a page.
 - [Capabilities](Safety.oot) — tokens and effects.
 - [How it works](Limits.oot) — typecheck, emit C, host `gcc`, run.
 
-Site: https://openooda.org/
+Door: https://openooda.org/
 Guide: https://openooda.org/guide/#Home.oot
-Registry: https://registry.openooda.org
+Store: https://registry.openooda.org

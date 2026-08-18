@@ -40,6 +40,7 @@ An extra store must serve `catalog`, `index.minisig`, and `registry.pub`.
 The CLI pins that pubkey on `registry add`.
 You cannot remove the stock store.
 The human page at the origin searches `/catalog`. It is not a second install path.
+The human store at https://registry.openooda.org shows the lock line `name@version#sha256#CapName`. Browser search is not `ooda add`.
 
 ## 3. Add from a file vendor
 
