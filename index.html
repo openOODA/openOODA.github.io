@@ -108,6 +108,24 @@
     @media (max-width: 800px) {
       .wrap { grid-template-columns: 1fr; }
       aside { position: static; border-right: 0; border-bottom: 1px solid var(--fg); padding-bottom: 1rem; }
+      #gh {
+        position: static; display: block;
+        margin-top: 0.75rem; padding: 0.75rem 0 0;
+        border-top: 1px solid var(--fg);
+      }
+      #theme, #copy {
+        min-height: 44px; padding: 0.55rem 0.85rem; box-sizing: border-box;
+      }
+      .global a {
+        min-height: 44px; padding-top: 0.65rem; padding-bottom: 0.65rem; box-sizing: border-box;
+      }
+      .install { flex-direction: column; align-items: flex-start; }
+      .install-cmd { white-space: normal; overflow-wrap: anywhere; }
+      .drop summary {
+        min-height: 44px; display: flex; align-items: center;
+        width: auto; max-width: 100%;
+      }
+      main { padding-bottom: 1.5rem; }
     }
     @media print {
       html, body { background: #fff; color: #000; }
@@ -120,7 +138,6 @@
 </head>
 <body>
   <a id="skip" href="/guide/">guide</a>
-  <a id="gh" href="https://github.com/openOODA">github</a>
   <header>
     <div class="brand-row">
       <a class="brand" href="/">openOODA</a>
@@ -135,6 +152,7 @@
         <a href="/guide/">guide</a>
         <a href="https://registry.openooda.org/">registry</a>
       </nav>
+      <a id="gh" href="https://github.com/openOODA">github</a>
     </aside>
     <main>
       <div class="install">
