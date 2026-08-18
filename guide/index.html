@@ -87,18 +87,29 @@
         <a href="https://registry.openooda.org/">registry</a>
       </nav>
       <nav class="local">
-        <a href="#Home.oot" data-page="Home.oot">what it is</a>
-        <a href="#Use.oot" data-page="Use.oot">start</a>
-        <a href="#Language.oot" data-page="Language.oot">language</a>
-        <a href="#Options.oot" data-page="Options.oot">commands</a>
-        <a href="#Packages.oot" data-page="Packages.oot">packages</a>
-        <a href="#Safety.oot" data-page="Safety.oot">capabilities</a>
-        <a href="#Limits.oot" data-page="Limits.oot">how it works</a>
+        <a href="Home.oot" data-page="Home.oot">what it is</a>
+        <a href="Use.oot" data-page="Use.oot">start</a>
+        <a href="Language.oot" data-page="Language.oot">language</a>
+        <a href="Options.oot" data-page="Options.oot">commands</a>
+        <a href="Packages.oot" data-page="Packages.oot">packages</a>
+        <a href="Safety.oot" data-page="Safety.oot">capabilities</a>
+        <a href="Limits.oot" data-page="Limits.oot">how it works</a>
       </nav>
     </aside>
     <main id="page">
-      <p class="canon">https://openooda.org/guide/</p>
-      <p>Loading…</p>
+      <noscript>
+        <p class="canon">https://openooda.org/guide/</p>
+        <p>User wiki. Open a page:</p>
+        <ul>
+          <li><a href="Home.oot">what it is</a></li>
+          <li><a href="Use.oot">start</a></li>
+          <li><a href="Language.oot">language</a></li>
+          <li><a href="Options.oot">commands</a></li>
+          <li><a href="Packages.oot">packages</a></li>
+          <li><a href="Safety.oot">capabilities</a></li>
+          <li><a href="Limits.oot">how it works</a></li>
+        </ul>
+      </noscript>
     </main>
   </div>
   <script>
@@ -130,6 +141,12 @@
         root.innerHTML = '<p class="err">Could not load ' + name + ".</p>";
       }
     }
+    document.querySelectorAll("aside a[data-page]").forEach((a) => {
+      a.addEventListener("click", (e) => {
+        e.preventDefault();
+        location.hash = a.dataset.page;
+      });
+    });
     window.addEventListener("hashchange", show);
     if (!location.hash) location.replace("#Home.oot");
     else show();
