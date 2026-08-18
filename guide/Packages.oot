@@ -34,14 +34,15 @@ ooda registry remove https://host
 The stock origin is https://registry.openooda.org
 `ooda add` GETs `/catalog` and `/index.minisig`.
 It verifies the catalog with `cli/registry.pub`.
-`ooda search` GETs `/catalog` only. It does not minisign.
+If the package manifest lists `pay=` and it is not `free`, add prints that a price is listed. It still downloads. It does not charge.
+`ooda search` GETs `/catalog`. For each hit it may GET `name/manifest` and print `pay=` when listed. It does not minisign.
 Bare `ooda add NAME` walks every listed store. The first catalog that names the package wins.
 
 An extra store must serve `catalog`, `index.minisig`, and `registry.pub`.
 The CLI pins that pubkey on `registry add`.
 You cannot remove the stock store.
 The human page at the origin searches `/catalog`. It is not a second install path.
-The human store at https://registry.openooda.org shows the lock line `name@version#sha256#CapName`. Browser search is not `ooda add`.
+The human store at https://registry.openooda.org shows the lock line `name@version#sha256#CapName` and a pay column from each `name/manifest`. Missing pay is free. Browser search is not `ooda add`.
 
 ## 3. Add from a file vendor
 

@@ -26,7 +26,7 @@ More on the path: [How it works](Limits.oot).
 First run: [Start](Use.oot).
 Tokens: [Capabilities](Safety.oot).
 Add a package: [Packages](Packages.oot).
-HTTP 402 / x402: [Pay](Pay.oot).
+HTTP 402 / x402: [Pay](Pay.oot). A tip quote (when the Worker is up) is `GET https://pay.openooda.org/tip`. The door does not charge.
 
 The public system is three places: door, guide, store.
 

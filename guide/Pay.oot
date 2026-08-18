@@ -17,6 +17,8 @@ x402 is a handshake on that status: the server quotes a price, the client may at
 openOODA teaches the program to **see** the quote and to **refuse spend** unless you pin it.
 It does not put a wallet on disk when you install.
 It does not charge the public door.
+A tip quote Worker (when deployed) is `GET https://pay.openooda.org/tip` — HTTP 402 plus JSON.
+That is not the door. Authors put their own `payTo` on a package manifest.
 
 ## 2. Import
 
@@ -25,7 +27,7 @@ import "std/net/x402.oo";
 import "std/net/x402_spend.oo";
 ```
 
-These files are in the product tree on branch `feat/x402-std`.
+These files are in the product tree on branch `feat/x402-merge`.
 They are not in the v0.204.0-beta tag until that branch is merged.
 
 ## 3. See a 402
@@ -88,6 +90,7 @@ Pin `1` and a proof → `Ok(true)`. Then use `x402_payment_header_line(proof)` f
 
 There is no chain send and no facilitator in this library.
 Install does not turn spend on.
+`ooda add` prints when a package lists a price. It does not charge.
 
 Capabilities for network fetch are on [Capabilities](Safety.oot).
 First run is on [Start](Use.oot).

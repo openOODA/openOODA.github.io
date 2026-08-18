@@ -230,7 +230,7 @@
         <summary>Locks</summary>
         <div class="drop-body">
           <p><strong><a href="/guide/#Packages.oot">Lock</a>.</strong> A <a href="/guide/#Packages.oot">lock line</a> is <code>name@version#sha256#CapName</code>. The line binds the bytes to the permitted effect. Extra capabilities are refused. A path that leaves the package tree is refused.</p>
-          <p><strong><a href="https://registry.openooda.org/">Catalog</a>.</strong> <a href="/guide/#Packages.oot"><code>ooda add hello</code></a> uses the stock store. <a href="/guide/#Packages.oot"><code>ooda search</code></a> walks every store you added. A yanked name is refused.</p>
+          <p><strong><a href="https://registry.openooda.org/">Catalog</a>.</strong> <a href="/guide/#Packages.oot"><code>ooda add hello</code></a> uses the stock store. <a href="/guide/#Packages.oot"><code>ooda search</code></a> walks every store you added. A yanked name is refused. A package may list <code>pay=</code> on its manifest. <code>ooda add</code> does not charge. <a href="/guide/#Pay.oot">Pay</a>.</p>
           <p>How packages work: <a href="/guide/#Packages.oot">packages</a>. How pins work: <a href="/guide/#Safety.oot">binary pins</a>. How tokens work: <a href="/guide/#Safety.oot">capabilities</a>.</p>
         </div>
       </details>
