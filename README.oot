@@ -1,16 +1,19 @@
 # openOODA public site
 
 File: openOODA.github.io/README.oot
-Public site for https://openooda.org. Splash, research viewer, install endpoint. Not the compiler. Not the wiki (`openOODA/wiki`). Not the registry (`registry.openooda.org`).
+Public site for https://openooda.org. Door, guide, install endpoint. Not the compiler. Not the wiki (`openOODA/wiki`). Not the registry (`registry.openooda.org`).
+
+The public system is three places: door, guide, store.
 
 ## What is on disk
 
 | Path | What it actually is |
 | :--- | :--- |
 | `index.html` | Product door. Macintosh chrome. Pin next to the wordmark. |
-| `research.html` | Research paper index. Papers are design, not proof. |
+| `guide/` | User wiki. Home, start, language, commands, packages, capabilities, how it works. |
 | `install` | `.oo` payload for `curl -fsSL https://openooda.org/install | oo`. Not a shell script. |
-| `research/` | RP / ES papers. Present-tense moonshots are residual. |
+| `research/` | Archive of design drafts. Not nav. Not product. Old URLs stay so they do not 404. |
+| `research.html` | Redirect to `/research/`. Same archive. |
 | `assets/` | Branding. |
 
 There is no playground. There are no API docs on this site. Product truth lives on the private boards: `openOODA/SHIPPED.oot`.

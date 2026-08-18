@@ -3,7 +3,7 @@
 File: guide/Language.oot
 User wiki. Canonical URL: https://openooda.org/guide/#Language.oot
 
-[Home](Home.oot) [Start](Use.oot) [Commands](Options.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [How it works](Limits.oot) [Research](Research.oot)
+[Home](Home.oot) [Start](Use.oot) [Commands](Options.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [How it works](Limits.oot)
 
 You write `.oo` programs on this page.
 [Home](Home.oot) is the one-minute picture.
@@ -12,7 +12,6 @@ You write `.oo` programs on this page.
 [Packages](Packages.oot) is how you add a library.
 [Capabilities](Safety.oot) is how an effect gets a token.
 [How it works](Limits.oot) is the product path.
-[Research](Research.oot) is the design library.
 
 ## 1. Files
 
@@ -59,7 +58,7 @@ ooda test hello.oo
 
 First run: [Start](Use.oot).
 The product path: [How it works](Limits.oot).
-Tests next to the function: [self-testing](/research/#RP-ES-3-es-self-testing.oot).
+`verify` sits next to the function it names.
 
 ## 3. Option and Result
 
@@ -84,7 +83,7 @@ pub fn main() {
 That `boom();` fails check. Bind the value, `match` it, or use `?`.
 
 `ooda fix` can wrap a discarded `Result`. See [Commands](Options.oot).
-A refused program should name the cause. See [narrative diagnostics](/research/#RP-5-5-narrative-diagnostics.oot).
+A refused program names the cause. `check --json-errors` is the machine form.
 
 ## 4. match and ?
 
@@ -140,8 +139,7 @@ pub fn held(x: Int) -> Int
 
 A false const clause fails the check. You do not wait for run.
 The same story on [How it works](Limits.oot).
-
-Design notes: [mathematical contracts](/research/#RP-1-2-mathematical-contracts.oot), [type-state](/research/#RP-1-5-compile-time-type-state.oot), [first-class AST macros](/research/#RP-1-4-first-class-ast-macros.oot).
+Full SMT stays residual.
 
 ## 6. Capability tokens
 
@@ -181,7 +179,6 @@ pub fn main() {
 `println(c.token)` fails check.
 `println(c.name)` is allowed.
 `process_exec` is a secret sink.
-Design note: [static taint](/research/#RP-3-5-static-taint-secret.oot).
 
 ## 8. Lists, loops, and sums
 
@@ -211,4 +208,4 @@ pub fn main() {
 A std function that does an effect still takes a token.
 Std does not grant ambient authority.
 
-[Home](Home.oot) [Start](Use.oot) [Commands](Options.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [How it works](Limits.oot) [Research](Research.oot)
+[Home](Home.oot) [Start](Use.oot) [Commands](Options.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [How it works](Limits.oot)

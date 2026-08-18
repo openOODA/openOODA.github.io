@@ -3,7 +3,7 @@
 File: guide/Safety.oot
 User wiki. Canonical URL: https://openooda.org/guide/#Safety.oot
 
-[Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Commands](Options.oot) [Packages](Packages.oot) [How it works](Limits.oot) [Research](Research.oot)
+[Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Commands](Options.oot) [Packages](Packages.oot) [How it works](Limits.oot)
 
 ## 1. What a token is
 
@@ -23,8 +23,7 @@ You cannot mint a token from bytes.
 A forged parent seal does not verify.
 HMAC attenuation makes a narrower child seal. The child is not the parent.
 
-The model is [capability sandboxing](/research/#RP-3-1-unified-capability-sandboxing.oot).
-The language is [capability-secure](/research/#RP-ES-2-es-capability-secure.oot).
+No token, no effect. A function cannot mint a token from bytes.
 
 ## 2. How you pass one
 
@@ -122,8 +121,6 @@ You do not take it for ordinary locals.
 Take it when you start work on another thread.
 A single-thread program does not need it.
 
-Quotas around the heap and the CPU: [memory quotas](/research/#RP-3-3-memory-quotas-heap-sandbox.oot), [CPU quotas](/research/#RP-3-4-cpu-quotas-maxcycles.oot).
-
 ## 7. Sys, Landlock, and quotas
 
 `&SysCap` is the broad OS token.
@@ -148,8 +145,6 @@ A call with no directories does not open the world.
 Zero quotas fail closed.
 A memory, file, or CPU quota of zero is not a grant.
 
-Time and entropy follow the same grant rule: [Landlock-related time/entropy](/research/#RP-3-2-time-entropy-sandboxing.oot).
-
 ## 8. Secrets
 
 Mark a secret field. The compiler tracks it.
@@ -171,8 +166,6 @@ The sibling non-secret field is allowed.
 
 `process_exec` is a secret sink.
 Do not pass a secret field into it.
-
-Design note: [static taint](/research/#RP-3-5-static-taint-secret.oot).
 
 ## 9. Packages
 
@@ -197,9 +190,6 @@ Path traversal, extra caps, and yank refuse.
 
 How to add a library: [Packages](Packages.oot).
 
-The same pin-and-grant idea is [zero-day defense](/research/#RP-ES-5-es-zero-day-defense.oot).
-Where the sandbox meets C: [caps vs FFI](/research/#RP-6-3-tension-caps-vs-ffi.oot).
-
 ## 10. Binary pins
 
 The lock pins the exact bytes of a package with a sha256 hash.
@@ -221,7 +211,5 @@ Load-time layout change is research, not this path.
 
 The product path still typechecks, emits C, compiles with host `gcc`, and runs.
 See [How it works](Limits.oot).
-
-See [Research](Research.oot) for design papers.
 
 This page: https://openooda.org/guide/#Safety.oot

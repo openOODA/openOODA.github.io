@@ -3,7 +3,7 @@
 File: guide/Packages.oot
 User wiki. Canonical URL: https://openooda.org/guide/#Packages.oot
 
-[Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Commands](Options.oot) [Capabilities](Safety.oot) [How it works](Limits.oot) [Research](Research.oot)
+[Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Commands](Options.oot) [Capabilities](Safety.oot) [How it works](Limits.oot)
 
 ## 1. What you install
 
@@ -179,12 +179,4 @@ ooda pm pack
 
 Fetch does not replace the stock pubkey.
 
-## 9. Research
-
-Design notes next to this product path:
-
-- [verifiable web of code](/research/#RP-5-2-verifiable-web-of-code.oot)
-- [capability sandboxing](/research/#RP-3-1-unified-capability-sandboxing.oot)
-- [capability-secure](/research/#RP-ES-2-es-capability-secure.oot)
-
-[Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Commands](Options.oot) [Capabilities](Safety.oot) [How it works](Limits.oot) [Research](Research.oot)
+[Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Commands](Options.oot) [Capabilities](Safety.oot) [How it works](Limits.oot)

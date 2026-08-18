@@ -3,7 +3,7 @@
 File: guide/Limits.oot
 User wiki. Canonical URL: https://openooda.org/guide/#Limits.oot
 
-[Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Commands](Options.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [Research](Research.oot)
+[Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Commands](Options.oot) [Packages](Packages.oot) [Capabilities](Safety.oot)
 
 ## 1. The model
 
@@ -84,8 +84,6 @@ oodac emit-x86 hello.oo
 You pick an emit when you need that artifact. The check is the same check.
 LLVM as a gcc replacement is residual. Extra emits have named hello locks. They are not the everyday path.
 
-Design notes: [C backend](/research/#RP-4-x-backend-c-product-floor.oot), [LLVM](/research/#RP-4-1-2-production-llvm.oot), [WebAssembly](/research/#RP-4-1-4-direct-webassembly.oot).
-
 ## 6. Memory
 
 Values drop when the last reference goes away. There is no tracing pause. The last handle frees the object.
@@ -93,8 +91,6 @@ Values drop when the last reference goes away. There is no tracing pause. The la
 Bump arenas live under `&AllocCap`. You create an arena, allocate from it, and reset the whole region at once. Use an arena when many short-lived values share one lifetime.
 
 Scope locals drop when the block ends. Shared values use last-reference drop. Arenas reclaim a generation in one reset.
-
-Design note: [ARC / memory](/research/#RP-3-7-zero-ms-gc-arc-raii.oot).
 
 ## 7. Capabilities
 
@@ -147,15 +143,13 @@ The compiler is a function from source to text. Same tree, same C. That is the r
 
 Host `gcc` still applies host flags. The claim is the emit, not every downstream object file.
 
-Official rebuild from the same seed, same sources, same emit. Design note: [reproducible builds](/research/#RP-4-3-2-deterministic-reproducible-builds.oot).
+Official rebuild from the same seed, same sources, same emit.
 
 ## 11. Self-hosted shape
 
 The compiler, the driver, the package tools, and the tests are `.oo`. The C you see is emit plus the small `chs_rt` runtime.
 
 You rebuild `oodac` from `.oo` with the seed. You then use that `oodac` on your own files. That is the self-hosted loop.
-
-Design note: [self-hosted](/research/#RP-5-1-self-hosted-ecosystem.oot).
 
 ## 12. How to hold it
 

@@ -3,7 +3,7 @@
 File: guide/Options.oot
 User wiki. Canonical URL: https://openooda.org/guide/#Options.oot
 
-[Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [How it works](Limits.oot) [Research](Research.oot)
+[Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [How it works](Limits.oot)
 
 ## 1. Everyday path
 
@@ -17,7 +17,7 @@ ooda test hello.oo
 
 `check` typechecks. `run` is check + emit C + `gcc` + exec. `test` runs `verify` / `assert_eq!` / `assert!` and sets `OODA_TEST=1`.
 
-`emit-c` is the everyday emit. See [C backend](/research/#RP-4-x-backend-c-product-floor.oot).
+`emit-c` is the everyday emit.
 
 ## 2. `ooda`
 
@@ -55,11 +55,10 @@ The payload is `.oo`. Never `| sh`.
 
 `lsp` is a multi-message stdio language server. Point your editor at `ooda lsp`.
 Initialize advertises completion on `&`. `&Fs` completes to `&FsCap`.
-See [native LSP](/research/#RP-5-7-universal-native-lsp.oot).
 
 `dump` prints the compiler view: tokens, AST, or check.
 
-`outline` prints public signatures. `reflect` prints caps and the signature. Pass a symbol to focus one name. `--json` is the machine form. See [token-minimized APIs](/research/#RP-2-2-token-minimized-apis.oot).
+`outline` prints public signatures. `reflect` prints caps and the signature. Pass a symbol to focus one name. `--json` is the machine form.
 
 `fix` applies common compiler patches. It asks yes or no unless you pass `--yes`. Set `OODA_FS_WRITEDIR` so it can write.
 
@@ -70,8 +69,6 @@ export OODA_FS_WRITEDIR="$PWD"
 ooda fix hello.oo --yes
 ooda patch hello.oo --replace-fn greet --with greet_body.oo
 ```
-
-See [surgical replace-fn](/research/#RP-2-2b-surgical-patch-replace-fn.oot).
 
 `context` counts and names `.oo` files in a path. Omit the path to use the current directory.
 
@@ -136,9 +133,9 @@ oodac --backend llvm emit-llvm <file.oo>
 
 `emit-c` is the everyday emit. `ooda run` is check + emit C + `gcc` + exec.
 
-`emit-llvm` writes LLVM IR. You can also pass `ooda build --target llvm` or `ooda build --emit-llvm`. `--release` is valid with LLVM. See [LLVM backend](/research/#RP-4-1-2-production-llvm.oot).
+`emit-llvm` writes LLVM IR. You can also pass `ooda build --target llvm` or `ooda build --emit-llvm`. `--release` is valid with LLVM. LLVM as a gcc replacement is residual.
 
-`emit-wasm` writes a wasm module. See [WebAssembly](/research/#RP-4-1-4-direct-webassembly.oot).
+`emit-wasm` writes a wasm module. It is an extra emit, not the everyday path.
 
 `emit-x86` writes standalone x86_64 assembly with `_start`. Assemble with `as` and `ld`.
 
@@ -173,13 +170,4 @@ Take `&FsReadCap` when you only read. Take `&HttpCap` when you only fetch. Take 
 
 On Linux, `&SysCap` can apply a Landlock jail and POSIX `setrlimit`. See [Capabilities](Safety.oot).
 
-## 7. Research
-
-- [token-minimized APIs](/research/#RP-2-2-token-minimized-apis.oot)
-- [surgical replace-fn](/research/#RP-2-2b-surgical-patch-replace-fn.oot)
-- [native LSP](/research/#RP-5-7-universal-native-lsp.oot)
-- [LLVM backend](/research/#RP-4-1-2-production-llvm.oot)
-- [WebAssembly](/research/#RP-4-1-4-direct-webassembly.oot)
-- [C backend](/research/#RP-4-x-backend-c-product-floor.oot)
-
-[Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [How it works](Limits.oot) [Research](Research.oot)
+[Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [How it works](Limits.oot)

@@ -21,14 +21,12 @@ The product path is:
 4. Run the binary.
 
 That path is `ooda run`.
-The same loop is the [C backend](/research/#RP-4-x-backend-c-product-floor.oot).
 More on the path: [How it works](Limits.oot).
 
 This page is the start of the user wiki.
 Site: https://openooda.org/
 Guide: https://openooda.org/guide/
 Registry: https://registry.openooda.org
-Research library: https://openooda.org/research/
 
 ## 2. Start here
 
@@ -98,8 +96,7 @@ The full flag list lives on [Commands](Options.oot).
 | `pm` | Package manager. |
 
 `outline`, `reflect`, `fix`, and `patch` keep the edit loop small.
-That is the [AI-native language](/research/#RP-ES-1-es-ai-native-systems-language.oot) surface.
-The name of the loop is [OODA loop speed](/research/#RP-1-1-philosophy-ooda-loop-speed.oot).
+That loop is `outline`, `reflect`, `fix`, and `patch`. See [Commands](Options.oot).
 
 ## 5. Capabilities
 
@@ -113,7 +110,7 @@ Prefer the small token.
 Details: [Capabilities](Safety.oot).
 Flags and env: [Commands](Options.oot).
 
-The model is [capability sandboxing](/research/#RP-3-1-unified-capability-sandboxing.oot).
+The model is on [Capabilities](Safety.oot).
 
 ## 6. Packages and std
 
@@ -129,7 +126,7 @@ The public catalog is https://registry.openooda.org
 How packages work: [Packages](Packages.oot).
 
 The compiler, CLI, tests, and package tools are `.oo`.
-That is the [self-hosted ecosystem](/research/#RP-5-1-self-hosted-ecosystem.oot) shape.
+See [How it works](Limits.oot).
 
 ## 7. This wiki
 
@@ -141,24 +138,7 @@ Start here. Then pick a page.
 - [Packages](Packages.oot) — `add`, `search`, `registry`.
 - [Capabilities](Safety.oot) — tokens and effects.
 - [How it works](Limits.oot) — typecheck, emit C, host `gcc`, run.
-- [Research](Research.oot) — how this wiki points at the library.
 
-The research library is https://openooda.org/research/
-
-## See also
-
-- [Start](Use.oot)
-- [Language](Language.oot)
-- [Commands](Options.oot)
-- [Packages](Packages.oot)
-- [Capabilities](Safety.oot)
-- [How it works](Limits.oot)
-- [Research](Research.oot)
-- [OODA loop speed](/research/#RP-1-1-philosophy-ooda-loop-speed.oot)
-- [capability sandboxing](/research/#RP-3-1-unified-capability-sandboxing.oot)
-- [C backend](/research/#RP-4-x-backend-c-product-floor.oot)
-- [self-hosted ecosystem](/research/#RP-5-1-self-hosted-ecosystem.oot)
-- Site: https://openooda.org/
-- Guide: https://openooda.org/guide/#Home.oot
-- Registry: https://registry.openooda.org
-- Research: https://openooda.org/research/
+Site: https://openooda.org/
+Guide: https://openooda.org/guide/#Home.oot
+Registry: https://registry.openooda.org

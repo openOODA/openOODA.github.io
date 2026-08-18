@@ -10,15 +10,14 @@ You run your first `.oo` program on this page.
 [Packages](Packages.oot) is how you add a library.
 [Capabilities](Safety.oot) is how an effect gets a token.
 [How it works](Limits.oot) is the product path.
-[Research](Research.oot) is the design library.
 
 ## 1. What you need
 
 You need host `gcc` to emit and run.
 The public command names the pin. It does not fetch a private tree.
 
-The rebuild is a [self-hosted ecosystem](/research/#RP-5-1-self-hosted-ecosystem.oot).
-The tools you type after that are the [pure product CLI](/research/#RP-5-1a-pure-product-compiler-cli.oot).
+The compiler, the driver, and the tests are `.oo`.
+The tools you type after install are `ooda` and `oodac`.
 
 ## 2. Install
 
@@ -97,7 +96,7 @@ JSON errors for an editor or a script:
 ooda check hello.oo --json-errors
 ```
 
-`check` is the fast loop. That is [sub-second feedback](/research/#RP-ES-4-es-subsecond-feedback.oot).
+`check` is the fast loop.
 The full command list is on [Commands](Options.oot).
 
 ## 5. Fix a file
@@ -121,7 +120,7 @@ ooda fix hello.oo --yes
 ```
 
 The human loop is `ooda fix`. HITL is not product.
-The edits are [surgical AST patching](/research/#RP-2-1-surgical-ast-patching.oot).
+`fix` patches the file. `patch` replaces one function.
 
 See [Capabilities](Safety.oot) for why writes stay inside `OODA_FS_WRITEDIR`.
 
@@ -131,7 +130,6 @@ You now have a compiler, a file, a check, a run, and a test.
 Add a library with `ooda add hello`. See [Packages](Packages.oot).
 Pick a backend or a flag from [Commands](Options.oot).
 Read [How it works](Limits.oot) when you want the product path in one place.
-Browse [Research](Research.oot) when you want the design papers.
 
 ## 7. See also
 
@@ -141,15 +139,6 @@ Browse [Research](Research.oot) when you want the design papers.
 - [Packages](Packages.oot) — `add`, `search`, `registry`.
 - [Capabilities](Safety.oot) — tokens and writes.
 - [How it works](Limits.oot) — product path.
-- [Research](Research.oot) — design library.
-
-Papers used on this page:
-
-- [self-hosted ecosystem](/research/#RP-5-1-self-hosted-ecosystem.oot)
-- [pure product CLI](/research/#RP-5-1a-pure-product-compiler-cli.oot)
-- [sub-second feedback](/research/#RP-ES-4-es-subsecond-feedback.oot)
-- [C backend](/research/#RP-4-x-backend-c-product-floor.oot)
-- [surgical AST patching](/research/#RP-2-1-surgical-ast-patching.oot)
 
 Site: https://openooda.org
 This page: https://openooda.org/guide/#Use.oot
