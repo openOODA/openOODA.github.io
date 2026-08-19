@@ -7,7 +7,8 @@ User wiki. Canonical URL: https://openooda.org/guide/#Safety.oot
 
 ## 1. What a token is
 
-openOODA is for programs that do not get free run of the machine.
+openOODA is for programs that need a token for every effect. Caps are the product.
+
 A capability token is a permission you hold as an argument.
 Effects need that argument.
 You write it as a type: `&FsReadCap`, `&ProcessCap`, `&SysCap`.
@@ -24,7 +25,7 @@ You cannot mint a token from bytes.
 A forged parent seal does not verify.
 HMAC attenuation makes a narrower child seal. The child is not the parent.
 
-No token, no effect. A function cannot mint a token from bytes.
+No token, no effect.
 
 ## 2. How you pass one
 
@@ -200,28 +201,38 @@ That is a hash, not a hardware enclave.
 The file on disk stays the same so a rebuild can match.
 Load-time layout change is research, not this path.
 
-## 11. Fuel, path, and host (libraries)
+## 11. Fuel budget
 
-These are modules you import. They are not new compiler tokens.
+A fuel budget is a struct. Import it. It is not a compiler token.
 
-`FuelBudget` (`std/sec/fuel_budget.oo`) is a remaining-cost counter you pass around.
-`fuel_can` / `fuel_after` fail closed when the cost is empty or not positive.
-It is not `&TimeCap` and not a `FuelCap` type in `oodac`.
+```
+import "std/sec/fuel_budget.oo";
+```
 
-`path_scope_allows` (`std/sec/path_scope.oo`) checks a path string against a prefix.
+You pass `FuelBudget` around. Zero remaining fails closed.
+It is not `&FuelCap`. `oodac` has no `FuelCap` type.
+
+## 12. Path scope
+
+Import `std/sec/path_scope.oo`. A path must sit under the prefix.
 `/tmp` does not allow `/tmp2`. A `..` segment is denied.
-You still need `&FsReadCap` to read a file.
+You still pass `&FsReadCap` to read a file.
 
-`host_scope_allows` (`std/sec/host_scope.oo`) checks a host string.
-Exact match, or `*.example.com` at a dot boundary. No fetch.
-You still need `&HttpCap` / `&NetCap` to talk to the network.
+## 13. Host scope
 
-`agent_send` refuses hop 2 and refuses a body that names a capability (`&TimeCap`, `&HttpCap`, and the older file/net/process tokens).
+Import `std/sec/host_scope.oo`. Exact host, or `*.example.com` at a dot boundary.
+It does not fetch. You still pass `&HttpCap` or `&NetCap` to talk.
+
+## 14. Hop-2 send
+
+Import `std/sec/agent_send.oo`. Hop 0 and hop 1 may send. Hop 2 fails closed.
+A body that names a token fails closed.
+Extra names include `&TimeCap`, `&HttpCap`, `&AllocCap`, `&ThreadCap`, `&RandCap`, `&MsgCap`, and `oo_cap_grant`.
 `untrusted_sink_denied` treats `launch` like `patch` when a blob is marked.
 
 Check: `ooda run scripts/cap_scope_smoke.oo`.
 
-## 12. How to use caps well
+## 15. How to use caps well
 
 1. Declare the tokens the function actually uses.
 2. Pass them down. Every effect call takes its token.
