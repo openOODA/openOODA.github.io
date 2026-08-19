@@ -190,6 +190,7 @@ The wrap is how the blob is stored.
 Path traversal, extra caps, and yank refuse.
 
 `ooda launch --exec` runs the gated payload after sha, caps, and yank are ok.
+A marked untrusted body refuses.
 
 How to add a library: [Packages](Packages.oot).
 

@@ -129,6 +129,7 @@ Path traversal, extra caps, and yank refuse.
 
 `ooda launch NAME` re-checks the pin against the live CAS bytes.
 `ooda launch NAME --exec` runs the gated payload after sha, caps, and yank are ok.
+A marked untrusted body refuses.
 
 ## 7. The `ooda pm` commands
 
@@ -160,7 +161,7 @@ ooda pm pack
 | `search` | Search every listed store. |
 | `registry` | List stores. `add` / `remove` a URL. |
 | `ingest` | Pin and wrap a local recipe. |
-| `launch` | Re-check sha, caps, and yank. `--exec NAME` runs the gated payload. |
+| `launch` | Re-check sha, caps, and yank. `--exec NAME` runs the gated payload. A marked untrusted body refuses. |
 | `remove` | Drop a name from the lock. |
 | `update` | Re-resolve from the vendor. |
 | `outdated` | Compare lock versions to the catalog. |

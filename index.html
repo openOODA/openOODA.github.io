@@ -221,7 +221,7 @@
       <details class="drop">
         <summary>Pins</summary>
         <div class="drop-body">
-          <p><strong><a href="/guide/#Safety.oot">Bytes</a>.</strong> The sha256 is the identity of the file. A different file is a different package. <a href="/guide/#Packages.oot"><code>ooda launch --exec</code></a> re-checks the live bytes. A mismatch refuses. See <a href="/guide/#Safety.oot">binary pins</a>.</p>
+          <p><strong><a href="/guide/#Safety.oot">Bytes</a>.</strong> The sha256 is the identity of the file. A different file is a different package. <a href="/guide/#Packages.oot"><code>ooda launch --exec</code></a> re-checks the live bytes. A mismatch refuses. A marked untrusted body refuses. See <a href="/guide/#Safety.oot">binary pins</a>.</p>
           <p><strong><a href="/guide/#Safety.oot">Foreign ELF</a>.</strong> A lock line does not grant Ooda <a href="/guide/#Safety.oot">tokens</a> to a foreign ELF. Extra capabilities are refused.</p>
           <p><strong><a href="/guide/#Safety.oot">Isolate</a>.</strong> Measured isolate hashes the payload, the token, and the domain. That is a hash, not a hardware enclave. The file on disk stays the same so a rebuild can match.</p>
         </div>

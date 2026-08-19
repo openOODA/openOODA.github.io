@@ -103,7 +103,7 @@ ooda pkg
 | :--- | :--- |
 | `add` | Install a name into CAS and the lock. |
 | `ingest` | Lock a local recipe directory. |
-| `launch` | Re-check sha, caps, and yank. `--exec NAME` runs the gated payload. |
+| `launch` | Re-check sha, caps, and yank. `--exec NAME` runs the gated payload. A marked untrusted body refuses. |
 | `remove` | Drop a name from the lock. |
 | `update` | Re-resolve from the vendor. |
 | `outdated` | Compare the lock to the catalog. |
