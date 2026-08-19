@@ -1,0 +1,68 @@
+# MORPHER — Zero-Trust Metamorphic AST Morpher
+
+File: guide/Morpher.oot
+User wiki. Canonical URL: https://openooda.org/guide/#Morpher.oot
+
+[Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Commands](Options.oot) [Capabilities](Safety.oot) [How it works](Limits.oot)
+
+## 1. What the Morpher is
+
+The Zero-Trust Metamorphic AST Morpher is an ahead-of-time diversification and binary fortification engine built directly into openOODA.
+
+It takes any valid `.oo` source program and applies multi-stage mathematical and topological transformations at compile time.
+Every compilation produces a radically unique cryptographic binary hash and execution layout while guaranteeing:
+
+1. **100% Semantic Equivalence**: All functions compute identical return values and pass all verification beats.
+2. **Zero Ambient Authority**: Morphed routines cannot mint capability tokens or escape sandboxes.
+3. **Zero Runtime Overhead**: Obfuscation and layout diversification happen ahead-of-time during C emission.
+
+## 2. Core Transformation Stages
+
+### 2.1 Control Flow Flattening (Chenxi Wang Obfuscation)
+Hierarchical `if/else` and `while` loop trees are decomposed into flat basic blocks governed by a centralized state-machine switch dispatcher.
+Decompilers (IDA Pro, Ghidra) cannot reconstruct the original algorithmic control flow.
+
+### 2.2 Dynamic Basic Block Permutation
+Basic blocks are shuffled across physical memory using a cryptographic entropy seed.
+Unconditional branch fixups are injected automatically to preserve original execution flow while invalidating static binary signatures.
+
+### 2.3 Number-Theoretic Opaque Predicates
+Injects algebraic identities (e.g. `(x * (x + 1)) % 2 == 0`) and quadratic non-residues mod 7 (`(7*y^2 - 1) % 7 == (x^2) % 7` is always false).
+Forces exponential state explosion in symbolic execution engines and automated SMT solvers (angr, Z3).
+
+### 2.4 Compile-Time String Encryption
+String literals and sensitive constant tables are encrypted at build time using dynamic rolling XOR keys.
+Stack-transient decrypters reconstruct strings in local stack frames only for the duration of the call and zero memory immediately after.
+
+### 2.5 Anti-ROP / Anti-JOP Gadget Elimination
+Scans intermediate bytecode streams for unintended `0xC3` (`ret`) or `0xFF 0x25` (`jmp`) byte alignments.
+Injects safe multi-byte NOP padders to break exploitable ROP gadget sequences before native binary generation.
+
+### 2.6 Decoy Function & Dead Code Injection
+Synthesizes capability-starved decoy routines and unreachable dummy blocks connected via opaque false predicates to waste reverse-engineering time.
+
+## 3. Zero-Trust Security Guarantees
+
+The Morpher strictly enforces all openOODA Zero-Trust invariants:
+
+- **Unforgeable Tokens**: Morphed dispatchers cannot synthesize `&FsReadCap`, `&FsWriteCap`, or `&ProcessCap`.
+- **Capability Scoping**: Decoy code paths possess zero ambient tokens and fail closed if invoked.
+- **Contract Preservation**: All `requires`, `ensures`, and `spec` contract clauses are verified before transformation.
+
+## 4. How to Use
+
+From the command line:
+
+```
+ooda morph src/main.oo -o build/morphed.oo --entropy 83921
+ooda run build/morphed.oo
+```
+
+Or via the compiler pass:
+
+```
+oodac emit-c --metamorphic src/main.oo > build/out.c
+gcc -O0 -Iruntime runtime/chs_rt.c build/out.c -o build/bin -lm
+```
+
+This page: https://openooda.org/guide/#Morpher.oot

@@ -256,6 +256,15 @@
           <p><a href="/guide/#Use.oot"><code>ooda check</code></a> typechecks. <a href="/guide/#Use.oot"><code>ooda run</code></a> typechecks, <a href="/guide/#Limits.oot">emits C</a>, calls host <code>gcc</code>, and runs the binary. <a href="/guide/#Use.oot"><code>ooda test</code></a> runs <code>verify</code> next to the function. <code>ooda run</code> does not.</p>
         </div>
       </details>
+      <details class="drop">
+        <summary>Zero-Trust Metamorphic AST Morpher</summary>
+        <div class="drop-body">
+          <p><strong><a href="/guide/#Morpher.oot">Metamorphic AST Transmutation</a>.</strong> The Morpher randomizes binary layout, basic block ordering, and instruction idioms on every build while guaranteeing 100% semantic equivalence and zero runtime overhead. Every build yields a unique cryptographic binary hash.</p>
+          <p><strong><a href="/guide/#Morpher.oot">Control Flow Flattening</a>.</strong> Deconstructs hierarchical <code>if</code>/<code>while</code> blocks into Chenxi Wang state-machine dispatchers, rendering decompilation in IDA Pro and Ghidra intractable. Injects number-theoretic quadratic non-residue opaque predicates to defeat automated symbolic execution (angr, Z3).</p>
+          <p><strong><a href="/guide/#Morpher.oot">Binary Fortification</a>.</strong> Scans intermediate bytecode to eliminate unintended ROP/JOP gadget sequences (<code>0xC3</code>/<code>0xFF 0x25</code>) and encrypts embedded string literals with dynamic rolling XOR keys and zero-on-stack decrypters.</p>
+          <p><strong><a href="/guide/#Safety.oot">Zero Ambient Authority</a>.</strong> Morphed routines strictly preserve capability tokens (<code>&amp;FsReadCap</code>, <code>&amp;FsWriteCap</code>, <code>&amp;ProcessCap</code>, <code>&amp;NetCap</code>). Injected decoys and dispatchers cannot synthesize permissions or escape Landlock/rlimit sandboxes. Read the full <a href="/guide/#Morpher.oot">Metamorphic Morpher Guide</a>.</p>
+        </div>
+      </details>
     </main>
     <footer>
       <form class="mail" id="mail" action="https://collect.openooda.org/v1/emails" method="post">
