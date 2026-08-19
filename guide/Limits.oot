@@ -49,6 +49,9 @@ The checkout has `fixtures/hello.oo` if you want a file that already exists.
 
 ## 4. Official rebuild
 
+First machine on Linux x86_64: `curl -fsSL https://openooda.org/install | bash`.
+That is a host script. It is not `.oo`. Mac, Windows, and Linux ARM are not that script.
+
 You rebuild the compiler from the seed compiler:
 
 ```

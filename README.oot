@@ -17,7 +17,7 @@ The store host is `registry.openooda.org`. Do not rename that host.
 | :--- | :--- |
 | `index.html` | Product door. Pin next to the wordmark. |
 | `guide/` | User wiki. Home, start, language, commands, packages, capabilities, how it works. |
-| `install` | `.oo` payload for the public pin command `curl -fsSL https://openooda.org/install | oo`. Not a shell script. |
+| `install` | Host script for first-machine install. `curl -fsSL https://openooda.org/install \| bash`. Linux x86_64. Not `.oo`. |
 
 `research/` is an archive of design drafts. Not nav. Not product. Old URLs stay so they do not 404. `research.html` redirects to `/research/`.
 
@@ -28,10 +28,10 @@ The door, guide, and 404 have a one-line mail-list field. It POSTs to `https://c
 ## Install
 
 ```
-curl -fsSL https://openooda.org/install | oo
+curl -fsSL https://openooda.org/install | bash
 ```
 
-`https://openooda.org/install` is `.oo`. Never `| sh`.
+`https://openooda.org/install` is a host script. First machine has no `oo` yet. Linux x86_64 only. Needs `git` and `gcc`.
 
 ## Local preview
 

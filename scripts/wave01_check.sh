@@ -169,13 +169,22 @@ if need "$DOOR"; then
   fi
 fi
 
-# 8. index.html still contains exactly the pin command
+# 8. index.html contains the first-machine host script command
 if [ -f "$DOOR" ]; then
-  if grep -Fq 'curl -fsSL https://openooda.org/install | oo' "$DOOR"; then
-    ok "door contains curl -fsSL https://openooda.org/install | oo"
+  if grep -Fq 'curl -fsSL https://openooda.org/install | bash' "$DOOR"; then
+    ok "door contains curl -fsSL https://openooda.org/install | bash"
   else
-    bad "door missing curl -fsSL https://openooda.org/install | oo"
+    bad "door missing curl -fsSL https://openooda.org/install | bash"
   fi
+fi
+if [ -f "$ROOT/install" ]; then
+  if head -n 1 "$ROOT/install" | grep -Fq '/usr/bin/env bash'; then
+    ok "install is a host bash script"
+  else
+    bad "install is not a host bash script"
+  fi
+else
+  bad "missing install"
 fi
 
 # 9. After the install copy button, next element is Tokens details.

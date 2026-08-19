@@ -14,24 +14,38 @@ You run your first `.oo` program on this page.
 
 ## 1. What you need
 
-You need host `gcc` to emit and run.
-The public command names the pin. It does not fetch a private tree.
+You need Linux on x86_64, `git`, and host `gcc`.
+The first install is a host script. It is not `.oo`.
+You cannot run `.oo` until `ooda` is on the machine.
 
-The compiler, the driver, and the tests are `.oo`.
-The tools you type after `ooda install` are `ooda` and `oodac`.
+The tools the script places are `ooda` and `oodac`.
 
-## 2. Pin
+Mac, Windows, and Linux ARM are not this install. See [How it works](Limits.oot).
 
-The public pin command:
+## 2. Install
+
+First machine:
 
 ```
-curl -fsSL https://openooda.org/install | oo
+curl -fsSL https://openooda.org/install | bash
 ```
 
-The payload at https://openooda.org/install is `.oo`. It is not a shell script. Never `| sh`.
-That program names the pin and the guide. It does not copy binaries.
+You can download the script and read it first:
 
-Install from a checkout you already have:
+```
+curl -fsSL https://openooda.org/install -o ooda-install
+bash ooda-install
+```
+
+The script looks at the OS and CPU. On Linux x86_64 it clones the tree, builds the CLI if needed, and copies `ooda`, `oodac`, `std`, and `runtime` under `~/.local`. It writes `~/.config/ooda/env`.
+
+```
+. ~/.config/ooda/env
+ooda version
+ooda run ~/.local/share/ooda/share/fixtures/hello.oo
+```
+
+If you already have a checkout with `bin/ooda` and `oodac/oodac`:
 
 ```
 OODA_FS_WRITEDIR=$HOME OODA_CHECKOUT=$PWD ooda install
@@ -39,9 +53,7 @@ OODA_FS_WRITEDIR=$HOME OODA_CHECKOUT=$PWD ooda install
 ooda version
 ```
 
-`ooda install` copies `ooda`, `oodac`, `std`, and `runtime` under `~/.local` and writes `~/.config/ooda/env`.
-The first program on disk after that is `~/.local/share/ooda/share/fixtures/hello.oo`.
-Host `gcc` and the seed rebuild are on [How it works](Limits.oot).
+`ooda install` is the checkout copy. It is not the first-machine path.
 
 ## 3. Write hello.oo
 

@@ -25,10 +25,10 @@ else
   ok "store has no collect form"
 fi
 
-if grep -q 'curl -fsSL https://openooda.org/install | oo' "$ROOT/index.html"; then
-  ok "pin command unchanged"
+if grep -q 'curl -fsSL https://openooda.org/install | bash' "$ROOT/index.html"; then
+  ok "install command is host script"
 else
-  bad "pin command missing"
+  bad "install command missing"
 fi
 
 if awk '

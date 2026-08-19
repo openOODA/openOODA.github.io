@@ -44,9 +44,9 @@ ooda pm add|ingest|launch|remove|update|outdated|why|tree|vendor|clean|audit|sbo
 ooda install
 ```
 
-The public pin command is `curl -fsSL https://openooda.org/install | oo`.
-The payload is `.oo`. The payload names the pin. Never `| sh`.
-`ooda install` is the checkout XDG install. It copies tree `bin/ooda`, `oodac/oodac`, `std`, and `runtime` onto XDG from a checkout.
+The public first-machine command is `curl -fsSL https://openooda.org/install | bash`.
+That URL is a host script. It is not `.oo`. Linux x86_64 only. Needs `git` and `gcc`.
+`ooda install` is the checkout copy after you already have `ooda`. It copies tree `bin/ooda`, `oodac/oodac`, `std`, and `runtime` onto XDG from a checkout.
 
 `check --json-errors` prints machine diagnostics for an editor or a script.
 
