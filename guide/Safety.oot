@@ -7,6 +7,7 @@ User wiki. Canonical URL: https://openooda.org/guide/#Safety.oot
 
 ## 1. What a token is
 
+openOODA is for programs that do not get free run of the machine.
 A capability token is a permission you hold as an argument.
 Effects need that argument.
 You write it as a type: `&FsReadCap`, `&ProcessCap`, `&SysCap`.
@@ -199,7 +200,28 @@ That is a hash, not a hardware enclave.
 The file on disk stays the same so a rebuild can match.
 Load-time layout change is research, not this path.
 
-## 11. How to use caps well
+## 11. Fuel, path, and host (libraries)
+
+These are modules you import. They are not new compiler tokens.
+
+`FuelBudget` (`std/sec/fuel_budget.oo`) is a remaining-cost counter you pass around.
+`fuel_can` / `fuel_after` fail closed when the cost is empty or not positive.
+It is not `&TimeCap` and not a `FuelCap` type in `oodac`.
+
+`path_scope_allows` (`std/sec/path_scope.oo`) checks a path string against a prefix.
+`/tmp` does not allow `/tmp2`. A `..` segment is denied.
+You still need `&FsReadCap` to read a file.
+
+`host_scope_allows` (`std/sec/host_scope.oo`) checks a host string.
+Exact match, or `*.example.com` at a dot boundary. No fetch.
+You still need `&HttpCap` / `&NetCap` to talk to the network.
+
+`agent_send` refuses hop 2 and refuses a body that names a capability (`&TimeCap`, `&HttpCap`, and the older file/net/process tokens).
+`untrusted_sink_denied` treats `launch` like `patch` when a blob is marked.
+
+Check: `ooda run scripts/cap_scope_smoke.oo`.
+
+## 12. How to use caps well
 
 1. Declare the tokens the function actually uses.
 2. Pass them down. Every effect call takes its token.

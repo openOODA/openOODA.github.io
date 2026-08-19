@@ -24,7 +24,7 @@ That path is `ooda run`.
 More on the path: [How it works](Limits.oot).
 
 First run: [Start](Use.oot).
-Tokens: [Capabilities](Safety.oot).
+Tokens: [Capabilities](Safety.oot). Fuel, path scope, and host scope are libraries on that page.
 Add a package: [Packages](Packages.oot).
 HTTP 402 / x402: [Pay](Pay.oot) is a library you import into an `.oo` program. A tip quote is `GET https://pay.openooda.org/tip`. The door does not charge.
 
@@ -44,7 +44,7 @@ Start here. Then pick a page.
 - [Packages](Packages.oot) — `add`, `search`, store list.
 - [Capabilities](Safety.oot) — tokens and effects.
 - [How it works](Limits.oot) — typecheck, emit C, host `gcc`, run.
-- [Pay](Pay.oot) — import 402 / x402 and related handshake helpers.
+- [Pay](Pay.oot) — a library you import for 402 / x402.
 
 Door: https://openooda.org/
 Guide: https://openooda.org/guide/#Home.oot
