@@ -6,6 +6,7 @@ User wiki. Canonical URL: https://openooda.org/guide/#Pay.oot
 [Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Commands](Options.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [How it works](Limits.oot)
 
 This page is how an `.oo` program reads an HTTP 402 and names a price.
+It also covers capability quotes, hashcash work, inverted offers, 425 Too Early, and Privacy Pass scrape.
 It is not a wallet. It does not send money by itself.
 The helpers live in `ooda/std` (`std/net/x402.oo`, `std/net/x402_spend.oo`).
 They speak **x402 v2**.
@@ -108,6 +109,88 @@ That is permission to attach a header. It is not a payment.
 There is no chain send and no facilitator in this library.
 Install does not turn spend on.
 `ooda add` prints when a package lists a price. It does not charge.
+
+## 6. Pay with a capability
+
+A 402 can ask for an attenuated cap instead of USDC.
+
+```
+import "std/net/pay_cap.oo";
+
+let q: PayCapQuote = pay_cap_parse(body);
+if pay_cap_ready(q) {
+    println(pay_cap_format(q));
+}
+```
+
+Headers: `CAP-REQUIRED`, `CAP-PROOF`.
+`pay_cap_ready` needs `scheme=cap`, a cap name (`FsRead`, …), and `resource.url`.
+Attach is denied unless `OODA_CAP_SPEND=1` and the proof is not empty.
+This file does not check a live token.
+
+## 7. Pay with work
+
+A 402 can ask for hashcash (SHA-256 leading zero bits).
+
+```
+import "std/net/pay_work.oo";
+
+let q: PayWorkQuote = pay_work_parse(body);
+if pay_work_stamp_ok(stamp, q.bits, q.resource) {
+    println(pay_work_format(q));
+}
+```
+
+Headers: `WORK-REQUIRED`, `WORK-PROOF`.
+Stamp shape: `ver:bits:date:resource:ext:rand:counter`.
+Attach is denied unless `OODA_WORK_SPEND=1`.
+The library verifies a stamp. It does not mint one.
+
+## 8. Inverted 402
+
+The server offers to pay the client. That is not an IETF status.
+Use HTTP 200 plus `PAYMENT-OFFERED`.
+
+```
+import "std/net/pay_offer.oo";
+
+let o: PayOffer = pay_offer_parse(body);
+if pay_offer_ready(o) {
+    println(pay_offer_format(o));
+}
+```
+
+Claim is denied unless `OODA_OFFER_CLAIM=1`. Claiming is not collecting.
+
+## 9. 425 Too Early
+
+HTTP 425 means the proof arrived before it was valid (RFC 8470).
+`http_response_reason(425)` is `Too Early`.
+`pay_early_is_too_early(425)` is true. 402 is not 425.
+
+```
+import "std/net/pay_early.oo";
+
+let e: PayEarly = pay_early_parse(body);
+```
+
+`pay_early_ready` needs `validAfter`. This file does not read a clock.
+
+## 10. Privacy Pass
+
+Scrape a `PrivateToken` challenge (RFC 9577 shape). Do not mint or redeem.
+
+```
+import "std/net/pay_pass.oo";
+
+let p: PayPass = pay_pass_parse(header);
+```
+
+Ready when `challenge` and `token-key` are both present.
+Attach is denied unless `OODA_PASS_ATTACH=1`.
+No VOPRF and no issuer in this library.
+
+Check all five: `ooda run scripts/pay_handshakes_smoke.oo`.
 
 Capabilities for network fetch are on [Capabilities](Safety.oot).
 First run is on [Start](Use.oot).
