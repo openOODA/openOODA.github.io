@@ -131,6 +131,7 @@ Do not use it as a shortcut for a file read.
 
 Landlock is a real Linux jail under `&SysCap`.
 You pass the directories the process may read and write.
+The library path check uses slash-boundary: `/tmp` does not allow `/tmp2`.
 
 ```
 import "std/sec/landlock.oo";
@@ -225,9 +226,9 @@ It does not fetch. You still pass `&HttpCap` or `&NetCap` to talk.
 
 ## 14. Hop-2 send
 
-Import `std/sec/agent_send.oo`. Hop 0 and hop 1 may send. Hop 2 fails closed.
-A body that names a token fails closed.
-Extra names include `&TimeCap`, `&HttpCap`, `&AllocCap`, `&ThreadCap`, `&RandCap`, `&MsgCap`, and `oo_cap_grant`.
+Import `std/sec/agent_send.oo`. Hop 0 and hop 1 may send. Empty hop and hop 2 fail closed.
+A body that names `&NameCap` or `oo_cap_grant` fails closed.
+`ooda launch --exec` refuses a marked untrusted body.
 `untrusted_sink_denied` treats `launch` like `patch` when a blob is marked.
 
 Check: `ooda run scripts/cap_scope_smoke.oo`.
