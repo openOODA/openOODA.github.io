@@ -1,32 +1,29 @@
-# PAY — HTTP 402 and x402 v2
+# PAY — libraries for 402 and related handshakes
 
 File: guide/Pay.oot
 User wiki. Canonical URL: https://openooda.org/guide/#Pay.oot
 
 [Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Commands](Options.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [How it works](Limits.oot)
 
-This page is how an `.oo` program reads an HTTP 402 and names a price.
-It also covers capability quotes, hashcash work, inverted offers, 425 Too Early, and Privacy Pass scrape.
-It is not a wallet. It does not send money by itself.
-The helpers live in `ooda/std` (`std/net/x402.oo`, `std/net/x402_spend.oo`).
-They speak **x402 v2**.
+These are **standard-library modules**. You `import` them in an `.oo` program if you want that program to speak HTTP 402, x402 v2, or the neighbor handshakes (capability quote, hashcash, inverted offer, 425, Privacy Pass).
 
-Spec: https://github.com/x402-foundation/x402/blob/main/specs/x402-specification-v2.md
+They parse and format quotes. They do not open a wallet, send USDC, or settle a chain payment. Your program still has to do HTTP, and if you sell, your server still has to send 402.
+
+Spec (x402 v2): https://github.com/x402-foundation/x402/blob/main/specs/x402-specification-v2.md
 HTTP transport: https://github.com/x402-foundation/x402/blob/main/specs/transports-v2/http.md
 
-## 1. What 402 is
+## 1. What you get
 
 HTTP 402 means payment required.
 x402 v2 is a handshake on that status: the server quotes a price, the client may attach a signed payload and retry.
 
-openOODA teaches the program to **see** the quote and to **refuse spend** unless you pin it.
-It does not put a wallet on disk when you install.
-It does not charge the public door.
-A tip quote Worker is `GET https://pay.openooda.org/tip`.
-After you set the `PAY_TO` secret it returns HTTP 402 plus a `PAYMENT-REQUIRED` header. Until then it is 503.
-That is not the door. Authors put their own `payTo` on a package manifest.
+Import the helpers, read the quote, print it, and (if you want) build a 402 body for your own server.
 
-v2 headers:
+The public door does not charge.
+A tip quote Worker is `GET https://pay.openooda.org/tip` — HTTP 402 plus a `PAYMENT-REQUIRED` header.
+Authors put their own `payTo` on a package manifest. `ooda add` may print that a price is listed. It still downloads. It does not charge.
+
+v2 headers, when you implement the HTTP side:
 
 | Header | Direction | Contents |
 |---|---|---|
@@ -34,9 +31,9 @@ v2 headers:
 | `PAYMENT-SIGNATURE` | client → server | base64 `PaymentPayload` JSON |
 | `PAYMENT-RESPONSE` | server → client | base64 settlement JSON |
 
-This library does not send `PAYMENT-RESPONSE`. That header is a settlement receipt. We do not settle.
+This library does not send `PAYMENT-RESPONSE`. That header is a settlement receipt.
 
-## 2. Import
+## 2. Import x402
 
 ```
 import "std/net/x402.oo";
@@ -44,7 +41,6 @@ import "std/net/x402_spend.oo";
 ```
 
 These files are on `main`.
-They are not in the v0.204.0-beta tag until the next pin.
 
 ## 3. See a 402
 
@@ -83,15 +79,14 @@ let body: String = x402_required_json(
 );
 ```
 
-That is a v2 `PaymentRequired` string. You still have to send HTTP 402 on your server.
+That is a v2 `PaymentRequired` string. You still send HTTP 402 from your server.
 GitHub Pages cannot do that handshake. A Worker or other origin can.
 
-## 5. Spend stays off
+## 5. Attaching a proof is opt-in
 
-Attaching a `PAYMENT-SIGNATURE` proof is denied unless:
+`x402_attach_or_deny` is a guard your program calls **before** it puts `PAYMENT-SIGNATURE` on a request.
 
-1. The spend pin is exactly `1` (callers pass `OODA_X402_SPEND`).
-2. The proof string is not empty.
+You pass two strings: a flag, and the proof. The flag must be exactly `1`, and the proof must not be empty. Otherwise you get `Err`. Callers usually pass `OODA_X402_SPEND` as that flag. If you pass `""`, attach is refused.
 
 ```
 let pin: String = "";
@@ -101,18 +96,13 @@ if r.is_err() {
 }
 ```
 
-Empty pin → denied.
-Pin `1` and empty proof → denied.
-Pin `1` and a proof → `Ok(true)`. Then use `x402_payment_header_line(proof)` for `PAYMENT-SIGNATURE: …`.
-That is permission to attach a header. It is not a payment.
+`Ok(true)` means “your program may attach the header.” It is not a payment. There is no chain send in this library.
 
-There is no chain send and no facilitator in this library.
-Install does not turn spend on.
-`ooda add` prints when a package lists a price. It does not charge.
+The same idea is used on the other modules, each with its own flag name (`OODA_CAP_SPEND`, `OODA_WORK_SPEND`, `OODA_OFFER_CLAIM`, `OODA_EARLY_RETRY`, `OODA_PASS_ATTACH`). Default is refuse. Your program chooses when to pass `1`.
 
 ## 6. Pay with a capability
 
-A 402 can ask for an attenuated cap instead of USDC.
+A 402 can ask for a capability name (for example `FsRead`) instead of USDC. Import this if you want that quote in your program.
 
 ```
 import "std/net/pay_cap.oo";
@@ -124,13 +114,12 @@ if pay_cap_ready(q) {
 ```
 
 Headers: `CAP-REQUIRED`, `CAP-PROOF`.
-`pay_cap_ready` needs `scheme=cap`, a cap name (`FsRead`, …), and `resource.url`.
-Attach is denied unless `OODA_CAP_SPEND=1` and the proof is not empty.
-This file does not check a live token.
+`pay_cap_ready` needs `scheme=cap`, a cap name, and `resource.url`.
+This module does not check a live capability token.
 
 ## 7. Pay with work
 
-A 402 can ask for hashcash (SHA-256 leading zero bits).
+A 402 can ask for hashcash (SHA-256 leading zero bits). Import this to parse the quote and check a stamp.
 
 ```
 import "std/net/pay_work.oo";
@@ -143,7 +132,6 @@ if pay_work_stamp_ok(stamp, q.bits, q.resource) {
 
 Headers: `WORK-REQUIRED`, `WORK-PROOF`.
 Stamp shape: `ver:bits:date:resource:ext:rand:counter`.
-Attach is denied unless `OODA_WORK_SPEND=1`.
 The library verifies a stamp. It does not mint one.
 
 ## 8. Inverted 402
@@ -160,7 +148,7 @@ if pay_offer_ready(o) {
 }
 ```
 
-Claim is denied unless `OODA_OFFER_CLAIM=1`. Claiming is not collecting.
+Parsing an offer is not collecting money.
 
 ## 9. 425 Too Early
 
@@ -174,11 +162,11 @@ import "std/net/pay_early.oo";
 let e: PayEarly = pay_early_parse(body);
 ```
 
-`pay_early_ready` needs `validAfter`. This file does not read a clock.
+`pay_early_ready` needs `validAfter`. This module does not read a clock.
 
 ## 10. Privacy Pass
 
-Scrape a `PrivateToken` challenge (RFC 9577 shape). Do not mint or redeem.
+Scrape a `PrivateToken` challenge (RFC 9577 shape). Import this to read the challenge. It does not mint or redeem tokens.
 
 ```
 import "std/net/pay_pass.oo";
@@ -187,10 +175,8 @@ let p: PayPass = pay_pass_parse(header);
 ```
 
 Ready when `challenge` and `token-key` are both present.
-Attach is denied unless `OODA_PASS_ATTACH=1`.
-No VOPRF and no issuer in this library.
 
-Check all five: `ooda run scripts/pay_handshakes_smoke.oo`.
+Check all five neighbor modules: `ooda run scripts/pay_handshakes_smoke.oo`.
 
 Capabilities for network fetch are on [Capabilities](Safety.oot).
 First run is on [Start](Use.oot).
