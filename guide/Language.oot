@@ -185,11 +185,10 @@ pub fn main() {
 ## 8. Lists, loops, and sums
 
 `for x in xs` walks a list. `for i in 0..n` walks a range.
-`type Name = A(Int) | B(Int)` is a tagged sum. Match binds the Int payload.
+`type Name = A(Int) | B(String) | Empty` is a tagged sum. Int payload binds directly; String payload binds `.s0`; Unit variants (`Empty`, `On`/`Off`) are bare identifiers.
 `&mut Name` writes through. `(*p).f = rhs` writes the field.
 
-String-payload sums and unit variants stay residual.
-Full SMT stays residual. Const header contracts fold at check.
+Const header contracts fold at check time.
 
 ## 9. Product std
 
@@ -210,4 +209,4 @@ pub fn main() {
 A std function that does an effect still takes a token.
 Std does not grant ambient authority.
 
-[Home](Home.oot) [Start](Use.oot) [Commands](Options.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [How it works](Limits.oot) [Pay](Pay.oot)
+[Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Commands](Options.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [Active Defense](Morpher.oot) [How it works](Limits.oot) [Pay](Pay.oot)

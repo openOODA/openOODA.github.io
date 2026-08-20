@@ -180,3 +180,5 @@ Check all five neighbor modules: `ooda run scripts/pay_handshakes_smoke.oo`.
 
 Capabilities for network fetch are on [Capabilities](Safety.oot).
 First run is on [Start](Use.oot).
+
+[Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Commands](Options.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [Active Defense](Morpher.oot) [How it works](Limits.oot) [Pay](Pay.oot)

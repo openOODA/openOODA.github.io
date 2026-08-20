@@ -62,3 +62,5 @@ Traditional security burdens developers with manual configuration. openOODA inve
 | `ooda run --debug main.oo` | **Opt-Out (Debug)** (Linear CFG, RASP disabled for GDB breakpoints) | Step-Debugging & Profiling |
 
 This page: https://openooda.org/guide/#Morpher.oot
+
+[Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Commands](Options.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [Active Defense](Morpher.oot) [How it works](Limits.oot) [Pay](Pay.oot)

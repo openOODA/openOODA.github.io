@@ -171,4 +171,4 @@ Take `&FsReadCap` when you only read. Take `&HttpCap` when you only fetch. Take 
 
 On Linux, `&SysCap` can apply a Landlock jail and POSIX `setrlimit`. See [Capabilities](Safety.oot).
 
-[Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [How it works](Limits.oot) [Pay](Pay.oot)
+[Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Commands](Options.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [Active Defense](Morpher.oot) [How it works](Limits.oot) [Pay](Pay.oot)
