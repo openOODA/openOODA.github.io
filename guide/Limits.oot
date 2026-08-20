@@ -5,17 +5,21 @@ User wiki. Canonical URL: https://openooda.org/guide/#Limits.oot
 
 [Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Commands](Options.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [Active Defense](Morpher.oot) [How it works](Limits.oot) [Pay](Pay.oot)
 
-## 1. The model
+## 1. The Closed-Loop Systems Architecture
 
-You write `.oo` files. The compiler typechecks them. It then emits C against the `chs_rt` runtime. Host `gcc` turns that C into a native binary. You run the binary.
+You write `.oo` files. The openOODA compiler typechecks them in a single fast pass, injects active binary defense transmutations, and emits clean C against the lightweight `chs_rt` runtime. Host `gcc` turns that C into an fortified native ELF binary, which initializes in-memory self-healing watchdogs upon execution.
 
-That is the everyday path. `ooda run` is that path.
+That is the everyday product path. `ooda run` executes this pipeline automatically:
 
 ```
-.oo  →  check  →  emit C (chs_rt)  →  gcc  →  run
+.oo Source  ──►  Typecheck  ──►  Metamorphic Passes  ──►  emit C (chs_rt)  ──►  gcc  ──►  Autonomic Binary
 ```
 
-You can also ask the same frontend for other text: LLVM IR, a WebAssembly module, or standalone x86_64 assembly. Those are extra emits. They are not the everyday path.
+By first principles, the compiler is a closed-loop system:
+1. **Frontend Gate**: Resolves non-ambient capability tokens (`&Token`) and folds const contracts (`requires`/`ensures`).
+2. **Hardening Engine**: Flattens AST control flow, permutes basic blocks, and neutralizes cross-instruction ROP gadgets.
+3. **Backend Emission**: Translates verified AST structures to deterministic C without hidden runtime bloat.
+4. **Autonomic Runtime**: Evaluates `.text` page integrity live in RAM and enforces Landlock sandboxes.
 
 ## 2. Two binaries
 

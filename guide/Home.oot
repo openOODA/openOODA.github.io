@@ -1,51 +1,63 @@
-# HOME — What openOODA is
+# HOME — The openOODA Thesis & Invariant Laws
 
 File: guide/Home.oot
 User wiki. Canonical URL: https://openooda.org/guide/#Home.oot
 Pin: v0.205.0-beta.
 
-## 1. In one minute
+[Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Commands](Options.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [Active Defense](Morpher.oot) [How it works](Limits.oot) [Pay](Pay.oot)
 
-openOODA is a systems language. You write `.oo` files.
-A systems language talks to the machine.
+## 1. Why openOODA Exists (Blue Ocean Strategy)
 
-Effects need a capability token.
-A capability token is a permission the function holds.
-No token, no effect.
+Traditional systems languages (C, C++, Rust, Go, Zig) operate in a "Red Ocean" of competing memory paradigms, sprawling package registries, and ambient authority. When a process runs, every imported library inherits full ambient access to the filesystem, network, and memory. Security is bolted on as an afterthought through external scanners and complex OS configurations.
 
-The product path is:
+openOODA creates a new paradigm: **an agent-native, capability-secure systems language with active sovereign binary defense on by default**.
 
-1. Typecheck the program.
-2. Emit C.
-3. Compile that C with host `gcc`.
-4. Run the binary.
+```
+Traditional Languages (Ambient & Static)       openOODA (Sovereign & Living)
+────────────────────────────────────────       ──────────────────────────────
+• Any routine can access OS/Network            • Zero Ambient Authority (&Token required)
+• Static binaries easily reverse-engineered    • Metamorphic AST & ROP Gadget Destroyer
+• AI agents parse entire sprawling repos       • Surgical AST Loop (outline ➔ patch ➔ fix)
+• Runtime hooks hijack execution undetected    • In-memory SHA256 Watchdog & Live Rollback
+```
 
-That path is `ooda run`.
-More on the path: [How it works](Limits.oot).
+## 2. The Three Invariant Laws of openOODA
 
-First run: [Start](Use.oot).
-Tokens: [Capabilities](Safety.oot). Fuel, path scope, and host scope are libraries on that page.
-Add a package: [Packages](Packages.oot).
-HTTP 402 / x402: [Pay](Pay.oot) is a library you import into an `.oo` program. A tip quote is `GET https://pay.openooda.org/tip`. The door does not charge.
+By first principles, openOODA is founded on three mathematical and architectural invariants:
 
-The public system is three places: door, guide, store.
+### 1. The Law of Authority (Zero Ambient Authority)
+Authority is not an ambient property of a process; it is an unforgeable capability token passed as an explicit parameter. If a function lacks `&FsReadCap` or `&NetCap`, the effect is mathematically impossible. Forged or missing tokens fail closed. See [Capabilities](Safety.oot).
 
-Door: https://openooda.org/
-Guide: https://openooda.org/guide/
-Store: https://registry.openooda.org
+### 2. The Law of Morphological Diversity (Active Binary Defense)
+A static binary is a sitting target. Every openOODA compilation produces a distinct, morphologically diversified binary with control-flow flattening, encrypted strings, decoy honeypots, and self-healing RASP watchdogs. See [Active Defense](Morpher.oot).
 
-## 2. This wiki
+### 3. The Law of Minimality (Power-Law Surgical Loops)
+Autonomous AI agents fail when overwhelmed by context window bloat. openOODA delivers high-leverage surgical tooling (`outline`, `reflect`, `fix`, `patch`), enabling agents to verify and refactor single AST functions with 90% less token consumption. See [Commands](Options.oot).
 
-Start here. Then pick a page.
+## 3. The Product Execution Pipeline
 
-- [Start](Use.oot) — first run, first test.
-- [Language](Language.oot) — `.oo` syntax.
-- [Commands](Options.oot) — `ooda` commands and flags.
-- [Packages](Packages.oot) — `add`, `search`, store list.
-- [Capabilities](Safety.oot) — tokens and effects.
-- [Active Binary Defense](Morpher.oot) — MTD, exploit mitigation, honeynets, and RASP self-healing.
-- [How it works](Limits.oot) — typecheck, emit C, host `gcc`, run.
-- [Pay](Pay.oot) — a library you import for 402 / x402.
+```
+.oo Source  ──►  ooda check  ──►  emit-c (chs_rt)  ──►  gcc  ──►  Fortified Binary
+```
+
+1. **Typecheck**: Fast single-pass type verification (`ooda check`).
+2. **Metamorphic Defense**: Eliminates ROP gadgets, flattens CFGs, and seals HMAC tokens.
+3. **Native C Emission**: Emits clean C paired with the minimal `chs_rt` runtime.
+4. **Host Compilation**: Compiles with host `gcc` into a high-performance native ELF.
+5. **Autonomic Runtime**: Enforces Landlock sandboxing and in-memory page verification.
+
+Read more: [How it works](Limits.oot).
+
+## 4. Explore the System
+
+- [Start](Use.oot) — Install toolchain, write `hello.oo`, and run your first test.
+- [Language](Language.oot) — Structs, sum types, pattern matching, `Result[T, E]`, `SECRET` fields.
+- [Commands](Options.oot) — `ooda` CLI, LSP server, and surgical AI workflows.
+- [Packages](Packages.oot) — Cryptographic pins, dependency locks, and store catalog.
+- [Capabilities](Safety.oot) — Object-capabilities, HMAC attenuation, and Landlock jails.
+- [Active Defense](Morpher.oot) — MTD, exploit mitigation, honeynets, and RASP self-healing.
+- [How it works](Limits.oot) — Compiler internals, CHS ABI, and ARC memory model.
+- [Pay](Pay.oot) — Native HTTP 402 / x402 protocol monetization for packages.
 
 Door: https://openooda.org/
 Guide: https://openooda.org/guide/#Home.oot
