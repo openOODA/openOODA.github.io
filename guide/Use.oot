@@ -3,12 +3,15 @@
 File: guide/Use.oot
 User wiki. Canonical URL: https://openooda.org/guide/#Use.oot
 
+[Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Commands](Options.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [Active Defense](Morpher.oot) [How it works](Limits.oot) [Pay](Pay.oot)
+
 You run your first `.oo` program on this page.
 [Home](Home.oot) is the one-minute picture.
 [Language](Language.oot) is the syntax.
 [Commands](Options.oot) is the full `ooda` list.
 [Packages](Packages.oot) is how you add a library.
 [Capabilities](Safety.oot) is how an effect gets a token.
+[Active Defense](Morpher.oot) is MTD, exploit mitigation, honeynets, and self-healing.
 [How it works](Limits.oot) is the product path.
 [Pay](Pay.oot) is HTTP 402 / x402.
 
@@ -153,7 +156,9 @@ Read [How it works](Limits.oot) when you want the product path in one place.
 - [Commands](Options.oot) — `ooda` and `oodac`.
 - [Packages](Packages.oot) — `add`, `search`, `registry`.
 - [Capabilities](Safety.oot) — tokens and writes.
+- [Active Defense](Morpher.oot) — MTD, exploit mitigation, honeynets, and RASP.
 - [How it works](Limits.oot) — product path.
+- [Pay](Pay.oot) — HTTP 402 / x402.
 
 Site: https://openooda.org
 This page: https://openooda.org/guide/#Use.oot

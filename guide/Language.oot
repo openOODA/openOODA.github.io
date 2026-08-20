@@ -3,7 +3,7 @@
 File: guide/Language.oot
 User wiki. Canonical URL: https://openooda.org/guide/#Language.oot
 
-[Home](Home.oot) [Start](Use.oot) [Commands](Options.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [How it works](Limits.oot) [Pay](Pay.oot)
+[Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Commands](Options.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [Active Defense](Morpher.oot) [How it works](Limits.oot) [Pay](Pay.oot)
 
 You write `.oo` programs on this page.
 [Home](Home.oot) is the one-minute picture.
@@ -11,7 +11,9 @@ You write `.oo` programs on this page.
 [Commands](Options.oot) is the `ooda` list.
 [Packages](Packages.oot) is how you add a library.
 [Capabilities](Safety.oot) is how an effect gets a token.
+[Active Defense](Morpher.oot) is MTD, exploit mitigation, honeynets, and self-healing.
 [How it works](Limits.oot) is the product path.
+[Pay](Pay.oot) is HTTP 402 / x402.
 
 ## 1. Files
 

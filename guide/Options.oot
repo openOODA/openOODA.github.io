@@ -3,7 +3,7 @@
 File: guide/Options.oot
 User wiki. Canonical URL: https://openooda.org/guide/#Options.oot
 
-[Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [How it works](Limits.oot) [Pay](Pay.oot)
+[Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Commands](Options.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [Active Defense](Morpher.oot) [How it works](Limits.oot) [Pay](Pay.oot)
 
 ## 1. Everyday path
 
@@ -17,15 +17,16 @@ ooda test hello.oo
 
 `check` typechecks. `run` is check + emit C + `gcc` + exec. `test` runs `verify` / `assert_eq!` / `assert!` and sets `OODA_TEST=1`.
 
-`emit-c` is the everyday emit.
+`emit-c` is the everyday emit. Binary defense is on by default; use `--plain` or `--debug` to opt out.
 
 ## 2. `ooda`
 
 ```
 ooda check <file.oo> [--json-errors]
 ooda build <file.oo> [-o out] [--target c|native|llvm]
-ooda run <file.oo>
+ooda run <file.oo> [--debug]
 ooda test <file.oo> [--fuzz]
+ooda morph <file.oo> [-o out] [--entropy seed]
 ooda lsp [request.json]
 ooda bench <file.oo> [--run]
 ooda dump tokens|ast|check <file.oo>
