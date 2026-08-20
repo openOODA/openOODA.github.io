@@ -43,7 +43,7 @@ Start here. Then pick a page.
 - [Commands](Options.oot) — `ooda` commands and flags.
 - [Packages](Packages.oot) — `add`, `search`, store list.
 - [Capabilities](Safety.oot) — tokens and effects.
-- [Metamorphic Morpher](Morpher.oot) — zero-trust binary diversification and obfuscation.
+- [Active Binary Defense](Morpher.oot) — MTD, exploit mitigation, honeynets, and RASP self-healing.
 - [How it works](Limits.oot) — typecheck, emit C, host `gcc`, run.
 - [Pay](Pay.oot) — a library you import for 402 / x402.
 
