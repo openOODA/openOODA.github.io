@@ -15,11 +15,11 @@ Every build generates a morphologically unique binary that destroys exploit chai
 Compiler AST Morpher ──► Gadget Destroyer ──► HMAC Seal ──► RASP Watchdog (RAM)
 ```
 
-## 2. The Threat-to-Immunity Matrix (Power-Law Risk Elimination)
+## 2. The Threat-to-Immunity Matrix
 
-95% of catastrophic exploits leverage three systemic weaknesses: static binary predictability, unintended ROP gadgets, and ambient privilege escalation. openOODA systematically neutralizes these vectors:
+Most catastrophic exploits leverage three core weaknesses: static binary predictability, unintended ROP gadgets, and ambient privilege escalation. openOODA systematically neutralizes these vectors:
 
-| Threat Vector (Fat-Tail Risk) | Classical Red-Ocean Vulnerability | openOODA Sovereign Defense Layer |
+| Threat Vector | Traditional Vulnerability | openOODA Sovereign Defense Layer |
 | :--- | :--- | :--- |
 | **Ghidra / IDA Decompilation** | Static CFG graphs expose business logic & keys | **Moving Target Defense (MTD)**: Chenxi Wang flattening + quadratic residue predicates |
 | **Return-Oriented Programming (ROP)** | Unintended `0xC3` byte sequences across instructions | **Anti-ROP Gadget Destroyer**: Inter-instruction alignment scanning & multi-byte NOP padders |

@@ -6,11 +6,11 @@ Pin: v0.205.0-beta.
 
 [Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Commands](Options.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [Active Defense](Morpher.oot) [How it works](Limits.oot) [Pay](Pay.oot)
 
-## 1. Why openOODA Exists (Blue Ocean Strategy)
+## 1. Why openOODA Exists
 
-Traditional systems languages (C, C++, Rust, Go, Zig) operate in a "Red Ocean" of competing memory paradigms, sprawling package registries, and ambient authority. When a process runs, every imported library inherits full ambient access to the filesystem, network, and memory. Security is bolted on as an afterthought through external scanners and complex OS configurations.
+In traditional systems languages (C, C++, Rust, Go, Zig), when a process runs, every imported routine inherits full ambient access to the filesystem, network, and memory. Security is typically handled through external scanners or complex OS configurations after the fact.
 
-openOODA creates a new paradigm: **an agent-native, capability-secure systems language with active sovereign binary defense on by default**.
+openOODA builds security directly into the language and compiler: **an agent-native, capability-secure systems language with active sovereign binary defense on by default**.
 
 ```
 Traditional Languages (Ambient & Static)       openOODA (Sovereign & Living)
@@ -23,16 +23,16 @@ Traditional Languages (Ambient & Static)       openOODA (Sovereign & Living)
 
 ## 2. The Three Invariant Laws of openOODA
 
-By first principles, openOODA is founded on three mathematical and architectural invariants:
+openOODA is founded on three architectural invariants:
 
-### 1. The Law of Authority (Zero Ambient Authority)
+### 1. The Law of Authority
 Authority is not an ambient property of a process; it is an unforgeable capability token passed as an explicit parameter. If a function lacks `&FsReadCap` or `&NetCap`, the effect is mathematically impossible. Forged or missing tokens fail closed. See [Capabilities](Safety.oot).
 
-### 2. The Law of Morphological Diversity (Active Binary Defense)
+### 2. The Law of Morphological Diversity
 A static binary is a sitting target. Every openOODA compilation produces a distinct, morphologically diversified binary with control-flow flattening, encrypted strings, decoy honeypots, and self-healing RASP watchdogs. See [Active Defense](Morpher.oot).
 
-### 3. The Law of Minimality (Power-Law Surgical Loops)
-Autonomous AI agents fail when overwhelmed by context window bloat. openOODA delivers high-leverage surgical tooling (`outline`, `reflect`, `fix`, `patch`), enabling agents to verify and refactor single AST functions with 90% less token consumption. See [Commands](Options.oot).
+### 3. The Law of Minimality
+Autonomous AI agents fail when overwhelmed by context window bloat. openOODA delivers surgical tooling (`outline`, `reflect`, `fix`, `patch`), enabling agents to verify and refactor single AST functions with 90% less token consumption. See [Commands](Options.oot).
 
 ## 3. The Product Execution Pipeline
 

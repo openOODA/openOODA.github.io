@@ -15,7 +15,7 @@ That is the everyday product path. `ooda run` executes this pipeline automatical
 .oo Source  ──►  Typecheck  ──►  Metamorphic Passes  ──►  emit C (chs_rt)  ──►  gcc  ──►  Autonomic Binary
 ```
 
-By first principles, the compiler is a closed-loop system:
+The compilation pipeline operates in four stages:
 1. **Frontend Gate**: Resolves non-ambient capability tokens (`&Token`) and folds const contracts (`requires`/`ensures`).
 2. **Hardening Engine**: Flattens AST control flow, permutes basic blocks, and neutralizes cross-instruction ROP gadgets.
 3. **Backend Emission**: Translates verified AST structures to deterministic C without hidden runtime bloat.
