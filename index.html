@@ -78,8 +78,8 @@
       background: var(--bg);
       color: var(--fg);
       border: 2px solid var(--fg);
-      padding: 0.15rem 0.5rem;
-      width: 15ch;
+      padding: 0.2rem 0.65rem;
+      width: 25ch;
       min-width: 0;
       box-sizing: border-box;
       font-size: 0.85rem;
@@ -93,7 +93,7 @@
       background: var(--bg);
       color: var(--fg);
       border: 2px solid var(--fg);
-      padding: 0.15rem 0.55rem;
+      padding: 0.2rem 0.65rem;
       cursor: pointer;
       white-space: nowrap;
       min-width: 5ch;
@@ -113,19 +113,25 @@
       overflow: hidden;
     }
     .install {
-      display: grid;
-      grid-template-columns: minmax(0, 50ch) auto;
-      justify-content: start;
-      justify-items: stretch;
+      display: flex;
+      flex-direction: row;
       align-items: center;
-      column-gap: 0.75rem;
-      row-gap: 0.55rem;
-      margin: 0 0 1.25rem;
-      width: max-content;
-      max-width: 100%;
+      justify-content: space-between;
+      border: 2px solid var(--fg);
+      background: var(--bg);
+      padding: 0.45rem 0.75rem;
+      margin: 0 0 1.5rem;
+      width: 100%;
+      max-width: 38rem;
+      box-sizing: border-box;
+      gap: 0.75rem;
     }
     .install-cmd {
-      font: inherit; white-space: nowrap;
+      font: inherit;
+      white-space: nowrap;
+      flex: 1;
+      text-align: center;
+      overflow-x: auto;
     }
     .wrap { display: grid; grid-template-columns: 12rem 1fr; max-width: 60rem; flex: 1 0 auto; }
     .col { display: flex; flex-direction: column; min-width: 0; }
@@ -207,15 +213,16 @@
       .install {
         display: flex;
         flex-direction: row;
-        align-items: stretch;
+        align-items: center;
         width: 100%;
         box-sizing: border-box;
-        border: 1px solid var(--fg);
+        border: 2px solid var(--fg);
         background: var(--bg);
         margin: 0 0 1.25rem;
       }
       .install-cmd {
         flex: 1;
+        text-align: center;
         padding: 0.6rem 0.75rem;
         overflow-x: auto;
         white-space: nowrap;
