@@ -68,8 +68,8 @@ The product path: [How it works](Limits.oot).
 `type Name = struct { ... }` names a record.
 `List[Name]` and `List[Float]` emit. One-level `List[List[Int]]` emits. Deeper nests stay residual.
 
-`Result[List[Name], Error]` is a Result whose Ok payload is a list of records.
-Handle it with `match` or `match let`. Do not discard it.
+`Result[List[Name]]` emits as `OoResL_Name`. Handle it with `match` or `match let`. Do not discard it.
+`Result[Option]` and `Result[Int, Bool]` stay `ERR\tc_emit`.
 
 Unused `Ok`, `Err`, or `Some` fail `ooda check`.
 A discarded `Result` fails `ooda check`.

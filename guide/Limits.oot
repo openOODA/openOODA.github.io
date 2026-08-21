@@ -5,21 +5,20 @@ User wiki. Canonical URL: https://openooda.org/guide/#Limits.oot
 
 [Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Commands](Options.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [Active Defense](Morpher.oot) [How it works](Limits.oot) [Pay](Pay.oot)
 
-## 1. The Closed-Loop Systems Architecture
+## 1. Product path
 
-You write `.oo` files. The openOODA compiler typechecks them in a single fast pass, injects active binary defense transmutations, and emits clean C against the lightweight `chs_rt` runtime. Host `gcc` turns that C into an fortified native ELF binary, which initializes in-memory self-healing watchdogs upon execution.
+You write `.oo` files. The compiler typechecks them, emits C for `chs_rt`, and host `gcc` builds the binary.
 
-That is the everyday product path. `ooda run` executes this pipeline automatically:
+That is the everyday path. `ooda run` runs it:
 
 ```
-.oo Source  ──►  Typecheck  ──►  Metamorphic Passes  ──►  emit C (chs_rt)  ──►  gcc  ──►  Autonomic Binary
+.oo source  ->  typecheck  ->  emit-c (chs_rt)  ->  gcc  ->  run
 ```
 
-The compilation pipeline operates in four stages:
-1. **Frontend Gate**: Resolves non-ambient capability tokens (`&Token`) and folds const contracts (`requires`/`ensures`).
-2. **Hardening Engine**: Flattens AST control flow, permutes basic blocks, and neutralizes cross-instruction ROP gadgets.
-3. **Backend Emission**: Translates verified AST structures to deterministic C without hidden runtime bloat.
-4. **Autonomic Runtime**: Evaluates `.text` page integrity live in RAM and enforces Landlock sandboxes.
+1. Check resolves capability tokens and folds const `requires` / `ensures`.
+2. `emit-c` writes C. Binary defense stays on unless you pass `--plain` or `--debug`.
+3. Host `gcc` builds the ELF.
+4. At run, Landlock and `setrlimit` apply when you pass `&SysCap`.
 
 ## 2. Two binaries
 

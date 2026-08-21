@@ -274,7 +274,7 @@
   <header>
     <div class="brand-row">
       <a class="brand" href="/">openOODA</a>
-      <a class="ver" href="https://github.com/openOODA/ooda/releases" title="GitHub release notes">v0.206.0</a>
+      <a class="ver" href="https://github.com/openOODA/ooda/releases" title="GitHub release notes">v0.207.0</a>
     </div>
     <div class="header-actions">
       <form class="mail-header" id="mail" action="https://collect.openooda.org/v1/emails" method="post">
@@ -302,33 +302,33 @@
       <details class="drop" open>
         <summary>Tokens</summary>
         <div class="drop-body">
-          <p><strong><a href="/guide/#Safety.oot">Non-Ambient Authority</a>.</strong> In C, Rust, Go, and Zig, any routine can access files or networks if the process can. openOODA enforces <em>Zero Ambient Authority</em>: an effect requires an explicit, unforgeable <a href="/guide/#Safety.oot">token</a> (e.g. <a href="/guide/#Safety.oot"><code>&amp;FsReadCap</code></a>, <a href="/guide/#Safety.oot"><code>&amp;NetCap</code></a>). No token, no effect. See <a href="/guide/#Safety.oot">capabilities</a> and <a href="/guide/#Limits.oot">how it works</a>.</p>
-          <p><strong><a href="/guide/#Safety.oot">HMAC Attenuation &amp; Writes</a>.</strong> Capabilities cannot be minted from arbitrary bytes. <a href="/guide/#Safety.oot"><code>write_file</code></a> requires <a href="/guide/#Safety.oot"><code>&amp;FsWriteCap</code></a> bounded by <a href="/guide/#Options.oot"><code>OODA_FS_WRITEDIR</code></a>. Token derivation uses cryptographic HMAC seals to narrow authority down call trees. See <a href="/guide/#Use.oot">getting started</a>.</p>
-          <p><strong><a href="/guide/#Language.oot">Information Flow &amp; Secrets</a>.</strong> Struct fields marked <a href="/guide/#Safety.oot"><code>SECRET</code></a> are statically barred from unauthenticated sinks. Accidental logging or printing fails <a href="/guide/#Options.oot"><code>ooda check</code></a> at compile time. See <a href="/guide/#Language.oot">language grammar</a>.</p>
-          <p><strong><a href="/guide/#Safety.oot">Kernel Sandboxing</a>.</strong> Holding <code>&amp;SysCap</code> enforces Linux <a href="/guide/#Safety.oot">Landlock jails</a> and POSIX <a href="/guide/#Options.oot"><code>setrlimit</code></a> quotas. Undefined boundaries fail closed. See <a href="/guide/#Safety.oot">capabilities</a> and <a href="/guide/#Limits.oot">runtime limits</a>.</p>
+          <p><strong><a href="/guide/#Safety.oot">No ambient authority</a>.</strong> An effect needs a token argument such as <a href="/guide/#Safety.oot"><code>&amp;FsReadCap</code></a> or <a href="/guide/#Safety.oot"><code>&amp;HttpCap</code></a>. No token, no effect. Missing or forged tokens fail closed. See <a href="/guide/#Safety.oot">capabilities</a>.</p>
+          <p><strong><a href="/guide/#Safety.oot">Writes and HMAC</a>.</strong> You cannot mint a token from bytes. <a href="/guide/#Safety.oot"><code>write_file</code></a> needs <a href="/guide/#Safety.oot"><code>&amp;FsWriteCap</code></a> and <a href="/guide/#Options.oot"><code>OODA_FS_WRITEDIR</code></a>. HMAC attenuation derives a narrower child seal. See <a href="/guide/#Use.oot">start</a>.</p>
+          <p><strong><a href="/guide/#Language.oot">SECRET fields</a>.</strong> A field marked <a href="/guide/#Safety.oot"><code>SECRET</code></a> must not go to <code>println</code> or <code>process_exec</code>. <a href="/guide/#Options.oot"><code>ooda check</code></a> refuses it. See <a href="/guide/#Language.oot">language</a>.</p>
+          <p><strong><a href="/guide/#Safety.oot">Landlock and quotas</a>.</strong> Under <code>&amp;SysCap</code> the runtime can apply a Linux Landlock jail and POSIX <a href="/guide/#Options.oot"><code>setrlimit</code></a>. Empty allowlists and zero quotas fail closed. See <a href="/guide/#Limits.oot">how it works</a>.</p>
         </div>
       </details>
       <details class="drop">
         <summary>Pins</summary>
         <div class="drop-body">
-          <p><strong><a href="/guide/#Safety.oot">Cryptographic Identity</a>.</strong> A package's identity is mathematical: $ID = \text{SHA256}(Bytes)$. A different byte sequence is an entirely distinct package. <a href="/guide/#Packages.oot"><code>ooda launch --exec</code></a> verifies live binaries before transfer. See <a href="/guide/#Safety.oot">binary pins</a> and <a href="/guide/#Limits.oot">compiler limits</a>.</p>
-          <p><strong><a href="/guide/#Safety.oot">Foreign ELF Confinement</a>.</strong> Foreign ELF binaries cannot inherit or synthesize openOODA <a href="/guide/#Safety.oot">tokens</a>. Undeclared capabilities are refused at the entry gate. See <a href="/guide/#Limits.oot">how it works</a> and <a href="/guide/#Options.oot">commands</a>.</p>
-          <p><strong><a href="/guide/#Safety.oot">Measured Domain Isolation</a>.</strong> Isolates compute deterministic hashes over payload, token, and domain boundaries, guaranteeing verifiable hermetic execution. See <a href="/guide/#Safety.oot">capabilities</a>, <a href="/guide/#Limits.oot">limits</a>, and <a href="/guide/#Use.oot">first run</a>.</p>
+          <p><strong><a href="/guide/#Packages.oot">Package identity</a>.</strong> The lock line carries a sha256 of the bytes. A different byte string is a different package. <a href="/guide/#Packages.oot"><code>ooda launch --exec</code></a> checks sha, caps, and yank before it runs. See <a href="/guide/#Packages.oot">packages</a>.</p>
+          <p><strong><a href="/guide/#Safety.oot">Foreign ELF</a>.</strong> A foreign ELF does not receive openOODA tokens. Undeclared caps are refused. See <a href="/guide/#Safety.oot">capabilities</a>.</p>
+          <p><strong><a href="/guide/#Safety.oot">Measured isolate</a>.</strong> The isolate hash covers payload, token, and domain. It is a hash. It is not a hardware enclave. See <a href="/guide/#Limits.oot">how it works</a>.</p>
         </div>
       </details>
       <details class="drop">
         <summary>Locks</summary>
         <div class="drop-body">
-          <p><strong><a href="/guide/#Packages.oot">Capability-Bound Contracts</a>.</strong> Every <a href="/guide/#Packages.oot">lock line</a> binds <code>name@version#sha256#CapName</code>. Dependencies can never access undeclared system resources or exfiltrate state. See <a href="/guide/#Safety.oot">capabilities</a> and <a href="/guide/#Limits.oot">compiler verification</a>.</p>
-          <p><strong><a href="https://registry.openooda.org/">Store Ecosystem &amp; 402 Monetization</a>.</strong> <a href="/guide/#Packages.oot"><code>ooda add hello</code></a> resolves packages from decentralized registries. Packages declare value exchange natively via HTTP 402 / x402 protocol quotes. See <a href="/guide/#Pay.oot">pay / 402</a> and <a href="/guide/#Options.oot">commands</a>.</p>
-          <p>Systemic dependencies: <a href="/guide/#Packages.oot">packages</a>. Cryptographic integrity: <a href="/guide/#Safety.oot">binary pins</a>. Living defenses: <a href="/guide/#Morpher.oot">active defense</a>.</p>
+          <p><strong><a href="/guide/#Packages.oot">Lock line</a>.</strong> Each lock is <code>name@version#sha256#CapName</code>. The cap name is the token that package may use. See <a href="/guide/#Safety.oot">capabilities</a>.</p>
+          <p><strong><a href="https://registry.openooda.org/">Store and 402</a>.</strong> <a href="/guide/#Packages.oot"><code>ooda add hello</code></a> uses the stock store. A package may quote HTTP 402 / x402. See <a href="/guide/#Pay.oot">pay</a>.</p>
+          <p>More: <a href="/guide/#Packages.oot">packages</a>, <a href="/guide/#Safety.oot">pins</a>, <a href="/guide/#Morpher.oot">active defense</a>.</p>
         </div>
       </details>
       <details class="drop">
         <summary>Agents</summary>
         <div class="drop-body">
-          <p><strong><a href="/guide/#Options.oot">Surgical 90% Context Reduction</a>.</strong> Traditional languages force AI agents to parse sprawling codebases, causing context window exhaustion. openOODA provides a direct surgical loop: <a href="/guide/#Options.oot"><code>outline</code></a>, <a href="/guide/#Options.oot"><code>reflect</code></a>, <a href="/guide/#Use.oot"><code>fix</code></a>, and <a href="/guide/#Options.oot"><code>patch</code></a> one isolated AST function. See <a href="/guide/#Language.oot">language specs</a>.</p>
-          <p><strong><a href="/guide/#Options.oot">Machine-Deterministic Diagnostics</a>.</strong> <a href="/guide/#Options.oot"><code>ooda lsp</code></a> provides real-time completion while <a href="/guide/#Options.oot"><code>check --json-errors</code></a> feeds structured, deterministic compiler diagnostics back to autonomous agents. See <a href="/guide/#Limits.oot">how it works</a> and <a href="/guide/#Options.oot">all commands</a>.</p>
+          <p><strong><a href="/guide/#Options.oot">Small tools</a>.</strong> Use <a href="/guide/#Options.oot"><code>outline</code></a>, <a href="/guide/#Options.oot"><code>reflect</code></a>, <a href="/guide/#Use.oot"><code>fix</code></a>, and <a href="/guide/#Options.oot"><code>patch</code></a> on one file or one function. Do not dump a full emit. See <a href="/guide/#Language.oot">language</a>.</p>
+          <p><strong><a href="/guide/#Options.oot">Machine diagnostics</a>.</strong> <a href="/guide/#Options.oot"><code>ooda lsp</code></a> completes on <code>&amp;</code>. <a href="/guide/#Options.oot"><code>check --json-errors</code></a> prints structured errors. See <a href="/guide/#Options.oot">commands</a>.</p>
         </div>
       </details>
       <details class="drop">
@@ -343,17 +343,15 @@
             <li><code>~/.config/ooda/<a href="/guide/#Options.oot">env</a></code> — hermetic <code>PATH</code> and <code>OODA_*</code> variables</li>
           </ul>
           <p><code>. ~/.config/ooda/env</code></p>
-          <p><strong><a href="/guide/#Limits.oot">Zero Hidden State</a>.</strong> Pure XDG directory hierarchy eliminates configuration drift. <a href="/guide/#Use.oot"><code>ooda check</code></a> typechecks, <a href="/guide/#Use.oot"><code>ooda run</code></a> emits clean C for host <code>gcc</code>, and <a href="/guide/#Use.oot"><code>ooda test</code></a> validates inline <code>verify</code> contracts. See <a href="/guide/#Options.oot">commands</a> and <a href="/guide/#Limits.oot">limits</a>.</p>
+          <p><strong><a href="/guide/#Limits.oot">Product path</a>.</strong> <a href="/guide/#Use.oot"><code>ooda check</code></a> typechecks. <a href="/guide/#Use.oot"><code>ooda run</code></a> emits C, compiles with host <code>gcc</code>, and execs. <a href="/guide/#Use.oot"><code>ooda test</code></a> runs <code>verify</code>. See <a href="/guide/#Options.oot">commands</a>.</p>
         </div>
       </details>
       <details class="drop">
         <summary>Defense</summary>
         <div class="drop-body">
-          <p><strong><a href="/guide/#Morpher.oot">Moving Target Defense</a>.</strong> Inverts the economics of cyber warfare by turning static binaries into mutating organisms. Compiles polymorphic binaries on every build via <a href="/guide/#Morpher.oot">AST control flow flattening</a>, <a href="/guide/#Limits.oot">basic block permutation</a>, and quadratic residue <a href="/guide/#Language.oot">opaque predicates</a>, rendering Ghidra/IDA Pro analysis intractable.</p>
-          <p><strong><a href="/guide/#Morpher.oot">Exploit Mitigation</a>.</strong> Scans intermediate <a href="/guide/#Limits.oot">bytecode</a> across instruction boundaries to destroy unintended <a href="/guide/#Morpher.oot">0xC3 / 0xFF ROP/JOP gadgets</a> and encrypts embedded strings with dynamic rolling keys and <a href="/guide/#Safety.oot">stack-transient decrypters</a>.</p>
-          <p><strong><a href="/guide/#Morpher.oot">Cyber Deception</a>.</strong> Plants capability-starved <a href="/guide/#Morpher.oot">decoy symbols</a> (<code>admin_override</code>, <code>debug_backdoor</code>) and canary credentials (<code>sk_live_canary_*</code>). Probing a decoy triggers instant <a href="/guide/#Safety.oot">fail-closed isolation</a> and <a href="/guide/#Options.oot">threat alerts</a>.</p>
-          <p><strong><a href="/guide/#Morpher.oot">Autonomic Self-Healing</a>.</strong> Embedded in-memory watchdog registers <a href="/guide/#Limits.oot">SHA256 checksums</a> of <code>.text</code> pages at startup, detecting inline debugger/hook injections and rolling back pristine <a href="/guide/#Morpher.oot">gold-master bytes</a> live in RAM without crashing. See <a href="/guide/#Use.oot">runtime verification</a>.</p>
-          <p><strong><a href="/guide/#Safety.oot">Zero-Trust Confinement</a>.</strong> Strictly enforces <a href="/guide/#Safety.oot">Zero Ambient Authority</a>. Morphed dispatchers and honeypots cannot synthesize <a href="/guide/#Safety.oot">tokens</a> (<code>&amp;FsReadCap</code>, <code>&amp;ProcessCap</code>) or escape <a href="/guide/#Options.oot">Landlock jails</a>. Read <a href="/guide/#Morpher.oot">active defense</a> and <a href="/guide/#Safety.oot">capabilities</a>.</p>
+          <p><strong><a href="/guide/#Morpher.oot">Defense on by default</a>.</strong> Everyday <code>emit-c</code> keeps binary defense on. Use <code>--plain</code> or <code>--debug</code> to opt out. See <a href="/guide/#Morpher.oot">active defense</a>.</p>
+          <p><strong><a href="/guide/#Morpher.oot">What the morpher does</a>.</strong> It can flatten control flow, permute blocks, and rewrite gadget-like byte runs. String encrypt and decoy symbols live on that page. See <a href="/guide/#Limits.oot">how it works</a>.</p>
+          <p><strong><a href="/guide/#Safety.oot">Tokens still bind</a>.</strong> A morphed binary does not mint <code>&amp;FsReadCap</code> or <code>&amp;ProcessCap</code>. Landlock still needs <code>&amp;SysCap</code>. Read <a href="/guide/#Safety.oot">capabilities</a>.</p>
         </div>
       </details>
     </main>

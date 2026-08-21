@@ -1,63 +1,74 @@
-# HOME — The openOODA Thesis & Invariant Laws
+# HOME — What openOODA is
 
 File: guide/Home.oot
 User wiki. Canonical URL: https://openooda.org/guide/#Home.oot
-Pin: v0.205.0-beta.
+Pin: v0.207.0.
 
 [Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Commands](Options.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [Active Defense](Morpher.oot) [How it works](Limits.oot) [Pay](Pay.oot)
 
-## 1. Why openOODA Exists
+## 1. What it is
 
-In traditional systems languages (C, C++, Rust, Go, Zig), when a process runs, every imported routine inherits full ambient access to the filesystem, network, and memory. Security is typically handled through external scanners or complex OS configurations after the fact.
+openOODA is a systems language. You write `.oo` files.
+The product path typechecks the file, emits C through `chs_rt`, compiles with host `gcc`, and runs.
 
-openOODA builds security directly into the language and compiler: **an agent-native, capability-secure systems language with active sovereign binary defense on by default**.
+An effect needs a capability token. No token, no effect.
+`oodac` is the compiler. `ooda` is the driver.
+
+Linux x86_64 is the first-machine install. See [Start](Use.oot).
+
+## 2. Three rules
+
+### Authority
+
+A process does not get file, net, or exec rights by default.
+A function that does an effect takes a token, for example `&FsReadCap`.
+Missing or forged tokens fail closed. See [Capabilities](Safety.oot).
+
+### Binary defense
+
+`emit-c` is the everyday emit. Binary defense is on by default.
+Use `--plain` or `--debug` to turn it off. See [Active Defense](Morpher.oot).
+
+### Small tools
+
+Read a small slice of a file. Use `outline`, `reflect`, `fix`, and `patch`.
+Do not dump a full emit. See [Commands](Options.oot).
+
+## 3. Product path
 
 ```
-Traditional Languages (Ambient & Static)       openOODA (Sovereign & Living)
-────────────────────────────────────────       ──────────────────────────────
-• Any routine can access OS/Network            • Zero Ambient Authority (&Token required)
-• Static binaries easily reverse-engineered    • Metamorphic AST & ROP Gadget Destroyer
-• AI agents parse entire sprawling repos       • Surgical AST Loop (outline ➔ patch ➔ fix)
-• Runtime hooks hijack execution undetected    • In-memory SHA256 Watchdog & Live Rollback
+.oo source  ->  ooda check  ->  emit-c (chs_rt)  ->  gcc  ->  run
 ```
 
-## 2. The Three Invariant Laws of openOODA
-
-openOODA is founded on three architectural invariants:
-
-### 1. The Law of Authority
-Authority is not an ambient property of a process; it is an unforgeable capability token passed as an explicit parameter. If a function lacks `&FsReadCap` or `&NetCap`, the effect is mathematically impossible. Forged or missing tokens fail closed. See [Capabilities](Safety.oot).
-
-### 2. The Law of Morphological Diversity
-A static binary is a sitting target. Every openOODA compilation produces a distinct, morphologically diversified binary with control-flow flattening, encrypted strings, decoy honeypots, and self-healing RASP watchdogs. See [Active Defense](Morpher.oot).
-
-### 3. The Law of Minimality
-Autonomous AI agents fail when overwhelmed by context window bloat. openOODA delivers surgical tooling (`outline`, `reflect`, `fix`, `patch`), enabling agents to verify and refactor single AST functions with 90% less token consumption. See [Commands](Options.oot).
-
-## 3. The Product Execution Pipeline
-
-```
-.oo Source  ──►  ooda check  ──►  emit-c (chs_rt)  ──►  gcc  ──►  Fortified Binary
-```
-
-1. **Typecheck**: Fast single-pass type verification (`ooda check`).
-2. **Metamorphic Defense**: Eliminates ROP gadgets, flattens CFGs, and seals HMAC tokens.
-3. **Native C Emission**: Emits clean C paired with the minimal `chs_rt` runtime.
-4. **Host Compilation**: Compiles with host `gcc` into a high-performance native ELF.
-5. **Autonomic Runtime**: Enforces Landlock sandboxing and in-memory page verification.
+1. `ooda check` typechecks. Const `requires` / `ensures` fold here.
+2. `emit-c` writes C for `chs_rt`. Defense stays on unless you opt out.
+3. Host `gcc` builds the native binary.
+4. At run, Landlock and `setrlimit` apply when you pass `&SysCap`.
 
 Read more: [How it works](Limits.oot).
 
-## 4. Explore the System
+## 4. What this pin adds
 
-- [Start](Use.oot) — Install toolchain, write `hello.oo`, and run your first test.
-- [Language](Language.oot) — Structs, sum types, pattern matching, `Result[T, E]`, `SECRET` fields.
-- [Commands](Options.oot) — `ooda` CLI, LSP server, and surgical AI workflows.
-- [Packages](Packages.oot) — Cryptographic pins, dependency locks, and store catalog.
-- [Capabilities](Safety.oot) — Object-capabilities, HMAC attenuation, and Landlock jails.
-- [Active Defense](Morpher.oot) — MTD, exploit mitigation, honeynets, and RASP self-healing.
-- [How it works](Limits.oot) — Compiler internals, CHS ABI, and ARC memory model.
-- [Pay](Pay.oot) — Native HTTP 402 / x402 protocol monetization for packages.
+v0.207.0 keeps the C path as product.
+User method calls on imported structs compile and run.
+`requires s.len() > 0` lowers to `oo_chars_len`.
+`Result[List[Name]]` emits as `OoResL_Name`.
+A false Hoare triple returns a counterexample. Planted UNSAT does not report SAT.
+eBPF packs 8-byte insns. SPIR-V writes a compute header that starts with magic `0x07230203`.
+
+Leftover methods stay `ERR\tc_emit`. Device GPU dispatch stays residual.
+LLVM, WASM, and x86 emits are extra. They are not the everyday path.
+
+## 5. Explore
+
+- [Start](Use.oot) — Install, write `hello.oo`, check, run, test.
+- [Language](Language.oot) — Structs, sums, `match`, `Result`, `SECRET`.
+- [Commands](Options.oot) — `ooda` and `oodac`.
+- [Packages](Packages.oot) — Pins, locks, and the store.
+- [Capabilities](Safety.oot) — Tokens, HMAC, Landlock, writes.
+- [Active Defense](Morpher.oot) — Defense that is on by default.
+- [How it works](Limits.oot) — Rebuild, memory, extra emits.
+- [Pay](Pay.oot) — HTTP 402 / x402.
 
 Door: https://openooda.org/
 Guide: https://openooda.org/guide/#Home.oot

@@ -151,7 +151,7 @@ Add a library with `ooda add hello`. See [Packages](Packages.oot).
 Pick a backend or a flag from [Commands](Options.oot).
 Read [How it works](Limits.oot) when you want the product path in one place.
 
-[Language](Language.oot) shows struct methods, inline `if`, `for i in 0..(n - 1)`, and `Result[List[Name], Error]` with `match let`.
+[Language](Language.oot) shows struct methods, inline `if`, `for i in 0..(n - 1)`, and `Result[List[Name]]` with `match let`.
 [Capabilities](Safety.oot) shows Landlock under `&SysCap`, HMAC attenuation, and `SECRET` fields.
 
 ## 7. See also

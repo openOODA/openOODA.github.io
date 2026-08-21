@@ -26,6 +26,8 @@ ooda check <file.oo> [--json-errors]
 ooda build <file.oo> [-o out] [--target c|native|llvm]
 ooda run <file.oo> [--debug]
 ooda test <file.oo> [--fuzz]
+ooda gen module|service|test <name>
+ooda migrate up|down|rollback|redo|status [--json]
 ooda morph <file.oo> [-o out] [--entropy seed]
 ooda lsp [request.json]
 ooda bench <file.oo> [--run]
