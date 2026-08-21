@@ -22,10 +22,8 @@ The call does not run.
 Helpers take the tokens they need as parameters.
 You pass the token down.
 You cannot mint a token from bytes.
-A forged parent seal does not verify.
-HMAC attenuation makes a narrower child seal. The child is not the parent.
 
-No token, no effect.
+No token, no effect. Zero ambient authority.
 
 ## 2. How you pass one
 
@@ -39,11 +37,8 @@ pub fn main(fs: &FsReadCap) {
 }
 ```
 
-`read_file` takes `fs`.
-`load_notes` takes `fs`.
-`main` takes `fs`.
+`read_file` takes `fs`. `load_notes` takes `fs`. `main` takes `fs`.
 Every call site shows the permission.
-
 A function that only computes takes no token.
 
 ## 3. Prefer the small token
@@ -76,7 +71,6 @@ pub fn main(fs: &FsReadCap) {
 
 Write a file with `&FsWriteCap`.
 `write_file` also needs `OODA_FS_WRITEDIR`.
-That env is the directory the write may touch.
 Unset denies the write.
 
 ```
@@ -104,8 +98,7 @@ pub fn main(p: &ProcessCap) {
 Network ops take `&HttpCap`, `&TcpCap`, `&UdpCap`, or the broader `&NetCap`.
 Prefer the small one that matches the call.
 
-`&EnvCap` lets `env_get` read `OODA_*` and `OO_*` keys.
-Host keys stay out.
+`&EnvCap` lets `env_get` read `OODA_*` and `OO_*` keys. Host keys stay out.
 
 ```
 pub fn main(env: &EnvCap) {
@@ -115,12 +108,8 @@ pub fn main(env: &EnvCap) {
 
 ## 6. Heap and threads
 
-`&AllocCap` is the token for heap and bump arenas.
-Take it when you allocate a region.
-You do not take it for ordinary locals.
-
+`&AllocCap` is the token for heap and bump arenas. Take it when you allocate a region.
 `&ThreadCap` is the token for threads, channels, and actor restart.
-Take it when you start work on another thread.
 A single-thread program does not need it.
 
 ## 7. Sys, Landlock, and quotas
@@ -144,11 +133,27 @@ pub fn main(sys: &SysCap) {
 Empty allowlists fail closed.
 A call with no directories does not open the world.
 
-`setrlimit` also sits under `&SysCap`.
-Zero quotas fail closed.
-A memory, file, or CPU quota of zero is not a grant.
+`setrlimit` also sits under `&SysCap`. Zero quotas fail closed.
 
-## 8. Secrets
+## 8. HMAC attenuation
+
+HMAC attenuation makes a narrower child seal. The child is not the parent.
+A forged parent seal does not verify.
+
+```
+import "std/sec/objcap_hmac.oo";
+
+pub fn narrower(parent_key: String) -> String {
+    let parent: String = crypto_hmac_sha256_internal(parent_key, "rwx");
+    let child: String = cap_attenuate(parent, "r");
+    return child;
+}
+```
+
+`cap_attenuate_ok("", "r")` is false. Empty parent and empty rights fail closed.
+A forged 64-hex parent does not match the child of a real parent for the same rights.
+
+## 9. SECRET fields
 
 Mark a secret field. The compiler tracks it.
 
@@ -170,7 +175,7 @@ The sibling non-secret field is allowed.
 `process_exec` is a secret sink.
 Do not pass a secret field into it.
 
-## 9. Packages
+## 10. Packages and pins
 
 A lock line carries a sha256 and a declared cap name.
 
@@ -178,63 +183,36 @@ A lock line carries a sha256 and a declared cap name.
 name@version#sha256#CapName
 ```
 
-The hash is the bytes.
-The cap name is the token that package may use.
-
-Ingest pins and wraps.
-The pin is the sha256.
-The wrap is how the blob is stored.
-
+The hash is the bytes. The cap name is the token that package may use.
 `ooda add hello` verifies the stock catalog with minisign.
-
 Path traversal, extra caps, and yank refuse.
-
 `ooda launch --exec` runs the gated payload after sha, caps, and yank are ok.
 A marked untrusted body refuses.
 
-How to add a library: [Packages](Packages.oot).
-
-## 10. Binary pins
-
-The lock pins the exact bytes of a package with a sha256 hash.
 A foreign ELF file does not receive Ooda tokens from a lock line.
 Measured isolate hashes the payload, the token, and the domain.
 That is a hash, not a hardware enclave.
-The file on disk stays the same so a rebuild can match.
-Load-time layout change is research, not this path.
+How to add a library: [Packages](Packages.oot).
 
-## 11. Fuel budget
+## 11. Fuel, path, host, hop-2
 
-A fuel budget is a struct. Import it. It is not a compiler token.
-
-```
-import "std/sec/fuel_budget.oo";
-```
-
-You pass `FuelBudget` around. Zero remaining fails closed.
+Import `std/sec/fuel_budget.oo`. You pass `FuelBudget` around. Zero remaining fails closed.
 It is not `&FuelCap`. `oodac` has no `FuelCap` type.
-
-## 12. Path scope
 
 Import `std/sec/path_scope.oo`. A path must sit under the prefix.
 `/tmp` does not allow `/tmp2`. A `..` segment is denied.
 You still pass `&FsReadCap` to read a file.
 
-## 13. Host scope
-
 Import `std/sec/host_scope.oo`. Exact host, or `*.example.com` at a dot boundary.
 It does not fetch. You still pass `&HttpCap` or `&NetCap` to talk.
-
-## 14. Hop-2 send
 
 Import `std/sec/agent_send.oo`. Hop 0 and hop 1 may send. Empty hop and hop 2 fail closed.
 A body that names `&NameCap` or `oo_cap_grant` fails closed.
 `ooda launch --exec` refuses a marked untrusted body.
-`untrusted_sink_denied` treats `launch` like `patch` when a blob is marked.
 
 Check: `ooda run scripts/cap_scope_smoke.oo`.
 
-## 15. How to use caps well
+## 12. How to use caps well
 
 1. Declare the tokens the function actually uses.
 2. Pass them down. Every effect call takes its token.

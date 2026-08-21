@@ -30,15 +30,17 @@ Mac, Windows, and Linux ARM are not this install. See [How it works](Limits.oot)
 First machine:
 
 ```
-curl -fsSL https://openooda.org/install | bash
+curl -fsSL https://openooda.org/install.sh | bash
 ```
 
 You can download the script and read it first:
 
 ```
-curl -fsSL https://openooda.org/install -o ooda-install
+curl -fsSL https://openooda.org/install.sh -o ooda-install
 bash ooda-install
 ```
+
+Old URL `/install` redirects to `/install.sh`.
 
 The script looks at the OS and CPU. On Linux x86_64 it clones the tree, builds the CLI if needed, and copies `ooda`, `oodac`, `std`, and `runtime` under `~/.local`. It writes `~/.config/ooda/env`.
 
@@ -148,6 +150,9 @@ You now have a compiler, a file, a check, a run, and a test.
 Add a library with `ooda add hello`. See [Packages](Packages.oot).
 Pick a backend or a flag from [Commands](Options.oot).
 Read [How it works](Limits.oot) when you want the product path in one place.
+
+[Language](Language.oot) shows struct methods, inline `if`, `for i in 0..(n - 1)`, and `Result[List[Name], Error]` with `match let`.
+[Capabilities](Safety.oot) shows Landlock under `&SysCap`, HMAC attenuation, and `SECRET` fields.
 
 ## 7. See also
 

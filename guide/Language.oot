@@ -60,14 +60,16 @@ ooda test hello.oo
 
 First run: [Start](Use.oot).
 The product path: [How it works](Limits.oot).
-`verify` sits next to the function it names.
 
-## 3. Option and Result
+## 3. Option, Result, and nested Result
 
 `Int`, `String`, `Bool`, `Float`, and `Void` are the primitives.
 `Option[Int]` and `Result[Int]` are sum types check tracks.
 `type Name = struct { ... }` names a record.
 `List[Name]` and `List[Float]` emit. One-level `List[List[Int]]` emits. Deeper nests stay residual.
+
+`Result[List[Name], Error]` is a Result whose Ok payload is a list of records.
+Handle it with `match` or `match let`. Do not discard it.
 
 Unused `Ok`, `Err`, or `Some` fail `ooda check`.
 A discarded `Result` fails `ooda check`.
@@ -85,46 +87,97 @@ pub fn main() {
 That `boom();` fails check. Bind the value, `match` it, or use `?`.
 
 `ooda fix` can wrap a discarded `Result`. See [Commands](Options.oot).
-A refused program names the cause. `check --json-errors` is the machine form.
 
-## 4. match and ?
+## 4. match, match let, and ?
 
 `match` must be exhaustive.
 Every constructor the type names must appear.
 An annotated `Option` or `Result` match whose only arm is `_` is refused.
 
 ```
-pub fn label(r: Result[String, String]) -> String {
+type Name = struct { s: String };
+type Error = struct { msg: String };
+
+pub fn label(r: Result[List[Name], Error]) -> String {
     return match r {
-        Ok(v) => v,
-        Err(e) => e,
+        Ok(names) => "ok",
+        Err(err) => err.msg,
     };
 }
-```
 
-This fails check:
-
-```
-let x: Option = Some(1);
-let y = match x {
-    _ => 0,
-};
+pub fn main() {
+    match let x = load_names() {
+        Ok(names) => {
+            println("ok");
+        },
+        Err(e) => {
+            println(e.msg);
+        }
+    }
+}
 ```
 
 `?` is the try postfix. It sits after a call.
 
 ```
-pub fn boom() -> Result[String, String] {
-    return Ok("yes");
-}
-
 pub fn main() {
     let y = boom()?;
     println(y);
 }
 ```
 
-## 5. Contracts
+## 5. Struct methods
+
+A method takes a receiver. Call it on a value or on a borrow.
+
+```
+type Point = struct { x: Int, y: Int };
+
+pub fn scale(self: Point) -> Point {
+    return Point { x: self.x * 10, y: self.y * 10 };
+}
+
+pub fn shift_x(pt: &Point, dx: Int) -> Int {
+    return pt.x + dx;
+}
+
+pub fn main() {
+    let p = Point { x: 2, y: 3 };
+    let q = p.scale();
+    let n = (&p).shift_x(1);
+    println(n);
+}
+```
+
+Call `p.scale()` on the value. Call `(&p).shift_x()` on a borrow.
+The borrowed receiver is `pt: &Point`.
+
+## 6. Inline if and for ranges
+
+`if` is an expression. You may add its value.
+
+```
+pub fn pick(val: Int, cond: Bool, a: Int, b: Int) -> Int {
+    let y = val + (if cond { a } else { b });
+    return y;
+}
+```
+
+`for x in xs` walks a list.
+`for i in 0..n` walks a range.
+The high bound may be an expression:
+
+```
+pub fn sum_prefix(n: Int) -> Int {
+    let mut t = 0;
+    for i in 0..(n - 1) {
+        t = t + i;
+    }
+    return t;
+}
+```
+
+## 7. Contracts
 
 A function header may carry `requires`, `ensures`, and `spec`.
 Those clauses can fold at check time.
@@ -140,10 +193,9 @@ pub fn held(x: Int) -> Int
 ```
 
 A false const clause fails the check. You do not wait for run.
-The same story on [How it works](Limits.oot).
 Full SMT stays residual.
 
-## 6. Capability tokens
+## 8. Capability tokens
 
 An effect takes a token argument, for example `&FsReadCap`.
 No token, no effect.
@@ -159,44 +211,32 @@ Prefer the small token.
 
 The token table: [Commands](Options.oot).
 How tokens work: [Capabilities](Safety.oot).
-How tokens sit on the path: [How it works](Limits.oot).
 
-## 7. SECRET taint
+## 9. SECRET taint
 
-Mark a name secret.
-Printing a secret field is refused.
-Printing a sibling field that is not secret is allowed.
+Mark a name secret. Printing a secret field is refused.
+The sibling field that is not secret is allowed.
 
 ```
 type Creds = struct { token: String, name: String };
 // SECRET: token
 
 pub fn main() {
-    let token = "s3cret-payload";
-    let c = Creds { token: token, name: "alice" };
+    let c = Creds { token: "s3cret", name: "alice" };
     println(c.name);
 }
 ```
 
-`println(c.token)` fails check.
-`println(c.name)` is allowed.
-`process_exec` is a secret sink.
+`println(c.token)` fails check. `process_exec` is a secret sink.
+Landlock, HMAC attenuation, and `SECRET` fields: [Capabilities](Safety.oot).
 
-## 8. Lists, loops, and sums
+## 10. Sums and product std
 
-`for x in xs` walks a list. `for i in 0..n` walks a range.
-`type Name = A(Int) | B(String) | Empty` is a tagged sum. Int payload binds directly; String payload binds `.s0`; Unit variants (`Empty`, `On`/`Off`) are bare identifiers.
+`type Flag = A(Int) | B(String) | Empty` is a tagged sum.
 `&mut Name` writes through. `(*p).f = rhs` writes the field.
 
-Const header contracts fold at check time.
-
-## 9. Product std
-
-Product std is `ooda/std`.
-Import from that tree.
+Product std is `ooda/std`. Import from that tree.
 How you add more code: [Packages](Packages.oot).
-
-Names that ship include `path_join`, `sha256`, and regex `nfa_simulate` / `dfa_compile`.
 
 ```
 import "std/fs/path.oo";

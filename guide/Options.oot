@@ -45,8 +45,8 @@ ooda pm add|ingest|launch|remove|update|outdated|why|tree|vendor|clean|audit|sbo
 ooda install
 ```
 
-The public first-machine command is `curl -fsSL https://openooda.org/install | bash`.
-That URL is a host script. It is not `.oo`. Linux x86_64 only. Needs `git` and `gcc`.
+The public first-machine command is `curl -fsSL https://openooda.org/install.sh | bash`.
+That URL is a host script (`openOODA.github.io/install.sh`). It is not `.oo`. Linux x86_64 only. Needs `git` and `gcc`. Old `/install` redirects.
 `ooda install` is the checkout copy after you already have `ooda`. It copies tree `bin/ooda`, `oodac/oodac`, `std`, and `runtime` onto XDG from a checkout.
 
 `check --json-errors` prints machine diagnostics for an editor or a script.
@@ -169,6 +169,10 @@ A function that does an effect takes a token argument, for example `&FsReadCap`.
 Take `&FsReadCap` when you only read. Take `&HttpCap` when you only fetch. Take `&SysCap` when you need Landlock or `setrlimit`.
 `&GpuCap` CPU/noop launch is product. Device GPU dispatch is residual.
 
-On Linux, `&SysCap` can apply a Landlock jail and POSIX `setrlimit`. See [Capabilities](Safety.oot).
+On Linux, `&SysCap` can apply a Landlock jail and POSIX `setrlimit`. HMAC attenuation and `SECRET` fields sit on the same page. See [Capabilities](Safety.oot).
+
+## 7. Language forms
+
+Struct methods, inline `if`, `for i in 0..(n - 1)`, and `Result[List[Name], Error]` with `match let` are on [Language](Language.oot).
 
 [Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Commands](Options.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [Active Defense](Morpher.oot) [How it works](Limits.oot) [Pay](Pay.oot)
