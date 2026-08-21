@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # openOODA first-boot install.
 # This is a host script. It is not .oo. You cannot run .oo until ooda exists.
-# Pin: v0.207.0
+# Pin: v0.208.0
 # Linux x86_64 only. Needs git and gcc.
 #
 #   curl -fsSL https://openooda.org/install.sh | bash
@@ -13,7 +13,7 @@
 
 set -euo pipefail
 
-PIN="v0.207.0"
+PIN="v0.208.0"
 REPO="https://github.com/openOODA/ooda.git"
 
 die() {

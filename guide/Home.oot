@@ -2,7 +2,7 @@
 
 File: guide/Home.oot
 User wiki. Canonical URL: https://openooda.org/guide/#Home.oot
-Pin: v0.207.0.
+Pin: v0.208.0.
 
 [Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Commands](Options.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [Active Defense](Morpher.oot) [How it works](Limits.oot) [Pay](Pay.oot)
 
@@ -49,12 +49,15 @@ Read more: [How it works](Limits.oot).
 
 ## 4. What this pin adds
 
-v0.207.0 keeps the C path as product.
-User method calls on imported structs compile and run.
-`requires s.len() > 0` lowers to `oo_chars_len`.
-`Result[List[Name]]` emits as `OoResL_Name`.
-A false Hoare triple returns a counterexample. Planted UNSAT does not report SAT.
-eBPF packs 8-byte insns. SPIR-V writes a compute header that starts with magic `0x07230203`.
+v0.208.0 keeps the C path as product.
+The standard library packs HTTP/2, WebSocket, DNS, and MQTT bytes.
+ChaCha20-Poly1305 seals a message. Open fails closed on a bad tag.
+Ed25519 multiplies points over 2^255-19. Compress then decompress recovers the point.
+Shamir recovers a secret from k shares and refuses k-1 shares.
+TOTP builds 6-digit and 8-digit codes on 30-second steps.
+BLAS, LU, and Householder QR run on small Float matrices.
+Inspectors read ELF64, Mach-O, and WASM headers.
+Huffman and LZ77 restore source bytes after encode then decode.
 
 Leftover methods stay `ERR\tc_emit`. Device GPU dispatch stays residual.
 LLVM, WASM, and x86 emits are extra. They are not the everyday path.

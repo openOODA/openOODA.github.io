@@ -141,6 +141,8 @@ Import from there. That is the library the compiler knows.
 
 A function in std that does an effect still takes a token. Std does not grant ambient authority.
 
+This pin adds HTTP/2, WebSocket, DNS, and MQTT byte packs. It adds ChaCha20-Poly1305, Ed25519, Shamir, and TOTP. It adds BLAS, LU, QR, ELF64/Mach-O/WASM inspect, Huffman, and LZ77. See [Home](Home.oot).
+
 ## 10. Same emit, same bytes
 
 Two `emit-c` of `fixtures/hello.oo` are byte-identical.

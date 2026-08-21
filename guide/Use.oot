@@ -151,6 +151,7 @@ Add a library with `ooda add hello`. See [Packages](Packages.oot).
 Pick a backend or a flag from [Commands](Options.oot).
 Read [How it works](Limits.oot) when you want the product path in one place.
 
+[Home](Home.oot) lists the standard library packs on this pin.
 [Language](Language.oot) shows struct methods, inline `if`, `for i in 0..(n - 1)`, and `Result[List[Name]]` with `match let`.
 [Capabilities](Safety.oot) shows Landlock under `&SysCap`, HMAC attenuation, and `SECRET` fields.
 

@@ -19,14 +19,24 @@
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
   <script>
     (function () {
+      var THEMES = ["night", "paper", "magma", "flare", "solar", "cyber", "frost", "tokyo", "laser"];
       var m = document.cookie.match(/(?:^|; )ooda-theme=([^;]*)/);
-      var t = (m && m[1] === "dark") || (typeof localStorage !== "undefined" && localStorage.getItem("ooda-theme") === "dark") ? "dark" : "light";
+      var stored = (m && m[1]) || (typeof localStorage !== "undefined" && localStorage.getItem("ooda-theme"));
+      var t = (stored && THEMES.indexOf(stored) !== -1) ? stored : "night";
       document.documentElement.setAttribute("data-theme", t);
     })();
   </script>
   <style>
-    :root { --bg: #fff; --fg: #000; --muted: #444; }
-    html[data-theme="dark"] { --bg: #000; --fg: #e8e8e8; --muted: #9a9a9a; }
+    :root { --bg: #000000; --fg: #e8e8e8; --muted: #9a9a9a; --panel: #141414; }
+    html[data-theme="night"] { --bg: #000000; --fg: #e8e8e8; --muted: #9a9a9a; --panel: #141414; }
+    html[data-theme="paper"] { --bg: #ffffff; --fg: #000000; --muted: #444444; --panel: #f2f2f2; }
+    html[data-theme="magma"] { --bg: #140d0f; --fg: #ff6b6b; --muted: #a34848; --panel: #221216; }
+    html[data-theme="flare"] { --bg: #181008; --fg: #ffa726; --muted: #a86520; --panel: #26170a; }
+    html[data-theme="solar"] { --bg: #002b36; --fg: #ffd166; --muted: #93a1a1; --panel: #073642; }
+    html[data-theme="cyber"] { --bg: #040a06; --fg: #00ff66; --muted: #008833; --panel: #08170c; }
+    html[data-theme="frost"] { --bg: #16202a; --fg: #80ffea; --muted: #5c8d99; --panel: #1f2d3a; }
+    html[data-theme="tokyo"] { --bg: #1a1b26; --fg: #7dcfff; --muted: #565f89; --panel: #24283b; }
+    html[data-theme="laser"] { --bg: #18122b; --fg: #ea047e; --muted: #8b5cf6; --panel: #251b3d; }
     html { background: var(--bg); color: var(--fg); height: 100%; }
     body {
       margin: 0;
@@ -139,7 +149,7 @@
   <header>
     <div class="brand-row">
       <a class="brand" href="/">openOODA</a>
-      <a class="ver" href="https://github.com/openOODA/ooda/releases" title="GitHub release notes">v0.207.0</a>
+      <a class="ver" href="https://github.com/openOODA/ooda/releases" title="GitHub release notes">v0.208.0</a>
     </div>
   </header>
   <div class="wrap">
@@ -165,19 +175,26 @@
     </footer>
     </div>
   </div>
-  <button type="button" id="theme">dark</button>
+  <button type="button" id="theme">paper</button>
   <script>
     (function () {
       var key = "ooda-theme";
+      var THEMES = ["night", "paper", "magma", "flare", "solar", "cyber", "frost", "tokyo", "laser"];
       function apply(t) {
+        if (THEMES.indexOf(t) === -1) t = "night";
         document.documentElement.setAttribute("data-theme", t);
         var b = document.getElementById("theme");
-        if (b) b.textContent = t === "dark" ? "light" : "dark";
+        if (b) {
+          var nextIdx = (THEMES.indexOf(t) + 1) % THEMES.length;
+          b.textContent = THEMES[nextIdx];
+        }
       }
-      apply(document.documentElement.getAttribute("data-theme") || "light");
+      apply(document.documentElement.getAttribute("data-theme") || "night");
       var b = document.getElementById("theme");
       if (b) b.onclick = function () {
-        var n = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+        var cur = document.documentElement.getAttribute("data-theme") || "night";
+        var nextIdx = (THEMES.indexOf(cur) + 1) % THEMES.length;
+        var n = THEMES[nextIdx];
         localStorage.setItem(key, n);
         document.cookie = key + "=" + n + ";path=/;domain=.openooda.org;max-age=31536000;SameSite=Lax";
         apply(n);
