@@ -47,8 +47,10 @@
       font-weight: 700; letter-spacing: 0.08em; color: var(--bg);
       background: var(--fg); padding: 0.2rem 0.45rem; text-decoration: none; white-space: nowrap;
     }
-    .ver { font-size: 0.85rem; white-space: nowrap; }
+    .ver { font-size: 0.85rem; white-space: nowrap; color: var(--fg); text-decoration: none; }
+    .ver:hover { text-decoration: underline; text-decoration-thickness: 2px; }
     #theme {
+      position: fixed; right: 1rem; bottom: 1rem; z-index: 20;
       font: inherit; background: var(--bg); color: var(--fg);
       border: 2px solid var(--fg); padding: 0.15rem 0.55rem; cursor: pointer; white-space: nowrap;
     }
@@ -99,7 +101,7 @@
     .mail .note { margin: 0; font-size: 0.85rem; color: var(--muted); grid-column: 1 / -1; }
     a { color: var(--fg); }
     a:hover { text-decoration-thickness: 2px; }
-    #gh { position: fixed; right: 1rem; bottom: 1rem; z-index: 20; color: var(--fg); background: var(--bg); padding: 0.15rem 0.35rem; }
+    #gh { color: var(--fg); }
     #skip {
       position: absolute; left: 0.5rem; top: 0.5rem; z-index: 30;
       background: var(--bg); color: var(--fg); padding: 0.15rem 0.45rem;
@@ -112,12 +114,8 @@
     @media (max-width: 800px) {
       .wrap { grid-template-columns: 1fr; }
       aside { position: static; border-right: 0; border-bottom: 1px solid var(--fg); padding-bottom: 1rem; }
-      #gh {
-        position: static; display: block;
-        margin-top: 0.75rem; padding: 0.75rem 0 0;
-        border-top: 1px solid var(--fg);
-      }
-      #theme, .mail #join, .mail input[type="email"] {
+      #theme { min-height: 44px; }
+      .mail #join, .mail input[type="email"] {
         min-height: 44px; padding: 0.55rem 0.85rem; box-sizing: border-box;
       }
       .global a {
@@ -141,9 +139,8 @@
   <header>
     <div class="brand-row">
       <a class="brand" href="/">openOODA</a>
-      <span class="ver">v0.205.0-beta</span>
+      <a class="ver" href="https://github.com/openOODA/ooda/releases" title="GitHub release notes">v0.206.0</a>
     </div>
-    <button type="button" id="theme">dark</button>
   </header>
   <div class="wrap">
     <aside>
@@ -151,8 +148,8 @@
         <a href="/">home</a>
         <a href="/guide/">guide</a>
         <a href="https://registry.openooda.org/">store</a>
+        <a id="gh" href="https://github.com/openOODA">github</a>
       </nav>
-      <a id="gh" href="https://github.com/openOODA">github</a>
     </aside>
     <div class="col">
     <main>
@@ -168,6 +165,7 @@
     </footer>
     </div>
   </div>
+  <button type="button" id="theme">dark</button>
   <script>
     (function () {
       var key = "ooda-theme";

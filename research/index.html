@@ -35,8 +35,10 @@
       font-weight: 700; letter-spacing: 0.08em; color: var(--bg);
       background: var(--fg); padding: 0.2rem 0.45rem; text-decoration: none; white-space: nowrap;
     }
-    .ver { font-size: 0.85rem; white-space: nowrap; }
+    .ver { font-size: 0.85rem; white-space: nowrap; color: var(--fg); text-decoration: none; }
+    .ver:hover { text-decoration: underline; text-decoration-thickness: 2px; }
     #theme {
+      position: fixed; right: 1rem; bottom: 1rem; z-index: 20;
       font: inherit; background: var(--bg); color: var(--fg);
       border: 2px solid var(--fg); padding: 0.15rem 0.55rem; cursor: pointer; white-space: nowrap;
     }
@@ -58,7 +60,7 @@
     pre { border: 1px solid var(--fg); padding: 0.7rem; overflow: auto; background: var(--panel); }
     code { font-family: inherit; background: var(--panel); padding: 0.05rem 0.25rem; }
     pre code { background: none; padding: 0; }
-    #gh { position: fixed; right: 1rem; bottom: 1rem; z-index: 20; color: var(--fg); background: var(--bg); padding: 0.15rem 0.35rem; }
+    #gh { color: var(--fg); }
     @media (max-width: 800px) {
       .wrap { grid-template-columns: 1fr; }
       aside { position: static; max-height: none; border-right: 0; border-bottom: 1px solid var(--fg); }
@@ -67,13 +69,11 @@
   </style>
 </head>
 <body>
-  <a id="gh" href="https://github.com/openOODA">github</a>
   <header>
     <div class="brand-row">
       <a class="brand" href="/">openOODA</a>
-      <span class="ver">v0.205.0-beta</span>
+      <a class="ver" href="https://github.com/openOODA/ooda/releases" title="GitHub release notes">v0.206.0</a>
     </div>
-    <button type="button" id="theme">dark</button>
   </header>
   <div class="wrap">
     <aside>
@@ -81,11 +81,13 @@
         <a href="/">home</a>
         <a href="/guide/">guide</a>
         <a href="https://registry.openooda.org/">registry</a>
+        <a id="gh" href="https://github.com/openOODA">github</a>
       </nav>
       <nav class="local" id="nav-list"></nav>
     </aside>
     <main id="content"><p>Select a paper.</p></main>
   </div>
+  <button type="button" id="theme">dark</button>
   <script>
     const papers = [{"file": "RP-1-1-philosophy-ooda-loop-speed.oot", "title": "RP-1.1: Philosophy of speed (OODA loop)"}, {"file": "RP-1-2-mathematical-contracts.oot", "title": "RP-1.2: Mathematical contracts (requires/ensures)"}, {"file": "RP-1-3-data-oriented-design-soa.oot", "title": "RP-1.3: Data-oriented design & SoA layout"}, {"file": "RP-1-4-first-class-ast-macros.oot", "title": "RP-1.4: First-class AST macros"}, {"file": "RP-1-5-compile-time-type-state.oot", "title": "RP-1.5: Compile-time type-state machines"}, {"file": "RP-2-1-surgical-ast-patching.oot", "title": "RP-2.1: Surgical AST Patching and JSON Diagnostics"}, {"file": "RP-2-2-token-minimized-apis.oot", "title": "RP-2.2: Token-Minimized APIs"}, {"file": "RP-2-2b-surgical-patch-replace-fn.oot", "title": "RP-2.2b: Surgical Function Replacement"}, {"file": "RP-2-3-intent-driven-compilation.oot", "title": "RP-2.3: Intent-Driven Compilation (Telepathic AST)"}, {"file": "RP-2-4-global-hive-mind-fuzzing.oot", "title": "RP-2.4: Global Hive-Mind Fuzzing"}, {"file": "RP-3-1-unified-capability-sandboxing.oot", "title": "RP-3.1: Unified Capability Sandboxing"}, {"file": "RP-3-10-shadow-state-semantic-reversion.oot", "title": "RP-3.10: Shadow-State Semantic Reversion"}, {"file": "RP-3-11-polymorphic-metamorphic-binaries.oot", "title": "RP-3.11: Polymorphic and Metamorphic Binaries"}, {"file": "RP-3-2-time-entropy-sandboxing.oot", "title": "RP-3.2: Time and Entropy Sandboxing for Deterministic Systems"}, {"file": "RP-3-3-memory-quotas-heap-sandbox.oot", "title": "RP-3.3: Memory Quotas (Heap Sandboxing)"}, {"file": "RP-3-4-cpu-quotas-maxcycles.oot", "title": "RP-3.4: CPU Quotas and Execution Sandboxing via the MaxCycles Attribute"}, {"file": "RP-3-5-static-taint-secret.oot", "title": "RP-3.5: Static Taint Tracking and Information-Flow Control"}, {"file": "RP-3-6-automated-contract-fuzzer.oot", "title": "RP-3.6: Automated Contract Fuzzer"}, {"file": "RP-3-7-zero-ms-gc-arc-raii.oot", "title": "RP-3.7: Zero Millisecond Garbage Collection and Memory Safety (ARC/RAII)"}, {"file": "RP-3-8-temporal-memory-rollback.oot", "title": "RP-3.8: Temporal Memory (State Rollback) for Resilient Agent Systems"}, {"file": "RP-3-9-cryptographic-call-graph-integrity.oot", "title": "RP-3.9: Theoretical Framework for Cryptographic Call-Graph Integrity in openOODA"}, {"file": "RP-4-1-1-development-bytecode-vm.oot", "title": "RP-4.1.1: Development Bytecode Virtual Machine"}, {"file": "RP-4-1-2-production-llvm.oot", "title": "RP-4.1.2: Production LLVM Backend Architecture"}, {"file": "RP-4-1-3-gpu-npu-acceleration.oot", "title": "RP-4.1.3: Universal GPU/NPU Acceleration Architecture"}, {"file": "RP-4-1-4-direct-webassembly.oot", "title": "RP-4.1.4: Direct WebAssembly"}, {"file": "RP-4-1-5-bare-metal-embedded.oot", "title": "RP-4.1.5: Bare-metal embedded (`#![no_std]`)"}, {"file": "RP-4-2-native-hot-code-reloading.oot", "title": "RP-4.2: Native Hot-Code Reloading for High-Availability Virtual Machines"}, {"file": "RP-4-3-1-cross-language-lto.oot", "title": "RP-4.3.1: Cross-language Link-Time Optimization (LTO)"}, {"file": "RP-4-3-2-deterministic-reproducible-builds.oot", "title": "RP-4.3.2: Deterministic reproducible builds"}, {"file": "RP-4-3-3-compile-time-ffi-generation.oot", "title": "RP-4.3.3: Compile-Time FFI Generation"}, {"file": "RP-4-4-holographic-data-persistence.oot", "title": "RP-4.4: Holographic data persistence"}, {"file": "RP-4-x-backend-c-product-floor.oot", "title": "RP-4.x: Backend-C Architecture"}, {"file": "RP-5-1-self-hosted-ecosystem.oot", "title": "RP-5.1: The Necessity of a Fully Self-Hosted Ecosystem in openOODA"}, {"file": "RP-5-1a-pure-product-compiler-cli.oot", "title": "RP-5.1a: Theoretical Design for a Pure Product Compiler and Command-Line Interface"}, {"file": "RP-5-2-verifiable-web-of-code.oot", "title": "RP-5.2: Verifiable Web of Code"}, {"file": "RP-5-3-fearless-concurrency.oot", "title": "RP-5.3: Fearless Concurrency"}, {"file": "RP-5-4-stdlib-core-vs-os.oot", "title": "RP-5.4: Standard Library Architecture: Core Versus Operating System Separation"}, {"file": "RP-5-5-narrative-diagnostics.oot", "title": "Narrative Diagnostics in Artificial Intelligence-Native Compilers"}, {"file": "RP-5-6-hitl-testing.oot", "title": "Human-in-the-Loop Testing for Artificial Intelligence-Native Languages"}, {"file": "RP-5-7-universal-native-lsp.oot", "title": "Universal Native Language Server Protocol Integration"}, {"file": "RP-6-1-tension-metamorphic-vs-deterministic.oot", "title": "The Boundary Policy: Resolving the Tension Between Metamorphic Binaries and Deterministic Builds"}, {"file": "RP-6-2-tension-arc-vs-temporal-memory.oot", "title": "Tension Resolution: Automatic Reference Counting versus Temporal Memory"}, {"file": "RP-6-3-tension-caps-vs-ffi.oot", "title": "Capability Sandboxing Versus Foreign Function Interfaces"}, {"file": "RP-ES-1-es-ai-native-systems-language.oot", "title": "Artificial Intelligence-Native Systems Language Architecture"}, {"file": "RP-ES-2-es-capability-secure.oot", "title": "Capability-Secure by Construction in Systems Languages"}, {"file": "RP-ES-3-es-self-testing.oot", "title": "RP-ES.3: Self-Testing Language Surface Architecture"}, {"file": "RP-ES-4-es-subsecond-feedback.oot", "title": "RP-ES.4: A Sub-Second Development Feedback Architecture for Continuous Verification"}, {"file": "RP-ES-5-es-zero-day-defense.oot", "title": "RP-ES.5: Zero-Day Defense Architecture"}, {"file": "RP-ES-6-es-scale-embedded-to-network.oot", "title": "RP-ES.6: Embedded to Global Verifiable Network Architecture"}];
     const navList = document.getElementById("nav-list");
