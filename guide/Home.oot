@@ -2,7 +2,7 @@
 
 File: guide/Home.oot
 User wiki. Canonical URL: https://openooda.org/guide/#Home.oot
-Pin: v0.208.0.
+Pin: v0.209.0.
 
 [Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Commands](Options.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [Active Defense](Morpher.oot) [How it works](Limits.oot) [Pay](Pay.oot)
 
@@ -49,15 +49,22 @@ Read more: [How it works](Limits.oot).
 
 ## 4. What this pin adds
 
-v0.208.0 keeps the C path as product.
-The standard library packs HTTP/2, WebSocket, DNS, and MQTT bytes.
-ChaCha20-Poly1305 seals a message. Open fails closed on a bad tag.
-Ed25519 multiplies points over 2^255-19. Compress then decompress recovers the point.
-Shamir recovers a secret from k shares and refuses k-1 shares.
-TOTP builds 6-digit and 8-digit codes on 30-second steps.
-BLAS, LU, and Householder QR run on small Float matrices.
-Inspectors read ELF64, Mach-O, and WASM headers.
-Huffman and LZ77 restore source bytes after encode then decode.
+v0.209.0 keeps the C path as product.
+The standard library packs PostgreSQL v3 StartupMessage and Query.
+MySQL packs handshake v10, COM_QUERY, OK, and ERR. ERR is not OK.
+RESP recovers Simple String, Error, Integer, Bulk String, and Array.
+The SQL lexer emits SELECT and WHERE and refuses garbage.
+A B-tree splits full nodes. A missing key is not found.
+A Bloom filter never reports an inserted key as absent.
+LRU evicts the least-recent key. A skip list stays ordered.
+vec2 and vec3 compute dot, cross, magnitude, lerp, and reflection.
+look_at and perspective are not identity. Translate then invert recovers a point.
+An R-tree overlap and nearest-neighbor query hit the inserted box.
+A convex hull has a positive area.
+Gaussian, Sobel, and Laplacian change pixels.
+A biquad low-pass and high-pass differ on a DC step.
+Linear and sinc resample change length with the sample-rate ratio.
+HTTP/2, WebSocket, DNS, MQTT, ChaCha20-Poly1305, Ed25519, Shamir, TOTP, BLAS, LU, QR, ELF, Huffman, and LZ77 stay in the library.
 
 Leftover methods stay `ERR\tc_emit`. Device GPU dispatch stays residual.
 LLVM, WASM, and x86 emits are extra. They are not the everyday path.

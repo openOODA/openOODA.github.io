@@ -291,7 +291,7 @@
   <header>
     <div class="brand-row">
       <a class="brand" href="/">openOODA</a>
-      <a class="ver" href="https://github.com/openOODA/ooda/releases" title="GitHub release notes">v0.208.0</a>
+      <a class="ver" href="https://github.com/openOODA/ooda/releases" title="GitHub release notes">v0.209.0</a>
     </div>
     <div class="header-actions">
       <form class="mail-header" id="mail" action="https://collect.openooda.org/v1/emails" method="post">
@@ -326,14 +326,15 @@
         </div>
       </details>
       <details class="drop">
-      <details class="drop">
         <summary>Libraries</summary>
         <div class="drop-body">
-          <p><strong><a href="/guide/#Home.oot">Wire packs</a>.</strong> HTTP/2 writes a 9-byte header and a 24-bit length. WebSocket applies a 4-byte XOR mask. DNS builds QNAME labels. MQTT encodes remaining length. Encode then decode recovers the fields. See <a href="/guide/#Home.oot">home</a>.</p>
+          <p><strong><a href="/guide/#Home.oot">Wire packs</a>.</strong> HTTP/2 writes a 9-byte header and a 24-bit length. WebSocket applies a 4-byte XOR mask. DNS builds QNAME labels. MQTT encodes remaining length. PostgreSQL v3 packs StartupMessage and Query. MySQL packs handshake v10 and COM_QUERY. RESP recovers plus, minus, colon, dollar, and star. Encode then decode recovers the fields. See <a href="/guide/#Home.oot">home</a>.</p>
           <p><strong><a href="/guide/#Home.oot">Crypto</a>.</strong> ChaCha20-Poly1305 open fails closed on a bad tag. Ed25519 multiplies points. Shamir needs k shares. TOTP builds 6-digit and 8-digit codes on 30-second steps.</p>
-          <p><strong><a href="/guide/#Home.oot">Matrices and files</a>.</strong> BLAS, LU, and QR run on small Float matrices. Inspectors read ELF64, Mach-O, and WASM headers. Huffman and LZ77 restore source bytes.</p>
+          <p><strong><a href="/guide/#Home.oot">Matrices, geometry, and files</a>.</strong> BLAS, LU, and QR run on small Float matrices. vec2 and vec3 compute dot, cross, and reflection. look_at and perspective are not identity. An R-tree answers overlap and nearest-neighbor. A convex hull has positive area. Inspectors read ELF64, Mach-O, and WASM headers. Huffman and LZ77 restore source bytes.</p>
+          <p><strong><a href="/guide/#Home.oot">Collections and DSP</a>.</strong> A B-tree splits full nodes. A Bloom filter never misses an inserted key. LRU evicts the least-recent key. A skip list stays ordered. Gaussian, Sobel, and Laplacian change pixels. A biquad low-pass and high-pass differ on a DC step. Linear and sinc resample change length with the sample-rate ratio.</p>
         </div>
       </details>
+      <details class="drop">
         <summary>Pins</summary>
         <div class="drop-body">
           <p><strong><a href="/guide/#Packages.oot">Package identity</a>.</strong> The lock line carries a sha256 of the bytes. A different byte string is a different package. <a href="/guide/#Packages.oot"><code>ooda launch --exec</code></a> checks sha, caps, and yank before it runs. See <a href="/guide/#Packages.oot">packages</a>.</p>
