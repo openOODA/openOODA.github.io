@@ -29,16 +29,16 @@
     })();
   </script>
   <style>
-    :root { --bg: #000000; --fg: #e8e8e8; --muted: #9a9a9a; --panel: #141414; }
-    html[data-theme="night"] { --bg: #000000; --fg: #e8e8e8; --muted: #9a9a9a; --panel: #141414; }
-    html[data-theme="paper"] { --bg: #ffffff; --fg: #000000; --muted: #444444; --panel: #f2f2f2; }
-    html[data-theme="magma"] { --bg: #140d0f; --fg: #ff6b6b; --muted: #a34848; --panel: #221216; }
-    html[data-theme="flare"] { --bg: #181008; --fg: #ffa726; --muted: #a86520; --panel: #26170a; }
-    html[data-theme="solar"] { --bg: #002b36; --fg: #ffd166; --muted: #93a1a1; --panel: #073642; }
-    html[data-theme="cyber"] { --bg: #040a06; --fg: #00ff66; --muted: #008833; --panel: #08170c; }
-    html[data-theme="frost"] { --bg: #16202a; --fg: #80ffea; --muted: #5c8d99; --panel: #1f2d3a; }
-    html[data-theme="tokyo"] { --bg: #1a1b26; --fg: #7dcfff; --muted: #565f89; --panel: #24283b; }
-    html[data-theme="laser"] { --bg: #18122b; --fg: #ea047e; --muted: #8b5cf6; --panel: #251b3d; }
+    :root { --bg: #000000; --fg: #e8e8e8; --muted: #9a9a9a; --panel: #141414; --next-bg: #ffffff; --next-fg: #000000; }
+    html[data-theme="night"] { --bg: #000000; --fg: #e8e8e8; --muted: #9a9a9a; --panel: #141414; --next-bg: #ffffff; --next-fg: #000000; }
+    html[data-theme="paper"] { --bg: #ffffff; --fg: #000000; --muted: #444444; --panel: #f2f2f2; --next-bg: #140d0f; --next-fg: #ff6b6b; }
+    html[data-theme="magma"] { --bg: #140d0f; --fg: #ff6b6b; --muted: #a34848; --panel: #221216; --next-bg: #181008; --next-fg: #ffa726; }
+    html[data-theme="flare"] { --bg: #181008; --fg: #ffa726; --muted: #a86520; --panel: #26170a; --next-bg: #002b36; --next-fg: #ffd166; }
+    html[data-theme="solar"] { --bg: #002b36; --fg: #ffd166; --muted: #93a1a1; --panel: #073642; --next-bg: #040a06; --next-fg: #00ff66; }
+    html[data-theme="cyber"] { --bg: #040a06; --fg: #00ff66; --muted: #008833; --panel: #08170c; --next-bg: #16202a; --next-fg: #80ffea; }
+    html[data-theme="frost"] { --bg: #16202a; --fg: #80ffea; --muted: #5c8d99; --panel: #1f2d3a; --next-bg: #1a1b26; --next-fg: #7dcfff; }
+    html[data-theme="tokyo"] { --bg: #1a1b26; --fg: #7dcfff; --muted: #565f89; --panel: #24283b; --next-bg: #18122b; --next-fg: #ea047e; }
+    html[data-theme="laser"] { --bg: #18122b; --fg: #ea047e; --muted: #8b5cf6; --panel: #251b3d; --next-bg: #000000; --next-fg: #e8e8e8; }
     html { background: var(--bg); color: var(--fg); height: 100%; }
     body {
       margin: 0;
@@ -138,8 +138,8 @@
     .err { color: var(--fg); }
     #theme {
       position: fixed; right: 1rem; bottom: 1rem; z-index: 20;
-      font: inherit; background: var(--bg); color: var(--fg);
-      border: 2px solid var(--fg); padding: 0.15rem 0.55rem; cursor: pointer; white-space: nowrap;
+      font: inherit; background: var(--next-bg); color: var(--next-fg);
+      border: 2px solid var(--next-fg); padding: 0.15rem 0.55rem; cursor: pointer; white-space: nowrap;
     }
     #skip {
       position: absolute; left: 0.5rem; top: 0.5rem; z-index: 30;
