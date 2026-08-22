@@ -2,7 +2,7 @@
 
 File: guide/Home.oot
 User wiki. Canonical URL: https://openooda.org/guide/#Home.oot
-Pin: v0.209.0.
+Pin: v0.210.0.
 
 [Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Commands](Options.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [Active Defense](Morpher.oot) [How it works](Limits.oot) [Pay](Pay.oot)
 
@@ -49,7 +49,7 @@ Read more: [How it works](Limits.oot).
 
 ## 4. What this pin adds
 
-v0.209.0 keeps the C path as product.
+v0.210.0 keeps the C path as product.
 The standard library packs PostgreSQL v3 StartupMessage and Query.
 MySQL packs handshake v10, COM_QUERY, OK, and ERR. ERR is not OK.
 RESP recovers Simple String, Error, Integer, Bulk String, and Array.
