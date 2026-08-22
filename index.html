@@ -394,6 +394,15 @@
           <p><strong><a href="/guide/#Safety.oot">Tokens still bind</a>.</strong> A morphed binary does not mint <code>&amp;FsReadCap</code> or <code>&amp;ProcessCap</code>. Landlock still needs <code>&amp;SysCap</code>. Read <a href="/guide/#Safety.oot">capabilities</a>.</p>
         </div>
       </details>
+      <details class="drop">
+        <summary>Verification</summary>
+        <div class="drop-body">
+          <p><strong><a href="/guide/#QA.oot">Zero-trust rule</a>.</strong> We treat all inputs, headers, and capability tokens as untrusted. We do not trust docstrings or mock objects. Every proof executes on live compiled binaries. See <a href="/guide/#QA.oot">verification</a>.</p>
+          <p><strong><a href="/guide/#QA.oot">First principles</a>.</strong> We verify physical and mathematical invariants on live outputs. B-trees verify sorted order. Hash functions match official FIPS 180-4 hex vectors. Linear algebra solvers prove exact matrix determinants. Missing or invalid inputs fail closed.</p>
+          <p><strong><a href="/guide/#QA.oot">Resilient code</a>.</strong> Functions return explicit <code>Result[T, String]</code> types. Errors use the standard <code>ERR\t</code> format. The system contains zero panics, zero segfaults, and zero unhandled exceptions. Chaos soak tests prove zero-byte memory growth over continuous cycles.</p>
+          <p><strong><a href="/guide/#QA.oot">Multi-compiler matrix</a>.</strong> Test suites execute across all sovereign backends: C99, native x86-64, native AArch64, and WebAssembly. All four backends must produce bit-exact identical stdout, exit codes, and memory states.</p>
+        </div>
+      </details>
     </main>
     </div>
   </div>

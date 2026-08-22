@@ -1,0 +1,89 @@
+# VERIFICATION — Zero trust, first principles, and resilient code
+
+File: guide/QA.oot
+User wiki. Canonical URL: https://openooda.org/guide/#QA.oot
+
+[Home](Home.oot) [Start](Use.oot) [Language](Language.oot) [Commands](Options.oot) [Packages](Packages.oot) [Capabilities](Safety.oot) [Active Defense](Morpher.oot) [How it works](Limits.oot) [Pay](Pay.oot) [Verification](QA.oot) [QuickRef](QuickRef.oot)
+
+## 1. The Zero-Trust Rule
+
+openOODA enforces zero trust across all code and tools.
+We do not trust comments, headers, or docstrings.
+We do not trust mock objects or fake stubs.
+Every proof must run on live compiled binaries.
+
+If a function claims an algorithm, the body must compute it.
+If a module claims a specification, the outputs must match published vectors.
+A test that passes on a stub is a false proof.
+We reject false proofs.
+
+```
+// Zero trust: test live outputs against published constants
+let got: String = sha256("abc");
+let want: String = "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad";
+if got != want {
+    process_exit(1);
+}
+```
+
+## 2. First-Principles Invariants
+
+Every standard library module must prove its physical or mathematical invariants:
+
+| Domain | Invariant | Proof Method |
+| :--- | :--- | :--- |
+| **B-Tree** | Sorted key order | In-order traversal strictly monotonic |
+| **Cryptography** | FIPS 180-4 / RFC 8439 | Bit-exact match on empty and known vectors |
+| **DSP & FFT** | Parseval's theorem | Time-domain energy equals frequency energy |
+| **Geometry** | Orientation & Norm | Cross-product right-hand rule; unit quaternion norm \|q\|=1 |
+| **Limit Order Book** | Volume conservation | Executed volume plus remaining depth equals input volume |
+| **Post-Quantum** | NTT invertibility | INTT(NTT(P)) == P mod 3329 |
+
+## 3. Resilient Error Handling
+
+We design all standard library code to be resilient and fail closed.
+
+1. **Explicit Result types**: Functions that can fail return `Result[T, String]`.
+2. **Standard error format**: Error messages use the `ERR\t<function>\t<reason>` format.
+3. **Zero panics**: Code must never segfault, abort, or exit with code 134.
+4. **Hostile inputs**: Corrupted byte streams and out-of-bounds indices return `Err(...)`.
+
+```
+pub fn list_first(xs: List[Int]) -> Result[Int, String] {
+    if list_len(xs) == 0 {
+        return Err("ERR\tlist_first\tempty");
+    }
+    return Ok(list_get(xs, 0));
+}
+```
+
+## 4. AST Mutation & Adversarial Probing
+
+Passing happy-path tests is not enough.
+The verification pipeline applies automated AST mutations:
+
+- **Condition inversions**: Swapping `<` to `>=`, `==` to `!=`.
+- **Boundary mutations**: Mutating n to n-1, n+1, or 0.
+- **Pointer/Slice corruptions**: Injecting negative offsets and depth bombs.
+
+A test suite must kill >= 95% of all injected mutants to be certified.
+
+## 5. Multi-Compiler Bit-Exact Parity Matrix
+
+The openOODA compiler supports four sovereign execution backends:
+1. **C99 Emitter** (`oodac emit-c` + host C compiler)
+2. **Direct x86-64 ELF Emitter** (bare-metal Linux binary)
+3. **Direct AArch64 Emitter** (bare-metal ARM64 binary)
+4. **Direct WebAssembly Emitter** (standalone `.wasm` / WasmGC)
+
+Every verified standard library test compiles across all four backends.
+All backends must produce bit-exact identical stdout, exit codes, and memory states.
+
+## 6. Master Governance Gates
+
+The repository governance tool `dinner_lint.oo` enforces strict rules:
+- **Pure `.oo` / `.oot`**: Zero `.py`, `.sh`, `.md`, or `.js` in product scope.
+- **Line limit**: Every source file is strictly <= 256 lines.
+- **Academy headers**: 100% of `.oo` files contain `# Title`, `Logline:`, `Setup:`, `Beats:`.
+- **Zero struct commas**: Struct types and literals omit trailing commas.
+- **Static typing**: 100% of variable bindings have explicit type annotations.
