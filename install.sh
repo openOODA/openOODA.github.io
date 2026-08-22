@@ -141,6 +141,14 @@ chmod +x "${OODA_HOME}/oodac/oodac"
 if [[ -f "${SRC}/fixtures/hello.oo" ]]; then
   cp -f "${SRC}/fixtures/hello.oo" "${OODA_HOME}/share/fixtures/hello.oo"
 fi
+if [[ -f "${SRC}/AGENTS.oot" ]]; then
+  cp -f "${SRC}/AGENTS.oot" "${OODA_HOME}/share/AGENTS.oot"
+fi
+if [[ -f "${SRC}/openOODA/QUICKREF.oot" ]]; then
+  cp -f "${SRC}/openOODA/QUICKREF.oot" "${OODA_HOME}/share/QUICKREF.oot"
+elif [[ -f "${SRC}/QUICKREF.oot" ]]; then
+  cp -f "${SRC}/QUICKREF.oot" "${OODA_HOME}/share/QUICKREF.oot"
+fi
 if [[ -f "${SRC}/install/BOOTSTRAP_PIN" ]]; then
   PIN="$(tr -d ' \t\r\n' < "${SRC}/install/BOOTSTRAP_PIN")"
 fi

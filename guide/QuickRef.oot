@@ -1,0 +1,100 @@
+# Universal AI Quick Reference Guide (openOODA)
+
+Logline: Concise reference manual for AI agents and human engineers to author valid, fast, and verified openOODA code.
+
+Setup: Use this reference to generate correct .oo programs that compile on the first attempt without type errors or lifetime violations.
+
+Beats:
+  1. Syntax and Grammar Cheat Sheet.
+  2. Type System and Mandatory Annotations.
+  3. Standard Library Core Modules.
+  4. Capability Security and Verification Laws.
+
+---
+
+## 1. Syntax and Grammar Cheat Sheet
+
+### 1.1 Source Files and Modules
+- Code files MUST have extension .oo. Documentation and board files MUST have extension .oot.
+- Every product .oo file MUST start with a 4-element Academy header:
+  // # Module Title
+  //
+  // Logline: One clear sentence in Simplified Technical English.
+  //
+  // Setup: Context and preconditions for the module.
+  //
+  // Beats:
+  //   1. Step one.
+  //   2. Step two.
+- File length limit: All .oo and .oot files MUST be <= 256 lines. Split larger components into submodule files.
+
+### 1.2 Functions and Control Flow
+- Functions use pub fn (exported) or fn (internal):
+  pub fn add(a: Int, b: Int) -> Int {
+      return a + b;
+  }
+- Control flow statements: if ... else if ... else, while cond { ... }, match expr { Ok(v) => ..., Err(e) => ... }.
+- Early returns: Use explicit return value;.
+
+### 1.3 Structs and Data Types
+- Struct definitions MUST omit trailing commas:
+  pub type Point = struct {
+      x: Int,
+      y: Int
+  };
+- Struct instantiations MUST omit trailing commas:
+  let pt: Point = Point { x: 10, y: 20 };
+- Struct field access uses dot syntax: pt.x or (pt).x.
+
+### 1.4 Mandatory Type Annotation Law
+- Every variable binding MUST declare an explicit type:
+  let count: Int = 0;              // CORRECT
+  let mut name: String = "ooda";   // CORRECT
+  let val = 42;                    // FORBIDDEN: missing type annotation
+
+---
+
+## 2. Standard Types and Generics
+
+- Int: 64-bit signed integer (let n: Int = 42;)
+- Float: 64-bit IEEE-754 float (let f: Float = 3.14159;)
+- Bool: Boolean truth value (let ok: Bool = true;)
+- String: Owned UTF-8 string (let s: String = "openOODA";)
+- List[T]: Dynamic ARC array list (let mut items: List[Int] = list_new();)
+- Option[T]: Optional value (Some(value) or None)
+- Result[T, E]: Fallible computation (Ok(value) or Err("reason"))
+
+### 2.1 List Operations
+  let mut xs: List[Int] = list_new();
+  xs = list_push(xs, 10);
+  let len: Int = list_len(xs);
+  let item: Int = list_get(xs, 0);
+
+### 2.2 Result Handling
+  let res: Result[Int, String] = compute();
+  match res {
+      Ok(v) => { println("Success: " + v.to_string()); }
+      Err(e) => { println("Error: " + e); }
+  }
+
+---
+
+## 3. Standard Library Modules Map
+
+- std/cli/: Declarative CLI parser (cli_arg_parser.oo), ANSI 256/RGB styles (cli_style.oo), shell completions (cli_completion.oo).
+- std/tui/: Double-buffered diff TUI (tui_buffer.oo, tui_renderer.oo), flexbox layout (tui_layout.oo), Kitty graphics (kitty_graphics.oo).
+- std/gui/: 3D vector pipeline (gui_3d_pipeline.oo, gui_3d_mesh.oo), Bezier curves (gui_bezier_cubic.oo), TrueType parser (gui_ttf_parser.oo), GPU canvas (gui_gpu_canvas.oo).
+- std/wui/: WebAssembly UI (wui_vdom.oo, wui_diff.oo, wui_patch_serializer.oo, wui_app.oo).
+- std/diag/: Zero-Trust Diagnostics (trace_span.oo, breadcrumb_tree.oo, telemetry_ndjson.oo, counterexample_diff.oo, invariant_eval.oo).
+- std/encoding/: JSON, TOML, CBOR, Bencode, Base64, CSV streaming parsers.
+- std/crypto/: SHA-256, HMAC, Ed25519, Kyber, ChaCha20, Minisign.
+- std/fs/ and std/net/: Sandboxed filesystem operations and Landlock TCP/UDP sockets with capability tokens.
+
+---
+
+## 4. Zero-Trust Verification Laws
+
+1. Pure Modules: Keep logic pure and deterministic. Isolate I/O behind explicit capability handles.
+2. Fail-Closed Returns: Return Result[T, String] with Err(...) on all bounds violations. Never abort or panic.
+3. No Trailing Commas: Never put a trailing comma after the last field in a struct type or literal.
+4. Line Budget: Keep every source file strictly <= 256 lines. Split cleanly into cohesive units.

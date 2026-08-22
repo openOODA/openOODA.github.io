@@ -267,7 +267,17 @@
         <a href="Morpher.oot" data-page="Morpher.oot">active defense</a>
         <a href="Limits.oot" data-page="Limits.oot">how it works</a>
         <a href="Pay.oot" data-page="Pay.oot">pay / 402</a>
+        <a href="QuickRef.oot" data-page="QuickRef.oot">quickref</a>
       </nav>
+      <div class="ai-snippets" style="margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid var(--fg);">
+        <div style="font-size: 0.8rem; color: var(--muted); margin-bottom: 0.4rem;">1-click ai setup</div>
+        <div style="display: flex; flex-direction: column; gap: 0.35rem;">
+          <button type="button" class="ai-copy-btn" data-snippet="cursor" style="font: inherit; font-size: 0.8rem; background: var(--panel); color: var(--fg); border: 1px solid var(--fg); padding: 0.2rem 0.4rem; cursor: pointer; text-align: left;">copy .cursorrules</button>
+          <button type="button" class="ai-copy-btn" data-snippet="claude" style="font: inherit; font-size: 0.8rem; background: var(--panel); color: var(--fg); border: 1px solid var(--fg); padding: 0.2rem 0.4rem; cursor: pointer; text-align: left;">copy CLAUDE.md</button>
+          <button type="button" class="ai-copy-btn" data-snippet="windsurf" style="font: inherit; font-size: 0.8rem; background: var(--panel); color: var(--fg); border: 1px solid var(--fg); padding: 0.2rem 0.4rem; cursor: pointer; text-align: left;">copy .windsurfrules</button>
+          <button type="button" class="ai-copy-btn" data-snippet="agents" style="font: inherit; font-size: 0.8rem; background: var(--panel); color: var(--fg); border: 1px solid var(--fg); padding: 0.2rem 0.4rem; cursor: pointer; text-align: left;">copy AGENTS.oot</button>
+        </div>
+      </div>
     </aside>
     <div class="col">
     <main>
@@ -285,6 +295,7 @@
           <li><a href="Morpher.oot">active defense</a></li>
           <li><a href="Limits.oot">how it works</a></li>
           <li><a href="Pay.oot">pay / 402</a></li>
+          <li><a href="QuickRef.oot">quickref</a></li>
         </ul>
       </noscript>
       </div>
@@ -293,7 +304,7 @@
   </div>
   <button type="button" id="theme">dark</button>
   <script>
-    const PAGES = ["Home.oot", "Use.oot", "Language.oot", "Options.oot", "Packages.oot", "Safety.oot", "Morpher.oot", "Limits.oot", "Pay.oot"];
+    const PAGES = ["Home.oot", "Use.oot", "Language.oot", "Options.oot", "Packages.oot", "Safety.oot", "Morpher.oot", "Limits.oot", "Pay.oot", "QuickRef.oot"];
     const root = document.getElementById("page");
     function currentPage() {
       const h = (location.hash || "#Use.oot").replace(/^#/, "");
@@ -373,6 +384,29 @@
         }).then(function (r) {
           if (r.ok) ok(); else fail();
         }).catch(fail);
+      });
+    })();
+    (function () {
+      var SNIPPETS = {
+        cursor: "# openOODA AI Editor Rules\n1. Always use .oo file extension for code and .oot for documentation.\n2. Every .oo file must have a 4-element Academy header (Title, Logline, Setup, Beats).\n3. Strict <= 256 lines per file constraint.\n4. Mandatory explicit type annotations on every let statement (e.g. let x: Int = 0;).\n5. Zero trailing commas in struct definitions and struct literals.\n6. Return Result[T, String] with Err(\"...\") on failure; never panic.\n",
+        claude: "# CLAUDE.md - openOODA Project Instructions\n\n## Syntax Laws\n- Extension: `.oo` for code, `.oot` for documentation.\n- Header: 4-element Academy header required on all source files.\n- Line limit: strictly <= 256 lines per file.\n- Types: Always explicit `let x: Type = val;`.\n- Structs: No trailing commas in fields or initializers.\n",
+        windsurf: "# openOODA Windsurf Rules\n1. Pure .oo for executable logic; pure .oot for specifications.\n2. Mandatory 4-element Academy headers on all .oo source files.\n3. Maximum file budget: <= 256 lines.\n4. Strict explicit type annotations on every let.\n5. Zero struct trailing commas.\n",
+        agents: "# AGENTS.oot - Universal Autonomous AI Engineering Manual\n\nLogline: Zero-trust operating instructions for autonomous AI agents authoring openOODA systems.\n\nSetup: Follow all rules fail-closed. Never produce unverified code.\n\nBeats:\n  1. Pure .oo source files (<= 256 lines).\n  2. 4-Element Academy headers on every file.\n  3. Explicit type annotations on all variable bindings.\n  4. Zero trailing commas in structs.\n"
+      };
+      document.querySelectorAll(".ai-copy-btn").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var key = btn.getAttribute("data-snippet");
+          var text = SNIPPETS[key] || "";
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(function () {
+              var orig = btn.textContent;
+              btn.textContent = "copied!";
+              setTimeout(function () { btn.textContent = orig; }, 1500);
+            }).catch(function () {
+              btn.textContent = "error";
+            });
+          }
+        });
       });
     })();
   </script>
